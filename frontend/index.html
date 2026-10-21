@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Aurora — Premium online shopping platform with curated products across electronics, fashion, home & living, and more.">
+  <title>Aurora — Premium Shopping Experience</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌌</text></svg>">
+</head>
+<body>
+
+  <!-- Background Effects -->
+  <div class="bg-gradient-mesh"></div>
+
+  <!-- ═══ NAVBAR ═══ -->
+  <nav class="navbar" id="navbar">
+    <a href="/" class="navbar-brand">
+      <div class="logo">A</div>
+      <span class="brand-text">Aurora</span>
+    </a>
+
+    <ul class="navbar-nav" id="main-nav">
+      <li><button class="nav-link active" data-tab="shop" onclick="switchTab('shop')">🛍️ Shop</button></li>
+      <li><button class="nav-link" data-tab="orders" onclick="switchTab('orders')">📦 My Orders</button></li>
+      <li><a href="/admin" class="nav-link" id="admin-link" style="display:none;">⚙️ Admin</a></li>
+    </ul>
+
+    <div class="navbar-actions">
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search products..." oninput="debounceSearch()">
+      </div>
+      <button class="cart-btn" id="cartToggle" onclick="toggleCart()">
+        🛒
+        <span class="badge" id="cartBadge"></span>
+      </button>
+      <div class="user-menu-wrapper" id="userMenuWrapper">
+        <button class="user-menu-btn" id="userMenuBtn" onclick="handleUserMenuClick()">
+          <div class="avatar" id="userAvatar">?</div>
+          <span id="userName">Sign In</span>
+        </button>
+        <div class="user-dropdown" id="userDropdown">
+          <div class="user-dropdown-header">
+            <div class="dropdown-avatar" id="dropdownAvatar">?</div>
+            <div class="dropdown-user-info">
+              <div class="dropdown-name" id="dropdownName">User</div>
+              <div class="dropdown-email" id="dropdownEmail">user@example.com</div>
+              <span class="role-badge" id="dropdownRole">Member</span>
+            </div>
+          </div>
+          <div class="user-dropdown-divider"></div>
+          <div class="user-dropdown-items">
+            <button class="dropdown-item" onclick="switchTab('orders'); closeUserDropdown();">
+              <span>📋</span> My Orders
+            </button>
+            <a href="/admin" class="dropdown-item" id="dropdownAdminLink" style="display:none;">
+              <span>⚙️</span> Admin Dashboard
+            </a>
+            <button class="dropdown-item danger" onclick="logout(); closeUserDropdown();">
+              <span>🚪</span> Sign Out
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <main class="main-content">
+    <!-- SHOP TAB -->
+    <div class="tab-content active" id="tab-shop">
+      <div class="container">
+        <!-- Hero -->
+        <section class="hero">
+          <h1>Discover <span class="gradient-text">Extraordinary</span><br>Products</h1>
+          <p>Curated collections of premium products, from cutting-edge electronics to timeless fashion. Experience shopping reimagined.</p>
+        </section>
+
+        <!-- Categories -->
+        <div class="categories-bar" id="categoriesBar">
+          <button class="category-chip active" data-category="all" onclick="filterCategory('all', this)">
+            <span class="cat-icon">✨</span> All Products
+          </button>
+          <!-- Dynamic categories loaded here -->
+        </div>
+
+        <!-- Sort Bar -->
+        <div class="sort-bar">
+          <span class="result-count" id="resultCount">Loading...</span>
+          <select class="sort-select" id="sortSelect" onchange="loadProducts()">
+            <option value="default">Featured</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Highest Rated</option>
+            <option value="newest">Newest First</option>
+          </select>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="products-grid" id="productsGrid">
+          <div class="loading-spinner"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ORDERS TAB -->
+    <div class="tab-content" id="tab-orders">
+      <div class="container">
+        <section class="orders-section">
+          <h2>📦 Order History</h2>
+          <div id="ordersContainer">
+            <div class="empty-state" id="ordersEmpty">
+              <div class="empty-icon">📋</div>
+              <h3>No orders yet</h3>
+              <p>Start shopping to see your orders here!</p>
+              <button class="btn btn-primary" style="margin-top: 1rem;" onclick="switchTab('shop')">Browse Products</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- ═══ CART SIDEBAR ═══ -->
+  <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h2>🛒 Shopping Cart</h2>
+      <button class="cart-close" onclick="toggleCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty">
+        <div class="empty-icon">🛒</div>
+        <p>Your cart is empty</p>
+        <p style="font-size: 0.85rem;">Add items to get started!</p>
+      </div>
+    </div>
+    <div class="cart-footer" id="cartFooter" style="display: none;">
+      <div class="cart-summary">
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="cartSubtotal">$0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span style="color: var(--success);">Free</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span id="cartTotal">$0.00</span>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-lg" onclick="placeOrder()">
+        Place Order →
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══ AUTH MODAL ═══ -->
+  <div class="modal-overlay" id="authModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="authTitle">Sign In</h2>
+        <button class="modal-close" onclick="closeAuthModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="auth-alert" id="authAlert"></div>
+        <p class="subtitle" id="authSubtitle">Welcome back! Sign in to continue shopping.</p>
+
+        <!-- Login Form -->
+        <div id="loginForm">
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="loginEmail" placeholder="Enter your email" onkeydown="if(event.key==='Enter') handleLogin()">
+          </div>
+          <div class="form-group">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label style="margin-bottom: 0;">Password</label>
+              <a class="forgot-password-link" onclick="showForgotPassword()">Forgot Password?</a>
+            </div>
+            <input type="password" id="loginPassword" placeholder="Enter your password" onkeydown="if(event.key==='Enter') handleLogin()">
+          </div>
+          <div style="margin-bottom: 1.25rem; display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="fillDemoCredentials('customer')" style="font-size: 0.75rem; padding: 5px 10px; border-radius: 999px;">
+              👤 Demo Customer
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="fillDemoCredentials('admin')" style="font-size: 0.75rem; padding: 5px 10px; border-radius: 999px;">
+              👑 Demo Admin
+            </button>
+          </div>
+          <button class="btn btn-primary btn-lg" id="loginBtn" onclick="handleLogin()">Sign In</button>
+
+          <!-- Divider -->
+          <div style="display: flex; align-items: center; margin: 1.2rem 0; gap: 12px;">
+            <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
+            <span style="color: var(--text-muted); font-size: 0.8rem;">or</span>
+            <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
+          </div>
+
+          <!-- Google Sign In -->
+          <button class="btn btn-lg" onclick="handleGoogleSignIn()" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-primary); display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer;">
+            <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
+              <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/>
+              <path d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+              <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+            </svg>
+            Continue with Google
+          </button>
+
+          <div class="auth-switch">
+            Don't have an account? <a onclick="showRegister()">Create one</a>
+          </div>
+        </div>
+
+        <!-- Register Form -->
+        <div id="registerForm" style="display: none;">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="regName" placeholder="Enter your name" onkeydown="if(event.key==='Enter') handleRegister()">
+          </div>
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="regEmail" placeholder="Enter your email" onkeydown="if(event.key==='Enter') handleRegister()">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="regPassword" placeholder="Create a password (min 6 characters)" onkeydown="if(event.key==='Enter') handleRegister()">
+          </div>
+
+          <!-- Admin Code Toggle -->
+          <div class="admin-code-toggle" id="adminCodeToggle" onclick="toggleAdminCodeSection()" role="button" tabindex="0">
+            <span>🔑</span>
+            <span>Register as Administrator?</span>
+            <span class="toggle-arrow" id="adminCodeArrow">›</span>
+          </div>
+          <div class="admin-code-section" id="adminCodeSection" style="display:none;">
+            <div class="form-group" style="margin-bottom: 6px;">
+              <label>Admin Access Code</label>
+              <input type="password" id="regAdminCode" placeholder="Enter administrator access code" onkeydown="if(event.key==='Enter') handleRegister()">
+            </div>
+            <p class="admin-code-hint">🛡️ Enter the secret code provided by Aurora to register with full administrator privileges. If you don't have an access code, leave this empty to register as a regular customer.</p>
+          </div>
+          <button class="btn btn-primary btn-lg" id="registerBtn" onclick="handleRegister()">Create Account</button>
+
+          <!-- Divider -->
+          <div style="display: flex; align-items: center; margin: 1.2rem 0; gap: 12px;">
+            <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
+            <span style="color: var(--text-muted); font-size: 0.8rem;">or</span>
+            <div style="flex: 1; height: 1px; background: var(--border-color);"></div>
+          </div>
+
+          <!-- Google Sign In -->
+          <button class="btn btn-lg" onclick="handleGoogleSignIn()" style="width: 100%; background: var(--bg-input); border: 1px solid var(--border-color); color: var(--text-primary); display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer;">
+            <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
+              <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/>
+              <path d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+              <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+            </svg>
+            Continue with Google
+          </button>
+
+          <div class="auth-switch">
+            Already have an account? <a onclick="showLogin()">Sign in</a>
+          </div>
+        </div>
+
+        <!-- Forgot Password Form -->
+        <div id="forgotPasswordForm" style="display: none;">
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="resetEmail" placeholder="Enter your registered email" onkeydown="if(event.key==='Enter') handleForgotPassword()">
+          </div>
+          <button class="btn btn-primary btn-lg" id="resetBtn" onclick="handleForgotPassword()">Send Reset Link</button>
+
+          <div class="auth-switch" style="margin-top: 1.5rem;">
+            Remember your password? <a onclick="showLogin()">Back to Sign in</a>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PRODUCT DETAIL MODAL ═══ -->
+  <div class="modal-overlay product-detail-modal" id="productDetailModal">
+    <div class="modal" style="max-width: 700px;">
+      <div class="modal-header">
+        <h2>Product Details</h2>
+        <button class="modal-close" onclick="closeProductDetail()">✕</button>
+      </div>
+      <div class="modal-body" id="productDetailBody">
+        <!-- Dynamic content -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ TOAST CONTAINER ═══ -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer" id="main-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="brand-name">Aurora</div>
+          <p>Your premium destination for curated products. Discover extraordinary items handpicked for quality and style.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Shop</h4>
+          <a href="#" onclick="filterCategory('cat-electronics')">Electronics</a>
+          <a href="#" onclick="filterCategory('cat-fashion')">Fashion</a>
+          <a href="#" onclick="filterCategory('cat-home')">Home & Living</a>
+          <a href="#" onclick="filterCategory('cat-sports')">Sports</a>
+        </div>
+        <div class="footer-col">
+          <h4>Support</h4>
+          <a href="#">Contact Us</a>
+          <a href="#">FAQ</a>
+          <a href="#">Shipping Info</a>
+          <a href="#">Returns</a>
+        </div>
+        <div class="footer-col">
+          <h4>Company</h4>
+          <a href="#">About Aurora</a>
+          <a href="#">Careers</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 Aurora. All rights reserved. Built with 💜
+      </div>
+    </div>
+  </footer>
+
+  <!-- Firebase JS SDK (compat mode for vanilla JS) -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script>
+    // Firebase configuration — Aurora project
+    const firebaseConfig = {
+      apiKey: "AIzaSyAkiDmaGHoOpg9Dl9_vrgGTW4CRtoZlR0g",
+      authDomain: "aurora-ee3eb.firebaseapp.com",
+      projectId: "aurora-ee3eb",
+      storageBucket: "aurora-ee3eb.firebasestorage.app",
+      messagingSenderId: "40534462324",
+      appId: "1:40534462324:web:7b13e1e0684296aecbe621",
+      measurementId: "G-Y9DYJ3BJZT"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <script src="js/app.js"></script>
+</body>
+</html>

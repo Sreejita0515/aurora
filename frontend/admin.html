@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Aurora Admin Dashboard — AI-powered business intelligence and management console.">
+  <title>Aurora Admin — AI Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+</head>
+<body>
+
+  <div class="bg-gradient-mesh"></div>
+
+  <!-- ═══ NAVBAR ═══ -->
+  <nav class="navbar scrolled">
+    <a href="/" class="navbar-brand">
+      <div class="logo">A</div>
+      <span class="brand-text">Aurora</span>
+    </a>
+    <ul class="navbar-nav">
+      <li><a href="/" class="nav-link">🛍️ Shop</a></li>
+      <li><span class="nav-link active">⚙️ Admin Dashboard</span></li>
+    </ul>
+    <div class="navbar-actions">
+      <div class="last-updated">
+        <span>🔄</span>
+        <span id="lastUpdated">Loading...</span>
+      </div>
+      <button class="btn btn-secondary btn-sm" id="refreshBtn" onclick="loadDashboard()">
+        ↻ Refresh
+      </button>
+      <div class="admin-user-pill" id="adminUserPill" style="display:none;">
+        <div class="avatar" id="adminAvatar">A</div>
+        <span id="adminEmail">admin@aurora.com</span>
+        <button class="btn-signout" onclick="handleAdminSignOut()" title="Sign Out">Sign Out</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══ ADMIN LAYOUT ═══ -->
+  <div class="admin-layout">
+
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="adminSidebar">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Analytics</div>
+        <button class="sidebar-link active" data-section="overview" onclick="showSection('overview')">
+          <span class="link-icon">📊</span> Overview
+        </button>
+        <button class="sidebar-link" data-section="sales" onclick="showSection('sales')">
+          <span class="link-icon">💰</span> Sales Analysis
+        </button>
+        <button class="sidebar-link" data-section="products" onclick="showSection('products')">
+          <span class="link-icon">📦</span> Products
+        </button>
+        <button class="sidebar-link" data-section="customers" onclick="showSection('customers')">
+          <span class="link-icon">👥</span> Customers
+        </button>
+        <button class="sidebar-link" data-section="inventory" onclick="showSection('inventory')">
+          <span class="link-icon">🏭</span> Inventory
+        </button>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">AI Agent</div>
+        <button class="sidebar-link" data-section="ai" onclick="showSection('ai')">
+          <span class="link-icon">🤖</span> AI Recommendations
+        </button>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Management</div>
+        <button class="sidebar-link" data-section="orders" onclick="showSection('orders')">
+          <span class="link-icon">📋</span> Recent Orders
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="admin-main" id="adminMain">
+      <div class="loading-spinner" id="dashboardLoader"><div class="spinner"></div></div>
+
+      <!-- ─── OVERVIEW SECTION ─── -->
+      <div class="admin-section" id="section-overview" style="display:none;">
+        <div class="admin-page-header">
+          <div>
+            <h1>📊 Dashboard Overview</h1>
+            <p class="page-subtitle">Real-time business metrics and insights</p>
+          </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid" id="kpiGrid"></div>
+
+        <!-- Charts Row -->
+        <div class="dashboard-grid">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">📈 Revenue Trend (30 Days)</div>
+            </div>
+            <div class="bar-chart" id="revenueChart"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">📊 Revenue by Category</div>
+            </div>
+            <div class="donut-chart-container" id="categoryChart"></div>
+          </div>
+        </div>
+
+        <!-- Quick AI Summary -->
+        <div class="panel" style="margin-bottom: 2rem;">
+          <div class="panel-header">
+            <div class="panel-title">🤖 AI Quick Insights</div>
+            <button class="btn btn-sm btn-secondary" onclick="showSection('ai')">View All →</button>
+          </div>
+          <div id="quickInsights"></div>
+        </div>
+      </div>
+
+      <!-- ─── SALES SECTION ─── -->
+      <div class="admin-section" id="section-sales" style="display:none;">
+        <div class="admin-page-header">
+          <div>
+            <h1>💰 Sales Analysis</h1>
+            <p class="page-subtitle">Revenue breakdown and sales trends</p>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">📅 Weekly Sales Pattern</div>
+            </div>
+            <div class="bar-chart" id="weeklyChart"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">📊 Order Status Distribution</div>
+            </div>
+            <div id="statusDistribution"></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">🏷️ Revenue by Category</div>
+          </div>
+          <table class="data-table" id="categoryRevenueTable">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Revenue</th>
+                <th>Orders</th>
+                <th>Share</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ─── PRODUCTS SECTION ─── -->
+      <div class="admin-section" id="section-products" style="display:none;">
+        <div class="admin-page-header">
+          <div>
+            <h1>📦 Product Performance</h1>
+            <p class="page-subtitle">Top sellers and underperforming products</p>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">🏆 Top Selling Products</div>
+            </div>
+            <table class="data-table" id="topProductsTable">
+              <thead>
+                <tr><th>Product</th><th>Sold</th><th>Revenue</th><th>Rating</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">⚠️ Needs Attention</div>
+            </div>
+            <table class="data-table" id="underperformersTable">
+              <thead>
+                <tr><th>Product</th><th>Sold</th><th>Revenue</th><th>Stock</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">⭐ Best Reviewed Products</div>
+          </div>
+          <table class="data-table" id="bestReviewedTable">
+            <thead>
+              <tr><th>Product</th><th>Rating</th><th>Reviews</th><th>Price</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ─── CUSTOMERS SECTION ─── -->
+      <div class="admin-section" id="section-customers" style="display:none;">
+        <div class="admin-page-header">
+          <div>
+            <h1>👥 Customer Insights</h1>
+            <p class="page-subtitle">Customer behavior and retention analysis</p>
+          </div>
+        </div>
+
+        <div class="kpi-grid" id="customerKpis"></div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">🏅 Customer Spending Leaderboard</div>
+          </div>
+          <table class="data-table" id="customerTable">
+            <thead>
+              <tr><th>Customer</th><th>Orders</th><th>Total Spent</th><th>Avg Order</th><th>Last Order</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ─── INVENTORY SECTION ─── -->
+      <div class="admin-section" id="section-inventory" style="display:none;">
+        <div class="admin-page-header">
+          <div>
+            <h1>🏭 Inventory Health</h1>
+            <p class="page-subtitle">Stock levels and inventory optimization</p>
+          </div>
+        </div>
+
+        <div class="kpi-grid" id="inventoryKpis"></div>
+
+        <div class="dashboard-grid">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">🚨 Low Stock Alerts</div>
+            </div>
+            <table class="data-table" id="lowStockTable">
+              <thead>
+                <tr><th>Product</th><th>Stock</th><th>Monthly Sales</th><th>Status</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">📦 Stock by Category</div>
+            </div>
+            <table class="data-table" id="stockCategoryTable">
+              <thead>
+                <tr><th>Category</th><th>Products</th><th>Total Stock</th><th>Value</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── AI RECOMMENDATIONS SECTION ─── -->
+      <div class="admin-section" id="section-ai" style="display:none;">
+        <div class="admin-page-header">
+          <div>
+            <h1>🤖 AI Decision Agent</h1>
+            <p class="page-subtitle">Data-driven recommendations to optimize your business</p>
+          </div>
+          <div class="ai-badge">🧠 AI Powered</div>
+        </div>
+        <div id="aiRecommendations"></div>
+      </div>
+
+      <!-- ─── ORDERS SECTION ─── -->
+      <div class="admin-section" id="section-orders" style="display:none;">
+        <div class="admin-page-header">
+          <div>
+            <h1>📋 Recent Orders</h1>
+            <p class="page-subtitle">Manage and track all customer orders</p>
+          </div>
+        </div>
+        <div class="panel">
+          <table class="data-table" id="ordersTable">
+            <thead>
+              <tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th><th>Actions</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+
+  <!-- Firebase JS SDK (compat mode for vanilla JS) -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script>
+    // Firebase configuration — Aurora project
+    const firebaseConfig = {
+      apiKey: "AIzaSyAkiDmaGHoOpg9Dl9_vrgGTW4CRtoZlR0g",
+      authDomain: "aurora-ee3eb.firebaseapp.com",
+      projectId: "aurora-ee3eb",
+      storageBucket: "aurora-ee3eb.firebasestorage.app",
+      messagingSenderId: "40534462324",
+      appId: "1:40534462324:web:7b13e1e0684296aecbe621",
+      measurementId: "G-Y9DYJ3BJZT"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
