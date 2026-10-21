@@ -501,62 +501,6 @@ body {
   border-color: rgba(255, 255, 255, 0.18);
   transform: translateY(-1px);
 }
-
-/* ── Quick Demo Helper Chips ── */
-.demo-accounts-box {
-  margin-top: 1.5rem;
-  padding: 12px 14px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px dashed rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-md);
-}
-
-.demo-box-header {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  margin-bottom: 8px;
-}
-
-.demo-chips {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.demo-chip {
-  padding: 7px 10px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: var(--radius-sm);
-  color: var(--text-secondary);
-  font-size: 0.78rem;
-  font-family: inherit;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: all 0.2s;
-  text-align: left;
-}
-
-.demo-chip:hover {
-  background: rgba(124, 58, 237, 0.15);
-  border-color: rgba(124, 58, 237, 0.4);
-  color: #c084fc;
-}
-
-.demo-chip strong {
-  color: var(--text-primary);
-  display: block;
-  font-size: 0.8rem;
-}
-
 /* ═══════════════════════════════════════════════════
    ACCOUNT TYPE / ROLE SELECTION IN REGISTRATION
    ═══════════════════════════════════════════════════ */
@@ -778,9 +722,6 @@ body {
     padding: 1.75rem 1.25rem;
   }
   .role-cards-grid {
-    grid-template-columns: 1fr;
-  }
-  .demo-chips {
     grid-template-columns: 1fr;
   }
 }

@@ -590,18 +590,6 @@
   font-weight: 700;
   margin-bottom: 0.5rem;
 }
-.admin-demo-hint {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(245, 158, 11, 0.12);
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  border-radius: var(--radius-sm);
-  padding: 8px 12px;
-  font-size: 0.8rem;
-  color: #fbbf24;
-  margin-bottom: 1.25rem;
-}
 .return-shop-link {
   color: var(--text-secondary);
   font-size: 0.85rem;

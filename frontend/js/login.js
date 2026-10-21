@@ -155,23 +155,6 @@ function hideForgotPasswordView() {
   switchAuthTab('signin');
 }
 
-// ═══ QUICK DEMO FILLER ═══
-function fillDemo(type) {
-  switchAuthTab('signin');
-  const emailInput = document.getElementById('signinEmail');
-  const passInput = document.getElementById('signinPassword');
-
-  if (type === 'admin') {
-    emailInput.value = 'admin@aurora.com';
-    passInput.value = 'admin123';
-    showToast('Filled admin demo credentials: admin@aurora.com', 'info');
-  } else {
-    emailInput.value = 'sarah@example.com';
-    passInput.value = 'user123';
-    showToast('Filled customer demo credentials: sarah@example.com', 'info');
-  }
-}
-
 // ═══ SIGN IN FLOW ═══
 async function handleSignIn() {
   const email = (document.getElementById('signinEmail').value || '').trim();

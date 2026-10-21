@@ -161,19 +161,6 @@ function toggleAuthModal() {
   window.location.href = '/login';
 }
 
-function fillDemoCredentials(type) {
-  showLogin();
-  const emailInput = document.getElementById('loginEmail');
-  const passInput = document.getElementById('loginPassword');
-  if (type === 'admin') {
-    emailInput.value = 'admin@aurora.com';
-    passInput.value = 'admin123';
-  } else {
-    emailInput.value = 'customer@aurora.com';
-    passInput.value = 'user123';
-  }
-}
-
 function closeAuthModal() {
   document.getElementById('authModal').classList.remove('open');
   clearAuthAlert();
