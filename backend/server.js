@@ -168,18 +168,34 @@ app.use(express.static(path.join(__dirname, '..', 'frontend')));
   app.post('/api/auth/register', (req, res) => {
     try {
       const bcrypt = require('bcryptjs');
-      const { name, email, password } = req.body;
+      const { name, email, password, adminCode } = req.body;
       if (!name || !email || !password) return res.status(400).json({ error: 'Name, email, and password are required' });
       const exists = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
       if (exists) return res.status(409).json({ error: 'Email already registered' });
       const id = uuidv4();
       const hash = bcrypt.hashSync(password, 10);
+      let role = 'customer';
+      if (adminCode) {
+        if (adminCode !== ADMIN_SECRET_CODE) {
+          return res.status(403).json({ error: 'Invalid admin access code. Administrator account creation denied.' });
+        }
+        role = 'admin';
+      }
       db.prepare('INSERT INTO users (id, name, email, password_hash, role) VALUES (?, ?, ?, ?, ?)')
-        .run(id, name, email, hash, 'customer');
+        .run(id, name, email, hash, role);
       saveDb();
       const user = db.prepare('SELECT id, name, email, role, created_at FROM users WHERE id = ?').get(id);
       res.status(201).json({ user });
     } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // Verify unique admin code
+  app.post('/api/auth/verify-admin-code', (req, res) => {
+    const { code } = req.body || {};
+    if (code === ADMIN_SECRET_CODE) {
+      return res.json({ valid: true, message: 'Valid administrator authorization code.' });
+    }
+    return res.status(403).json({ valid: false, error: 'Invalid administrator access code.' });
   });
 
   // ═══════════════════════════════════════════════════
@@ -432,8 +448,9 @@ app.use(express.static(path.join(__dirname, '..', 'frontend')));
     } catch (e) { res.status(500).json({ error: e.message }); }
   });
 
-  // SPA fallback
+  // Page routes
   app.get('/', (req, res) => res.sendFile(path.join(__dirname, '..', 'frontend', 'index.html')));
+  app.get('/login', (req, res) => res.sendFile(path.join(__dirname, '..', 'frontend', 'login.html')));
   app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, '..', 'frontend', 'admin.html')));
 
   app.listen(PORT, () => {
@@ -442,6 +459,7 @@ app.use(express.static(path.join(__dirname, '..', 'frontend')));
     console.log('   ║──────────────────────────────────────────────────║');
     console.log(`   ║  Server running on http://localhost:${PORT}         ║`);
     console.log(`   ║  Shop:  http://localhost:${PORT}/                   ║`);
+    console.log(`   ║  Login: http://localhost:${PORT}/login               ║`);
     console.log(`   ║  Admin: http://localhost:${PORT}/admin               ║`);
     console.log('   ║──────────────────────────────────────────────────║');
     console.log('   ║  🔥 Firebase Authentication: ENABLED            ║');

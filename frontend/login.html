@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In & Register — Aurora Shopping Platform</title>
+  <meta name="description" content="Unified authentication portal for Aurora customers and store administrators.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌌</text></svg>">
+  <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+  <!-- ═══ AMBIENT BACKGROUND GLOWS ═══ -->
+  <div class="ambient-glow ambient-glow-1"></div>
+  <div class="ambient-glow ambient-glow-2"></div>
+  <div class="ambient-glow ambient-glow-3"></div>
+
+  <!-- ═══ TOP NAVIGATION ═══ -->
+  <nav class="portal-top-nav">
+    <a href="/" class="back-link" id="backToShopLink">
+      <span>←</span>
+      <span>Back to Storefront</span>
+    </a>
+    <div class="top-security-badge">
+      <span>🛡️</span>
+      <span>256-Bit SSL Encrypted Portal</span>
+    </div>
+  </nav>
+
+  <!-- ═══ MAIN LOGIN CONTAINER ═══ -->
+  <main class="login-container">
+    
+    <!-- Portal Brand Header -->
+    <header class="portal-header">
+      <a href="/" class="portal-logo" title="Aurora Shopping Platform">
+        <div class="logo-icon-orb">🌌</div>
+        <h1 class="portal-brand-title">Aurora</h1>
+      </a>
+      <p class="portal-subtitle" id="portalSubtitle">
+        Sign in to access your orders, cart, or the admin dashboard
+      </p>
+    </header>
+
+    <!-- Glassmorphic Auth Card -->
+    <div class="auth-card" id="authCard">
+      
+      <!-- Segmented Tab Switcher -->
+      <div class="tab-switcher" role="tablist">
+        <button class="tab-btn active" id="tabSignIn" onclick="switchAuthTab('signin')" role="tab" aria-selected="true">
+          <span>🔑</span> Sign In
+        </button>
+        <button class="tab-btn" id="tabRegister" onclick="switchAuthTab('register')" role="tab" aria-selected="false">
+          <span>📝</span> Create Account
+        </button>
+      </div>
+
+      <!-- Status / Error Alert Container -->
+      <div class="portal-alert" id="portalAlert" role="alert"></div>
+
+      <!-- ═══════════════════════════════════════════════════
+           TAB 1: SIGN IN FORM (BOTH CUSTOMER & ADMIN)
+           ═══════════════════════════════════════════════════ -->
+      <section class="auth-section" id="signinCard">
+        <form onsubmit="event.preventDefault(); handleSignIn();" autocomplete="on">
+          
+          <div class="form-group">
+            <label for="signinEmail">Email Address</label>
+            <div class="input-wrapper">
+              <span class="input-icon">✉️</span>
+              <input type="email" id="signinEmail" class="form-input" placeholder="name@example.com" required autocomplete="email">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="signinPassword">
+              <span>Password</span>
+              <button type="button" class="forgot-link" onclick="showForgotPasswordView()">Forgot Password?</button>
+            </label>
+            <div class="input-wrapper">
+              <span class="input-icon">🔒</span>
+              <input type="password" id="signinPassword" class="form-input" placeholder="Enter your password" required autocomplete="current-password">
+              <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('signinPassword', this)" title="Show password">👁️</button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit" id="signinSubmitBtn">
+            <span>Sign In to Aurora →</span>
+          </button>
+        </form>
+
+        <div class="or-divider">
+          <span>or continue with</span>
+        </div>
+
+        <button type="button" class="btn-google" id="googleSignInBtn" onclick="handleGoogleSignIn()">
+          <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
+            <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/>
+            <path d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+            <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+          </svg>
+          <span>Continue with Google</span>
+        </button>
+
+        <!-- Quick Demo Credentials Box -->
+        <div class="demo-accounts-box">
+          <div class="demo-box-header">
+            <span>⚡</span>
+            <span>One-Click Demo Credentials</span>
+          </div>
+          <div class="demo-chips">
+            <button type="button" class="demo-chip" onclick="fillDemo('customer')" title="Fill Sarah Johnson (Customer)">
+              <span>👤</span>
+              <div>
+                <strong>Customer Demo</strong>
+                <span>sarah@example.com</span>
+              </div>
+            </button>
+            <button type="button" class="demo-chip" onclick="fillDemo('admin')" title="Fill Admin Demo">
+              <span>🛡️</span>
+              <div>
+                <strong>Admin Demo</strong>
+                <span>admin@aurora.com</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════
+           TAB 2: REGISTER FORM (CUSTOMER & ADMIN WITH CODE)
+           ═══════════════════════════════════════════════════ -->
+      <section class="auth-section" id="registerCard" style="display: none;">
+        <form onsubmit="event.preventDefault(); handleRegister();" autocomplete="on">
+          
+          <!-- Role Selector -->
+          <span class="role-selector-label">Select Account Type</span>
+          <div class="role-cards-grid">
+            <div class="role-card selected" id="roleCardCustomer" onclick="selectRole('customer')" role="button" tabindex="0">
+              <div class="role-card-top">
+                <span class="role-card-icon">🛍️</span>
+                <span class="role-pill customer">Customer</span>
+              </div>
+              <div class="role-card-title">Shopper</div>
+              <div class="role-card-desc">Personal orders, cart & reviews</div>
+            </div>
+
+            <div class="role-card admin-type" id="roleCardAdmin" onclick="selectRole('admin')" role="button" tabindex="0">
+              <div class="role-card-top">
+                <span class="role-card-icon">🛡️</span>
+                <span class="role-pill admin">Admin</span>
+              </div>
+              <div class="role-card-title">Administrator</div>
+              <div class="role-card-desc">Code required for business access</div>
+            </div>
+          </div>
+
+          <!-- Secret Admin Code Panel (Shows only when Admin is selected) -->
+          <div class="admin-code-panel" id="adminCodePanel" style="display: none;">
+            <div class="admin-code-panel-header">
+              <div class="shield-badge">🔑</div>
+              <span class="title">Administrator Access Code</span>
+              <span class="required-tag">Required</span>
+            </div>
+            <div class="admin-code-input-wrapper">
+              <div class="input-wrapper">
+                <span class="input-icon">🔐</span>
+                <input type="password" id="regAdminCode" class="form-input" placeholder="Enter private admin security code" autocomplete="off">
+                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('regAdminCode', this)" title="Show code">👁️</button>
+              </div>
+            </div>
+            <p class="admin-code-hint">
+              🛡️ Master security authorization required. Default secret code: <strong>AURORA-ADMIN-2026</strong>.
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label for="regName">Full Name</label>
+            <div class="input-wrapper">
+              <span class="input-icon">👤</span>
+              <input type="text" id="regName" class="form-input" placeholder="e.g. Alex Morgan" required autocomplete="name">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="regEmail">Email Address</label>
+            <div class="input-wrapper">
+              <span class="input-icon">✉️</span>
+              <input type="email" id="regEmail" class="form-input" placeholder="name@example.com" required autocomplete="email">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="regPassword">Password</label>
+            <div class="input-wrapper">
+              <span class="input-icon">🔒</span>
+              <input type="password" id="regPassword" class="form-input" placeholder="At least 6 characters" required autocomplete="new-password">
+              <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('regPassword', this)" title="Show password">👁️</button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit" id="registerSubmitBtn">
+            <span>🛍️ Create Customer Account</span>
+          </button>
+        </form>
+
+        <div class="or-divider">
+          <span>or register with</span>
+        </div>
+
+        <button type="button" class="btn-google" onclick="handleGoogleSignIn()">
+          <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/>
+            <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332C2.438 15.983 5.482 18 9 18z" fill="#34A853"/>
+            <path d="M3.964 10.71c-.18-.54-.282-1.117-.282-1.71s.102-1.17.282-1.71V4.958H.957C.347 6.173 0 7.548 0 9s.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/>
+            <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0 5.482 0 2.438 2.017.957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
+          </svg>
+          <span>Sign up with Google</span>
+        </button>
+      </section>
+
+      <!-- ═══════════════════════════════════════════════════
+           FORGOT PASSWORD DRAWER
+           ═══════════════════════════════════════════════════ -->
+      <section class="forgot-password-card" id="forgotPasswordCard">
+        <form onsubmit="event.preventDefault(); handleSendPasswordReset();">
+          <p style="font-size: 0.86rem; color: var(--text-secondary); margin-bottom: 1.25rem; line-height: 1.5;">
+            Enter the email address registered with your Aurora account. We will send you an official reset link.
+          </p>
+
+          <div class="form-group">
+            <label for="forgotEmail">Email Address</label>
+            <div class="input-wrapper">
+              <span class="input-icon">✉️</span>
+              <input type="email" id="forgotEmail" class="form-input" placeholder="name@example.com" required>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-submit" id="forgotSubmitBtn">
+            <span>Send Password Reset Link →</span>
+          </button>
+
+          <div style="text-align: center; margin-top: 1.25rem;">
+            <button type="button" class="forgot-link" onclick="hideForgotPasswordView()">
+              ← Back to Sign In
+            </button>
+          </div>
+        </form>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ═══ TOAST NOTIFICATION CONTAINER ═══ -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Firebase JS SDK (compat mode) -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAkiDmaGHoOpg9Dl9_vrgGTW4CRtoZlR0g",
+      authDomain: "aurora-ee3eb.firebaseapp.com",
+      projectId: "aurora-ee3eb",
+      storageBucket: "aurora-ee3eb.firebasestorage.app",
+      messagingSenderId: "40534462324",
+      appId: "1:40534462324:web:7b13e1e0684296aecbe621",
+      measurementId: "G-Y9DYJ3BJZT"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+  <script src="js/login.js"></script>
+</body>
+</html>

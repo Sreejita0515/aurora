@@ -65,20 +65,14 @@ async function syncFirebaseUser(fbUser) {
 
 // ═══ INITIALIZATION ═══
 document.addEventListener('DOMContentLoaded', () => {
-  // ── Handle redirects from /admin ──
+  // ── Handle redirects from /admin or legacy queries ──
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('requireAdmin') === '1') {
-    // Redirected from admin page — not logged in
-    setTimeout(() => {
-      showLogin();
-      document.getElementById('authModal').classList.add('open');
-      setAuthAlert('Please sign in with an admin account to access the dashboard.', 'info');
-    }, 400);
-    window.history.replaceState({}, '', '/');
+    window.location.href = '/login?redirect=/admin&requireAdmin=1';
+    return;
   } else if (urlParams.get('adminDenied') === '1') {
-    // Redirected from admin page — logged in but not admin
-    setTimeout(() => showToast('Access denied: your account does not have administrator privileges.', 'error'), 400);
-    window.history.replaceState({}, '', '/');
+    window.location.href = '/login?redirect=/admin&adminDenied=1';
+    return;
   }
 
   // Listen for Firebase auth state changes
@@ -133,7 +127,7 @@ function handleUserMenuClick() {
   if (currentUser) {
     toggleUserDropdown();
   } else {
-    toggleAuthModal();
+    window.location.href = '/login';
   }
 }
 
@@ -164,8 +158,7 @@ function toggleAuthModal() {
     toggleUserDropdown();
     return;
   }
-  showLogin();
-  document.getElementById('authModal').classList.add('open');
+  window.location.href = '/login';
 }
 
 function fillDemoCredentials(type) {

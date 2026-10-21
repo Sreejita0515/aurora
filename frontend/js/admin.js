@@ -35,8 +35,8 @@ function initAdminAuth() {
       firebaseAdminUserObj = fbUser;
       await verifyAndLoadAdmin(fbUser);
     } else {
-      // Not signed in — redirect to storefront with sign-in prompt
-      window.location.href = '/?requireAdmin=1';
+      // Not signed in — redirect to unified login portal
+      window.location.href = '/login?redirect=/admin&requireAdmin=1';
     }
   });
 }
@@ -64,8 +64,8 @@ async function verifyAndLoadAdmin(fbUser) {
     await loadDashboard();
   } catch (err) {
     console.error('Admin verification failed:', err);
-    // Redirect to storefront with access denied flag
-    window.location.href = '/?adminDenied=1';
+    // Redirect to login portal with access denied flag
+    window.location.href = '/login?redirect=/admin&adminDenied=1';
   }
 }
 
