@@ -175,7 +175,7 @@ function renderOverview() {
     <div class="kpi-card">
       <div class="kpi-icon">💰</div>
       <div class="kpi-label">Total Revenue</div>
-      <div class="kpi-value">$${formatNumber(o.totalRevenue)}</div>
+      <div class="kpi-value">₹${formatNumber(o.totalRevenue)}</div>
       <span class="kpi-change ${growthClass}">${growthIcon} ${Math.abs(o.revenueGrowth)}%</span>
     </div>
     <div class="kpi-card">
@@ -192,12 +192,12 @@ function renderOverview() {
     <div class="kpi-card">
       <div class="kpi-icon">🛒</div>
       <div class="kpi-label">Avg Order Value</div>
-      <div class="kpi-value">$${o.avgOrderValue.toFixed(2)}</div>
+      <div class="kpi-value">${formatPrice(o.avgOrderValue)}</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-icon">📈</div>
       <div class="kpi-label">Last 30 Days</div>
-      <div class="kpi-value">$${formatNumber(o.last30Revenue)}</div>
+      <div class="kpi-value">₹${formatNumber(o.last30Revenue)}</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-icon">❌</div>
@@ -247,7 +247,7 @@ function renderSales() {
     return `
       <tr>
         <td class="product-name-cell">${cat.icon} ${cat.category}</td>
-        <td class="revenue-cell">$${formatNumber(cat.revenue)}</td>
+        <td class="revenue-cell">₹${formatNumber(cat.revenue)}</td>
         <td class="number-cell">${cat.orders}</td>
         <td>
           <div style="display: flex; align-items: center; gap: 8px;">
@@ -275,7 +275,7 @@ function renderProducts() {
         ${p.name}
       </td>
       <td class="number-cell">${p.total_sold}</td>
-      <td class="revenue-cell">$${formatNumber(p.total_revenue)}</td>
+      <td class="revenue-cell">₹${formatNumber(p.total_revenue)}</td>
       <td><span class="stars" style="font-size: 0.75rem; color: #fbbf24;">${'★'.repeat(Math.floor(p.rating))}</span> ${p.rating}</td>
     </tr>
   `).join('');
@@ -288,7 +288,7 @@ function renderProducts() {
       <tr>
         <td class="product-name-cell">${p.name}</td>
         <td class="number-cell">${p.total_sold}</td>
-        <td class="revenue-cell">$${formatNumber(p.total_revenue)}</td>
+        <td class="revenue-cell">₹${formatNumber(p.total_revenue)}</td>
         <td><span class="status-badge ${stockClass}">${p.stock}</span></td>
       </tr>
     `;
@@ -301,7 +301,7 @@ function renderProducts() {
       <td class="product-name-cell">${p.name}</td>
       <td><span class="stars" style="font-size: 0.75rem; color: #fbbf24;">${'★'.repeat(Math.floor(p.rating))}</span> ${p.rating}</td>
       <td class="number-cell">${p.reviews_count}</td>
-      <td class="number-cell">$${p.price.toFixed(2)}</td>
+      <td class="number-cell">${formatPrice(p.price)}</td>
     </tr>
   `).join('');
 }
@@ -355,8 +355,8 @@ function renderCustomers() {
         <div style="font-size: 0.75rem; color: var(--text-muted);">${c.email}</div>
       </td>
       <td class="number-cell">${c.total_orders}</td>
-      <td class="revenue-cell">$${formatNumber(c.total_spent)}</td>
-      <td class="number-cell">$${c.avg_order.toFixed(2)}</td>
+      <td class="revenue-cell">₹${formatNumber(c.total_spent)}</td>
+      <td class="number-cell">${formatPrice(c.avg_order)}</td>
       <td style="color: var(--text-muted); font-size: 0.8rem;">
         ${new Date(c.last_order).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
       </td>
@@ -372,7 +372,7 @@ function renderInventory() {
     <div class="kpi-card">
       <div class="kpi-icon">💎</div>
       <div class="kpi-label">Inventory Value</div>
-      <div class="kpi-value">$${formatNumber(inv.inventoryValue)}</div>
+      <div class="kpi-value">₹${formatNumber(inv.inventoryValue)}</div>
     </div>
     <div class="kpi-card">
       <div class="kpi-icon">🚨</div>
@@ -418,7 +418,7 @@ function renderInventory() {
       <td class="product-name-cell">${cat.icon} ${cat.category}</td>
       <td class="number-cell">${cat.product_count}</td>
       <td class="number-cell">${cat.total_stock}</td>
-      <td class="revenue-cell">$${formatNumber(cat.inventory_value)}</td>
+      <td class="revenue-cell">₹${formatNumber(cat.inventory_value)}</td>
     </tr>
   `).join('');
 }
@@ -478,7 +478,7 @@ async function loadRecentOrders() {
           <div style="font-weight: 600; font-size: 0.85rem;">${order.customer_name}</div>
           <div style="font-size: 0.75rem; color: var(--text-muted);">${order.customer_email}</div>
         </td>
-        <td class="revenue-cell">$${order.total.toFixed(2)}</td>
+        <td class="revenue-cell">${formatPrice(order.total)}</td>
         <td><span class="order-status ${order.status}">${order.status}</span></td>
         <td style="color: var(--text-muted); font-size: 0.8rem;">
           ${new Date(order.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
@@ -532,8 +532,8 @@ function renderBarChart(containerId, data, valueKey, labelKey) {
     const label = d[labelKey].length > 5 ? d[labelKey].substring(5) : d[labelKey]; // trim year from date
     return `
       <div class="bar-wrapper">
-        <div class="bar-value">$${Math.round(d[valueKey])}</div>
-        <div class="bar" style="height: ${Math.max(height, 2)}%;" title="$${d[valueKey].toFixed(2)}"></div>
+        <div class="bar-value">₹${Math.round(d[valueKey]).toLocaleString('en-IN')}</div>
+        <div class="bar" style="height: ${Math.max(height, 2)}%;" title="${formatPrice(d[valueKey])}"></div>
         <div class="bar-label">${label}</div>
       </div>
     `;
@@ -553,8 +553,8 @@ function renderWeeklyChart(data) {
     const height = maxRevenue > 0 ? (d.revenue / maxRevenue * 100) : 0;
     return `
       <div class="bar-wrapper">
-        <div class="bar-value">$${Math.round(d.revenue)}</div>
-        <div class="bar" style="height: ${Math.max(height, 2)}%;" title="${d.orders} orders"></div>
+        <div class="bar-value">₹${Math.round(d.revenue).toLocaleString('en-IN')}</div>
+        <div class="bar" style="height: ${Math.max(height, 2)}%;" title="${d.orders} orders (${formatPrice(d.revenue)})"></div>
         <div class="bar-label">${d.day}</div>
       </div>
     `;
@@ -581,7 +581,7 @@ function renderCategoryDonut() {
   container.innerHTML = `
     <div class="donut-chart" style="background: conic-gradient(${gradientParts.join(', ')});">
       <div class="donut-center">
-        <div class="donut-value">$${formatNumber(total)}</div>
+        <div class="donut-value">₹${formatNumber(total)}</div>
         <div class="donut-label">Total Revenue</div>
       </div>
     </div>
@@ -634,10 +634,16 @@ function renderStatusDistribution(data) {
 }
 
 // ═══ UTILITIES ═══
+function formatPrice(val) {
+  if (val === null || val === undefined || isNaN(val)) return '₹0';
+  return '₹' + Math.round(Number(val)).toLocaleString('en-IN');
+}
+
 function formatNumber(num) {
-  if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+  if (num >= 10000000) return (num / 10000000).toFixed(2) + ' Cr';
+  if (num >= 100000) return (num / 100000).toFixed(1) + ' L';
   if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-  return num.toFixed(2);
+  return Math.round(num).toLocaleString('en-IN');
 }
 
 function showToast(message, type = 'info') {
