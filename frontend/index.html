@@ -6,7 +6,7 @@
   <meta name="description" content="Aurora — Premium online shopping platform with curated products across electronics, fashion, home & living, and more.">
   <title>Aurora — Premium Shopping Experience</title>
   <link rel="stylesheet" href="css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2316181B'/><text x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='600' fill='%23FAF8F4' text-anchor='middle'>A</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌌</text></svg>">
 </head>
 <body>
 
@@ -21,20 +21,18 @@
     </a>
 
     <ul class="navbar-nav" id="main-nav">
-      <li><button class="nav-link active" data-tab="shop" onclick="switchTab('shop')">Shop</button></li>
-      <li><button class="nav-link" data-tab="orders" onclick="switchTab('orders')">My Orders</button></li>
-      <li><a href="/admin" class="nav-link" id="admin-link" style="display:none;">Admin</a></li>
+      <li><button class="nav-link active" data-tab="shop" onclick="switchTab('shop')">🛍️ Shop</button></li>
+      <li><button class="nav-link" data-tab="orders" onclick="switchTab('orders')">📦 My Orders</button></li>
+      <li><a href="/admin" class="nav-link" id="admin-link" style="display:none;">⚙️ Admin</a></li>
     </ul>
 
     <div class="navbar-actions">
       <div class="search-bar">
-        <span class="search-icon">
-          <svg class="icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        </span>
+        <span class="search-icon">🔍</span>
         <input type="text" id="searchInput" placeholder="Search products..." oninput="debounceSearch()">
       </div>
       <button class="cart-btn" id="cartToggle" onclick="toggleCart()">
-        <svg class="icon" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+        🛒
         <span class="badge" id="cartBadge"></span>
       </button>
       <div class="user-menu-wrapper" id="userMenuWrapper">
@@ -54,13 +52,13 @@
           <div class="user-dropdown-divider"></div>
           <div class="user-dropdown-items">
             <button class="dropdown-item" onclick="switchTab('orders'); closeUserDropdown();">
-              My Orders
+              <span>📋</span> My Orders
             </button>
             <a href="/admin" class="dropdown-item" id="dropdownAdminLink" style="display:none;">
-              Admin Dashboard
+              <span>⚙️</span> Admin Dashboard
             </a>
             <button class="dropdown-item danger" onclick="logout(); closeUserDropdown();">
-              Sign Out
+              <span>🚪</span> Sign Out
             </button>
           </div>
         </div>
@@ -75,35 +73,14 @@
       <div class="container">
         <!-- Hero -->
         <section class="hero">
-          <div class="hero-copy">
-            <div class="hero-eyebrow">Curated Marketplace</div>
-            <h1>Shop the<br><span class="gradient-text">extraordinary</span></h1>
-            <p>Handpicked electronics, fashion, home goods and more — selected for quality, not just trend. Every order shipped free.</p>
-            <div class="hero-actions">
-              <button class="btn btn-primary btn-lg" onclick="document.querySelector('.sort-bar').scrollIntoView({behavior:'smooth'})">Start Shopping →</button>
-              <button class="btn btn-ghost btn-lg" onclick="switchTab('orders')">Track an order</button>
-            </div>
-            <div class="trust-row">
-              <span>Free shipping</span>
-              <span class="divider"></span>
-              <span>30-day returns</span>
-              <span class="divider"></span>
-              <span>Secure checkout</span>
-            </div>
-          </div>
-          <div class="hero-visual" aria-hidden="true">
-            <div class="hero-visual-frame">
-              <img src="https://picsum.photos/seed/laptop1/700/875" alt="" loading="lazy">
-              <span class="hero-visual-tag">New arrivals</span>
-            </div>
-          </div>
+          <h1>Handcrafted <span class="gradient-text">Indian Heritage</span><br>& Modern Living</h1>
+          <p>Curated Banarasi silks, authentic spices, pure Ayurvedic wellness, artisanal Jaipur pottery, and festive treasures delivered across India.</p>
         </section>
 
         <!-- Categories -->
-        <div class="section-label">Shop by Category</div>
         <div class="categories-bar" id="categoriesBar">
           <button class="category-chip active" data-category="all" onclick="filterCategory('all', this)">
-            All Products
+            <span class="cat-icon">✨</span> All Products
           </button>
           <!-- Dynamic categories loaded here -->
         </div>
@@ -131,12 +108,10 @@
     <div class="tab-content" id="tab-orders">
       <div class="container">
         <section class="orders-section">
-          <h2>Order History</h2>
+          <h2>📦 Order History</h2>
           <div id="ordersContainer">
             <div class="empty-state" id="ordersEmpty">
-              <div class="empty-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8z"/><path d="M3.27 6.96 12 12l8.73-5.04M12 22.08V12"/></svg>
-              </div>
+              <div class="empty-icon">📋</div>
               <h3>No orders yet</h3>
               <p>Start shopping to see your orders here!</p>
               <button class="btn btn-primary" style="margin-top: 1rem;" onclick="switchTab('shop')">Browse Products</button>
@@ -151,33 +126,29 @@
   <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
   <div class="cart-sidebar" id="cartSidebar">
     <div class="cart-header">
-      <h2>Shopping Cart</h2>
-      <button class="cart-close" onclick="toggleCart()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
+      <h2>🛒 Shopping Cart</h2>
+      <button class="cart-close" onclick="toggleCart()">✕</button>
     </div>
     <div class="cart-items" id="cartItems">
       <div class="cart-empty">
-        <div class="empty-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
-        </div>
+        <div class="empty-icon">🛒</div>
         <p>Your cart is empty</p>
-        <p style="font-size: 0.85rem;">Add items to get started.</p>
+        <p style="font-size: 0.85rem;">Add items to get started!</p>
       </div>
     </div>
     <div class="cart-footer" id="cartFooter" style="display: none;">
       <div class="cart-summary">
         <div class="summary-row">
           <span>Subtotal</span>
-          <span id="cartSubtotal">$0.00</span>
+          <span id="cartSubtotal">₹0</span>
         </div>
         <div class="summary-row">
           <span>Shipping</span>
-          <span style="color: var(--success);">Free</span>
+          <span style="color: var(--success);">Free Across India 🇮🇳</span>
         </div>
         <div class="summary-row total">
           <span>Total</span>
-          <span id="cartTotal">$0.00</span>
+          <span id="cartTotal">₹0</span>
         </div>
       </div>
       <button class="btn btn-primary btn-lg" onclick="placeOrder()">
@@ -191,9 +162,7 @@
     <div class="modal">
       <div class="modal-header">
         <h2 id="authTitle">Sign In</h2>
-        <button class="modal-close" onclick="closeAuthModal()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
+        <button class="modal-close" onclick="closeAuthModal()">✕</button>
       </div>
       <div class="modal-body">
         <div class="auth-alert" id="authAlert"></div>
@@ -214,10 +183,10 @@
           </div>
           <div style="margin-bottom: 1.25rem; display: flex; gap: 8px; flex-wrap: wrap;">
             <button type="button" class="btn btn-secondary btn-sm" onclick="fillDemoCredentials('customer')" style="font-size: 0.75rem; padding: 5px 10px; border-radius: 999px;">
-              Demo Customer
+              👤 Demo Customer
             </button>
             <button type="button" class="btn btn-secondary btn-sm" onclick="fillDemoCredentials('admin')" style="font-size: 0.75rem; padding: 5px 10px; border-radius: 999px;">
-              Demo Admin
+              👑 Demo Admin
             </button>
           </div>
           <button class="btn btn-primary btn-lg" id="loginBtn" onclick="handleLogin()">Sign In</button>
@@ -262,6 +231,7 @@
 
           <!-- Admin Code Toggle -->
           <div class="admin-code-toggle" id="adminCodeToggle" onclick="toggleAdminCodeSection()" role="button" tabindex="0">
+            <span>🔑</span>
             <span>Register as Administrator?</span>
             <span class="toggle-arrow" id="adminCodeArrow">›</span>
           </div>
@@ -270,7 +240,7 @@
               <label>Admin Access Code</label>
               <input type="password" id="regAdminCode" placeholder="Enter administrator access code" onkeydown="if(event.key==='Enter') handleRegister()">
             </div>
-            <p class="admin-code-hint">Enter the secret code provided by Aurora to register with full administrator privileges. If you don't have an access code, leave this empty to register as a regular customer.</p>
+            <p class="admin-code-hint">🛡️ Enter the secret code provided by Aurora to register with full administrator privileges. If you don't have an access code, leave this empty to register as a regular customer.</p>
           </div>
           <button class="btn btn-primary btn-lg" id="registerBtn" onclick="handleRegister()">Create Account</button>
 
@@ -319,9 +289,7 @@
     <div class="modal" style="max-width: 700px;">
       <div class="modal-header">
         <h2>Product Details</h2>
-        <button class="modal-close" onclick="closeProductDetail()">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
+        <button class="modal-close" onclick="closeProductDetail()">✕</button>
       </div>
       <div class="modal-body" id="productDetailBody">
         <!-- Dynamic content -->
@@ -338,14 +306,16 @@
       <div class="footer-grid">
         <div class="footer-brand">
           <div class="brand-name">Aurora</div>
-          <p>Your premium destination for curated products. Discover extraordinary items handpicked for quality and style.</p>
+          <p>India's premier destination for curated artisanal handlooms, authentic spices, pure Ayurvedic wellness, and contemporary lifestyle treasures.</p>
         </div>
         <div class="footer-col">
-          <h4>Shop</h4>
-          <a href="#" onclick="filterCategory('cat-electronics')">Electronics</a>
-          <a href="#" onclick="filterCategory('cat-fashion')">Fashion</a>
-          <a href="#" onclick="filterCategory('cat-home')">Home & Living</a>
-          <a href="#" onclick="filterCategory('cat-sports')">Sports</a>
+          <h4>Shop By Category</h4>
+          <a href="#" onclick="filterCategory('cat-ethnic')">Ethnic & Festive Wear</a>
+          <a href="#" onclick="filterCategory('cat-handicrafts')">Handicrafts & Decor</a>
+          <a href="#" onclick="filterCategory('cat-ayurveda')">Ayurveda & Herbal Care</a>
+          <a href="#" onclick="filterCategory('cat-gourmet')">Spices, Teas & Saffron</a>
+          <a href="#" onclick="filterCategory('cat-jewelry')">Jewelry & Footwear</a>
+          <a href="#" onclick="filterCategory('cat-gadgets')">Smart Devices & Audio</a>
         </div>
         <div class="footer-col">
           <h4>Support</h4>
@@ -363,7 +333,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        &copy; 2026 Aurora. All rights reserved.
+        &copy; 2026 Aurora. All rights reserved. Built with 💜
       </div>
     </div>
   </footer>

@@ -17,6 +17,12 @@ let currentCategory = 'all';
 let searchTimeout = null;
 let pendingAdminCode = '';    // Set during registration to grant admin role
 
+// Indian Rupee currency formatter
+function formatPrice(val) {
+  if (val === null || val === undefined || isNaN(val)) return '₹0';
+  return '₹' + Math.round(Number(val)).toLocaleString('en-IN');
+}
+
 // ═══ FIREBASE AUTH HELPER ═══
 // Get a fresh ID token for API requests
 async function getIdToken() {
@@ -521,8 +527,8 @@ function createProductCard(product) {
         </div>
         <div class="product-price-row">
           <div>
-            <span class="price">$${product.price.toFixed(2)}</span>
-            ${hasDiscount ? `<span class="original-price">$${product.original_price.toFixed(2)}</span>` : ''}
+            <span class="price">${formatPrice(product.price)}</span>
+            ${hasDiscount ? `<span class="original-price">${formatPrice(product.original_price)}</span>` : ''}
           </div>
           ${hasDiscount ? `<span class="discount-pct">Save ${discountPct}%</span>` : ''}
         </div>
@@ -569,8 +575,8 @@ async function openProductDetail(productId) {
           </div>
           <p class="description">${p.description}</p>
           <div class="price-section">
-            <span class="current-price">$${p.price.toFixed(2)}</span>
-            ${hasDiscount ? `<span class="old-price">$${p.original_price.toFixed(2)}</span>` : ''}
+            <span class="current-price">${formatPrice(p.price)}</span>
+            ${hasDiscount ? `<span class="old-price">${formatPrice(p.original_price)}</span>` : ''}
           </div>
           <div class="stock-info ${stockClass}">${stockText}</div>
           <button class="btn btn-primary btn-lg" style="width: 100%;" onclick="addToCart('${p.id}'); closeProductDetail();"
@@ -700,8 +706,8 @@ function updateCartUI() {
   }
 
   footer.style.display = 'block';
-  document.getElementById('cartSubtotal').textContent = `$${cart.total.toFixed(2)}`;
-  document.getElementById('cartTotal').textContent = `$${cart.total.toFixed(2)}`;
+  document.getElementById('cartSubtotal').textContent = formatPrice(cart.total);
+  document.getElementById('cartTotal').textContent = formatPrice(cart.total);
 
   itemsContainer.innerHTML = cart.items.map(item => `
     <div class="cart-item">
@@ -709,7 +715,7 @@ function updateCartUI() {
            onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 72 72%22><rect fill=%22%23F1EDE4%22 width=%2272%22 height=%2272%22/><text x=%2236%22 y=%2236%22 text-anchor=%22middle%22 fill=%22%239D9A94%22 font-size=%2220%22>📦</text></svg>'">
       <div class="cart-item-info">
         <div class="item-name">${item.name}</div>
-        <div class="item-price">$${(item.price * item.quantity).toFixed(2)}</div>
+        <div class="item-price">${formatPrice(item.price * item.quantity)}</div>
       </div>
       <div class="cart-item-controls">
         <div class="quantity-controls">
@@ -742,7 +748,7 @@ async function placeOrder() {
       headers,
       body: JSON.stringify({
         userId: currentUser.id,
-        shippingAddress: '123 Main St, City, State 12345',
+        shippingAddress: '42 Park Street, Flat 4A, Kolkata, West Bengal 700016',
         paymentMethod: 'card',
       }),
     });
@@ -808,14 +814,14 @@ async function loadOrders() {
                    onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22><rect fill=%22%23F1EDE4%22 width=%2248%22 height=%2248%22/><text x=%2224%22 y=%2228%22 text-anchor=%22middle%22 fill=%22%239D9A94%22 font-size=%2216%22>📦</text></svg>'">
               <div class="item-details">
                 <div class="name">${item.product_name}</div>
-                <div class="qty">Qty: ${item.quantity} × $${item.price.toFixed(2)}</div>
+                <div class="qty">Qty: ${item.quantity} × ${formatPrice(item.price)}</div>
               </div>
-              <div class="item-total">$${(item.price * item.quantity).toFixed(2)}</div>
+              <div class="item-total">${formatPrice(item.price * item.quantity)}</div>
             </div>
           `).join('')}
         </div>
         <div class="order-total">
-          Total: <span style="margin-left: 8px; color: var(--accent-secondary);">$${order.total.toFixed(2)}</span>
+          Total: <span style="margin-left: 8px; color: var(--accent-secondary);">${formatPrice(order.total)}</span>
         </div>
       </div>
     `).join('');

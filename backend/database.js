@@ -198,9 +198,10 @@ async function initializeDatabase() {
     )
   `);
 
-  // Seed data if empty
+  // Seed data if empty or upgrade if old legacy catalog is detected
+  const ethnicCat = dbGet("SELECT id FROM categories WHERE id = 'cat-ethnic'");
   const userCount = dbGet('SELECT COUNT(*) as count FROM users');
-  if (!userCount || userCount.count === 0) {
+  if (!userCount || userCount.count === 0 || !ethnicCat) {
     seedDatabase();
   }
 
@@ -211,73 +212,304 @@ async function initializeDatabase() {
 function seedDatabase() {
   const now = new Date();
 
-  // --- Users ---
+  // Clear existing catalog data for clean Indian store seeding
+  dbRun('DELETE FROM reviews');
+  dbRun('DELETE FROM order_items');
+  dbRun('DELETE FROM orders');
+  dbRun('DELETE FROM cart_items');
+  dbRun('DELETE FROM products');
+  dbRun('DELETE FROM categories');
+
+  // Preserve existing users if any, or re-seed
+  const existingUsers = dbAll('SELECT * FROM users');
   const adminHash = bcrypt.hashSync('admin123', 10);
   const userHash = bcrypt.hashSync('user123', 10);
 
-  const users = [
+  let users = [
     { id: uuidv4(), name: 'Admin', email: 'admin@aurora.com', password_hash: adminHash, role: 'admin' },
-    { id: uuidv4(), name: 'Sarah Johnson', email: 'sarah@example.com', password_hash: userHash, role: 'customer' },
-    { id: uuidv4(), name: 'Mike Chen', email: 'mike@example.com', password_hash: userHash, role: 'customer' },
-    { id: uuidv4(), name: 'Emily Davis', email: 'emily@example.com', password_hash: userHash, role: 'customer' },
-    { id: uuidv4(), name: 'James Wilson', email: 'james@example.com', password_hash: userHash, role: 'customer' },
     { id: uuidv4(), name: 'Priya Patel', email: 'priya@example.com', password_hash: userHash, role: 'customer' },
-    { id: uuidv4(), name: 'Alex Turner', email: 'alex@example.com', password_hash: userHash, role: 'customer' },
-    { id: uuidv4(), name: 'Lisa Wang', email: 'lisa@example.com', password_hash: userHash, role: 'customer' },
+    { id: uuidv4(), name: 'Rohan Mukherjee', email: 'rohan@example.com', password_hash: userHash, role: 'customer' },
+    { id: uuidv4(), name: 'Ananya Iyer', email: 'ananya@example.com', password_hash: userHash, role: 'customer' },
+    { id: uuidv4(), name: 'Aarav Sharma', email: 'aarav@example.com', password_hash: userHash, role: 'customer' },
+    { id: uuidv4(), name: 'Sneha Nair', email: 'sneha@example.com', password_hash: userHash, role: 'customer' },
+    { id: uuidv4(), name: 'Vikram Malhotra', email: 'vikram@example.com', password_hash: userHash, role: 'customer' },
+    { id: uuidv4(), name: 'Arjun Mehta', email: 'arjun@example.com', password_hash: userHash, role: 'customer' },
   ];
 
-  for (const u of users) {
-    dbRun('INSERT INTO users (id, name, email, password_hash, role) VALUES (?, ?, ?, ?, ?)', [u.id, u.name, u.email, u.password_hash, u.role]);
+  if (!existingUsers || existingUsers.length === 0) {
+    for (const u of users) {
+      dbRun('INSERT INTO users (id, name, email, password_hash, role) VALUES (?, ?, ?, ?, ?)', [u.id, u.name, u.email, u.password_hash, u.role]);
+    }
+  } else {
+    // Keep existing users for seamless authentication
+    users = existingUsers;
   }
 
-  // --- Categories ---
+  // --- Indian Store Categories ---
   const categories = [
-    { id: 'cat-electronics', name: 'Electronics', icon: '💻', description: 'Latest gadgets and tech' },
-    { id: 'cat-fashion', name: 'Fashion', icon: '👗', description: 'Trending styles and apparel' },
-    { id: 'cat-home', name: 'Home & Living', icon: '🏠', description: 'Furniture and home decor' },
-    { id: 'cat-sports', name: 'Sports & Outdoors', icon: '⚽', description: 'Gear for active lifestyles' },
-    { id: 'cat-beauty', name: 'Beauty & Care', icon: '✨', description: 'Skincare and beauty products' },
-    { id: 'cat-books', name: 'Books & Media', icon: '📚', description: 'Books, music, and more' },
+    { id: 'cat-ethnic', name: 'Ethnic & Festive Wear', icon: '🥻', description: 'Handcrafted sarees, kurtas, dupattas & pashminas' },
+    { id: 'cat-handicrafts', name: 'Handicrafts & Home Decor', icon: '🪔', description: 'Brass diyas, Jaipur blue pottery, idols & artisanal crafts' },
+    { id: 'cat-ayurveda', name: 'Ayurveda & Herbal Care', icon: '🌿', description: 'Kumkumadi serums, pure herbal formulations & natural wellness' },
+    { id: 'cat-gourmet', name: 'Spices, Teas & Gourmet', icon: '☕', description: 'Malabar whole spices, Darjeeling estate teas & Kashmiri saffron' },
+    { id: 'cat-jewelry', name: 'Jewelry & Footwear', icon: '💎', description: 'Kundan choker sets, pure silver filigree jhumkas & Rajasthani mojris' },
+    { id: 'cat-gadgets', name: 'Smart Devices & Audio', icon: '🎧', description: 'Wireless ANC earbuds, smartwatches & audio essentials' },
   ];
 
   for (const c of categories) {
     dbRun('INSERT INTO categories (id, name, icon, description) VALUES (?, ?, ?, ?)', [c.id, c.name, c.icon, c.description]);
   }
 
-  // --- Products ---
+  // --- Authentic Indian Products with High-Resolution Photography ---
   const products = [
-    { id: uuidv4(), name: 'ProBook Ultra Laptop', description: 'Ultra-thin 14" laptop with M3 chip, 16GB RAM, 512GB SSD. Perfect for professionals and creatives.', price: 1299.99, original_price: 1499.99, image_url: 'https://picsum.photos/seed/laptop1/400/400', category_id: 'cat-electronics', stock: 45, rating: 4.8, reviews_count: 234, is_featured: 1 },
-    { id: uuidv4(), name: 'Galaxy Pro Smartphone', description: '6.7" AMOLED display, 108MP camera, 5G connectivity, 256GB storage.', price: 899.99, original_price: 999.99, image_url: 'https://picsum.photos/seed/phone1/400/400', category_id: 'cat-electronics', stock: 120, rating: 4.6, reviews_count: 567, is_featured: 1 },
-    { id: uuidv4(), name: 'SonicWave Pro Headphones', description: 'Active noise cancellation, 40-hour battery, premium drivers for audiophile-quality sound.', price: 349.99, original_price: 399.99, image_url: 'https://picsum.photos/seed/headphone1/400/400', category_id: 'cat-electronics', stock: 89, rating: 4.7, reviews_count: 892, is_featured: 1 },
-    { id: uuidv4(), name: 'SmartWatch Elite', description: 'Health tracking, GPS, always-on display, 7-day battery life, water resistant to 50m.', price: 299.99, original_price: null, image_url: 'https://picsum.photos/seed/watch1/400/400', category_id: 'cat-electronics', stock: 67, rating: 4.5, reviews_count: 345 },
-    { id: uuidv4(), name: '4K Ultra Monitor 27"', description: 'IPS panel, 144Hz refresh rate, HDR600, USB-C connectivity for creative professionals.', price: 549.99, original_price: 649.99, image_url: 'https://picsum.photos/seed/monitor1/400/400', category_id: 'cat-electronics', stock: 34, rating: 4.4, reviews_count: 156 },
-    { id: uuidv4(), name: 'Wireless Earbuds Pro', description: 'Spatial audio, adaptive EQ, 30-hour total battery, MagSafe charging case.', price: 179.99, original_price: 199.99, image_url: 'https://picsum.photos/seed/earbuds1/400/400', category_id: 'cat-electronics', stock: 200, rating: 4.3, reviews_count: 1023 },
-    { id: uuidv4(), name: 'Tablet Air 11"', description: 'Liquid Retina display, powerful chip, all-day battery, perfect for entertainment.', price: 599.99, original_price: null, image_url: 'https://picsum.photos/seed/tablet1/400/400', category_id: 'cat-electronics', stock: 55, rating: 4.6, reviews_count: 278 },
-    { id: uuidv4(), name: 'Portable Bluetooth Speaker', description: 'Waterproof, 20-hour battery, 360° sound, built-in microphone for calls.', price: 89.99, original_price: 119.99, image_url: 'https://picsum.photos/seed/speaker1/400/400', category_id: 'cat-electronics', stock: 150, rating: 4.2, reviews_count: 445 },
-    { id: uuidv4(), name: 'Classic Leather Jacket', description: 'Genuine leather, slim fit, satin lining, timeless style for every season.', price: 289.99, original_price: 349.99, image_url: 'https://picsum.photos/seed/jacket1/400/400', category_id: 'cat-fashion', stock: 30, rating: 4.7, reviews_count: 189, is_featured: 1 },
-    { id: uuidv4(), name: 'Designer Sunglasses', description: 'UV400 protection, polarized lenses, lightweight titanium frame.', price: 159.99, original_price: null, image_url: 'https://picsum.photos/seed/sunglasses1/400/400', category_id: 'cat-fashion', stock: 75, rating: 4.4, reviews_count: 312 },
-    { id: uuidv4(), name: 'Premium Running Shoes', description: 'React foam technology, breathable mesh, responsive cushioning for miles of comfort.', price: 129.99, original_price: 159.99, image_url: 'https://picsum.photos/seed/shoes1/400/400', category_id: 'cat-fashion', stock: 95, rating: 4.6, reviews_count: 678 },
-    { id: uuidv4(), name: 'Cashmere Sweater', description: '100% pure cashmere, crew neck, luxuriously soft and warm.', price: 199.99, original_price: 249.99, image_url: 'https://picsum.photos/seed/sweater1/400/400', category_id: 'cat-fashion', stock: 40, rating: 4.8, reviews_count: 145 },
-    { id: uuidv4(), name: 'Chronograph Watch', description: 'Swiss movement, sapphire crystal, stainless steel, water-resistant 100m.', price: 459.99, original_price: 599.99, image_url: 'https://picsum.photos/seed/chronowatch/400/400', category_id: 'cat-fashion', stock: 20, rating: 4.9, reviews_count: 89 },
-    { id: uuidv4(), name: 'Canvas Tote Bag', description: 'Organic cotton canvas, leather straps, spacious interior with laptop sleeve.', price: 69.99, original_price: null, image_url: 'https://picsum.photos/seed/bag1/400/400', category_id: 'cat-fashion', stock: 110, rating: 4.3, reviews_count: 234 },
-    { id: uuidv4(), name: 'Ergonomic Office Chair', description: 'Lumbar support, adjustable armrests, breathable mesh, 360° swivel.', price: 449.99, original_price: 549.99, image_url: 'https://picsum.photos/seed/chair1/400/400', category_id: 'cat-home', stock: 25, rating: 4.5, reviews_count: 567, is_featured: 1 },
-    { id: uuidv4(), name: 'Minimalist Desk Lamp', description: 'LED, adjustable brightness and color temperature, wireless charging base.', price: 79.99, original_price: null, image_url: 'https://picsum.photos/seed/lamp1/400/400', category_id: 'cat-home', stock: 85, rating: 4.4, reviews_count: 234 },
-    { id: uuidv4(), name: 'Smart Air Purifier', description: 'HEPA H13 filter, real-time air quality monitor, covers 500 sq ft, whisper quiet.', price: 249.99, original_price: 299.99, image_url: 'https://picsum.photos/seed/purifier1/400/400', category_id: 'cat-home', stock: 42, rating: 4.6, reviews_count: 189 },
-    { id: uuidv4(), name: 'Luxury Bedding Set', description: '1000-thread count Egyptian cotton, includes duvet cover, sheet set, and pillowcases.', price: 189.99, original_price: 239.99, image_url: 'https://picsum.photos/seed/bedding1/400/400', category_id: 'cat-home', stock: 60, rating: 4.7, reviews_count: 345 },
-    { id: uuidv4(), name: 'Espresso Machine Pro', description: 'Built-in grinder, steam wand, 15-bar pressure, touchscreen display.', price: 699.99, original_price: 849.99, image_url: 'https://picsum.photos/seed/coffee1/400/400', category_id: 'cat-home', stock: 18, rating: 4.8, reviews_count: 123 },
-    { id: uuidv4(), name: 'Indoor Plant Set (3-pack)', description: 'Low-maintenance succulents in ceramic pots, perfect for desk or shelf.', price: 39.99, original_price: null, image_url: 'https://picsum.photos/seed/plant1/400/400', category_id: 'cat-home', stock: 200, rating: 4.2, reviews_count: 456 },
-    { id: uuidv4(), name: 'Carbon Fiber Bicycle', description: 'Lightweight frame, Shimano 22-speed, disc brakes, aerodynamic design.', price: 1899.99, original_price: 2199.99, image_url: 'https://picsum.photos/seed/bike1/400/400', category_id: 'cat-sports', stock: 12, rating: 4.8, reviews_count: 67 },
-    { id: uuidv4(), name: 'Yoga Mat Premium', description: 'Non-slip, eco-friendly TPE, 6mm thick, includes carrying strap.', price: 49.99, original_price: null, image_url: 'https://picsum.photos/seed/yoga1/400/400', category_id: 'cat-sports', stock: 180, rating: 4.5, reviews_count: 789 },
-    { id: uuidv4(), name: 'Hiking Backpack 45L', description: 'Waterproof, ventilated back panel, multiple compartments, rain cover included.', price: 129.99, original_price: 159.99, image_url: 'https://picsum.photos/seed/backpack1/400/400', category_id: 'cat-sports', stock: 55, rating: 4.6, reviews_count: 234 },
-    { id: uuidv4(), name: 'Resistance Bands Set', description: '5-piece set with varying resistance levels, includes door anchor and carry bag.', price: 29.99, original_price: 39.99, image_url: 'https://picsum.photos/seed/bands1/400/400', category_id: 'cat-sports', stock: 300, rating: 4.3, reviews_count: 1234 },
-    { id: uuidv4(), name: 'Tennis Racket Pro', description: 'Graphite frame, string tension 55-65 lbs, grip size 4 3/8, with cover.', price: 189.99, original_price: null, image_url: 'https://picsum.photos/seed/tennis1/400/400', category_id: 'cat-sports', stock: 40, rating: 4.4, reviews_count: 156 },
-    { id: uuidv4(), name: 'Vitamin C Serum', description: '20% Vitamin C, Hyaluronic Acid, Vitamin E. Brightens and firms skin.', price: 34.99, original_price: 44.99, image_url: 'https://picsum.photos/seed/serum1/400/400', category_id: 'cat-beauty', stock: 250, rating: 4.7, reviews_count: 1567 },
-    { id: uuidv4(), name: 'Hair Dryer Professional', description: 'Ionic technology, 3 heat settings, lightweight design, includes diffuser.', price: 149.99, original_price: 179.99, image_url: 'https://picsum.photos/seed/hairdryer1/400/400', category_id: 'cat-beauty', stock: 70, rating: 4.5, reviews_count: 345 },
-    { id: uuidv4(), name: 'Luxury Fragrance Set', description: '3 signature scents in 30ml bottles, perfect for gifting or trying new favorites.', price: 89.99, original_price: null, image_url: 'https://picsum.photos/seed/perfume1/400/400', category_id: 'cat-beauty', stock: 65, rating: 4.6, reviews_count: 234 },
-    { id: uuidv4(), name: 'Electric Toothbrush', description: 'Sonic technology, 5 modes, 2-minute timer, includes 4 brush heads.', price: 79.99, original_price: 99.99, image_url: 'https://picsum.photos/seed/toothbrush1/400/400', category_id: 'cat-beauty', stock: 130, rating: 4.4, reviews_count: 678 },
-    { id: uuidv4(), name: 'The Art of Innovation', description: 'Bestselling guide to creative thinking and building breakthrough products.', price: 24.99, original_price: null, image_url: 'https://picsum.photos/seed/book1/400/400', category_id: 'cat-books', stock: 500, rating: 4.5, reviews_count: 2345 },
-    { id: uuidv4(), name: 'Wireless E-Reader', description: '7" anti-glare display, weeks of battery, waterproof, 32GB storage.', price: 139.99, original_price: 159.99, image_url: 'https://picsum.photos/seed/ereader1/400/400', category_id: 'cat-books', stock: 80, rating: 4.7, reviews_count: 890 },
-    { id: uuidv4(), name: 'Vinyl Record Collection', description: 'Curated set of 5 classic albums on 180g vinyl, audiophile quality pressing.', price: 99.99, original_price: 129.99, image_url: 'https://picsum.photos/seed/vinyl1/400/400', category_id: 'cat-books', stock: 35, rating: 4.8, reviews_count: 123 },
+    {
+      id: uuidv4(),
+      name: 'Banarasi Katan Silk Saree',
+      description: 'Handwoven pure Varanasi Katan silk saree adorned with intricate golden zari floral jaal, meenakari motifs, and a regal festive pallu. Includes matching unstitched blouse piece.',
+      price: 6499,
+      original_price: 8999,
+      image_url: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-ethnic',
+      stock: 25,
+      rating: 4.9,
+      reviews_count: 342,
+      is_featured: 1
+    },
+    {
+      id: uuidv4(),
+      name: 'Kashmiri Pashmina Embroidered Shawl',
+      description: '100% certified pure Himalayan Cashmere wool shawl featuring delicate needle Sozni embroidery handcrafted by master artisans of Srinagar.',
+      price: 4299,
+      original_price: 5999,
+      image_url: 'https://images.unsplash.com/photo-1607522370275-f14206abe5d3?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-ethnic',
+      stock: 30,
+      rating: 4.8,
+      reviews_count: 184,
+      is_featured: 1
+    },
+    {
+      id: uuidv4(),
+      name: 'Chikankari Hand-Embroidered Kurta',
+      description: 'Authentic Lucknowi Chikankari tunic crafted with delicate shadow-work floral motifs on breathable pure georgette with an inner slip.',
+      price: 1899,
+      original_price: 2499,
+      image_url: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-ethnic',
+      stock: 65,
+      rating: 4.7,
+      reviews_count: 256,
+      is_featured: 1
+    },
+    {
+      id: uuidv4(),
+      name: 'Kanjeevaram Temple Border Silk Dupatta',
+      description: 'Lustrous South Indian handloom silk dupatta woven with auspicious temple korvai borders and rich antique gold zari work.',
+      price: 2799,
+      original_price: 3499,
+      image_url: 'https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-ethnic',
+      stock: 40,
+      rating: 4.6,
+      reviews_count: 128
+    },
+    {
+      id: uuidv4(),
+      name: 'Royal Jaipur Blue Pottery Tea Set',
+      description: 'Traditional 7-piece quartz ceramic tea set (teapot + 6 cups) hand-painted with Persian-inspired floral motifs by heritage artisans of Jaipur.',
+      price: 1799,
+      original_price: 2299,
+      image_url: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-handicrafts',
+      stock: 45,
+      rating: 4.8,
+      reviews_count: 312,
+      is_featured: 1
+    },
+    {
+      id: uuidv4(),
+      name: 'Handcrafted Solid Brass Peacock Diya (Pair)',
+      description: 'Heavy cast pure brass oil lamps with intricately engraved peacock finials and deep oil reservoirs for Diwali, pooja rituals and home decor.',
+      price: 1399,
+      original_price: 1899,
+      image_url: 'https://images.unsplash.com/photo-1605651202774-7d573fd3f12d?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-handicrafts',
+      stock: 80,
+      rating: 4.9,
+      reviews_count: 478,
+      is_featured: 1
+    },
+    {
+      id: uuidv4(),
+      name: 'Hand-Casted Brass Ganesha Idol',
+      description: 'Auspicious bronze-tone brass sculpture of Lord Ganesha in blessing mudra, meticulously detailed and polished by traditional metal smiths.',
+      price: 2199,
+      original_price: 2799,
+      image_url: 'https://images.unsplash.com/photo-1582738411706-bfc8e691d1c2?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-handicrafts',
+      stock: 35,
+      rating: 4.9,
+      reviews_count: 512
+    },
+    {
+      id: uuidv4(),
+      name: 'Kashmir Walnut Wood Carved Keepsake Box',
+      description: 'Single-block walnut wood box featuring deep relief hand-carving of Kashmiri chinar leaves with soft royal velvet interior lining.',
+      price: 1499,
+      original_price: 1999,
+      image_url: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-handicrafts',
+      stock: 50,
+      rating: 4.6,
+      reviews_count: 94
+    },
+    {
+      id: uuidv4(),
+      name: 'Kumkumadi Miraculous Ayurvedic Serum (30ml)',
+      description: 'Ancient Ayurvedic formulation infused with 26 precious herbs, Kashmiri saffron, sandalwood, and lotus extract to illuminate and nourish glowing skin.',
+      price: 1499,
+      original_price: 1999,
+      image_url: 'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-ayurveda',
+      stock: 120,
+      rating: 4.8,
+      reviews_count: 840,
+      is_featured: 1
+    },
+    {
+      id: uuidv4(),
+      name: 'Himalayan Pure Shilajit & Gold Ashwagandha',
+      description: 'Grade-A purified high-altitude Himalayan shilajit resin enriched with organic KSM-66 ashwagandha for holistic vitality, stamina and mental focus.',
+      price: 999,
+      original_price: 1399,
+      image_url: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-ayurveda',
+      stock: 150,
+      rating: 4.7,
+      reviews_count: 630
+    },
+    {
+      id: uuidv4(),
+      name: 'Mysore Pure Sandalwood Dhoop Cones (Pack of 60)',
+      description: 'Charcoal-free natural temple dhoop crafted with authentic Mysore sandalwood paste, organic herbs, and floral extracts for peaceful meditation.',
+      price: 449,
+      original_price: 599,
+      image_url: 'https://images.unsplash.com/photo-1602928321679-560bb453f190?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-ayurveda',
+      stock: 220,
+      rating: 4.5,
+      reviews_count: 410
+    },
+    {
+      id: uuidv4(),
+      name: 'Kerala Malabar Cardamom & Black Pepper Tin',
+      description: 'Single-origin bold 8mm green cardamom pods and Tellicherry TGSEB black peppercorns harvested from high-elevation estates in Idukki, Kerala.',
+      price: 699,
+      original_price: 899,
+      image_url: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-gourmet',
+      stock: 140,
+      rating: 4.8,
+      reviews_count: 389,
+      is_featured: 1
+    },
+    {
+      id: uuidv4(),
+      name: 'Darjeeling First Flush Muscatel Black Tea (150g)',
+      description: 'Celebrated spring harvest whole-leaf black tea plucked from misty 6,000 ft Himalayan slopes with delicate floral and natural muscatel grape notes.',
+      price: 899,
+      original_price: 1199,
+      image_url: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-gourmet',
+      stock: 90,
+      rating: 4.7,
+      reviews_count: 295
+    },
+    {
+      id: uuidv4(),
+      name: 'Kashmiri Mogra Saffron (Grade A++ 1g Kesar)',
+      description: '100% authentic GI-tagged Pampore saffron with long dark red stigmas, intense natural aroma and high natural crocin coloring potency.',
+      price: 999,
+      original_price: 1299,
+      image_url: 'https://images.unsplash.com/photo-1509358271058-acd22cc93898?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-gourmet',
+      stock: 85,
+      rating: 4.9,
+      reviews_count: 540
+    },
+    {
+      id: uuidv4(),
+      name: 'Royal Assam CTC Masala Chai Blend (500g)',
+      description: 'Rich malty Assam CTC granular tea hand-blended with freshly crushed green cardamom, Ceylon cinnamon, cloves, ginger and black pepper.',
+      price: 499,
+      original_price: 649,
+      image_url: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-gourmet',
+      stock: 300,
+      rating: 4.8,
+      reviews_count: 720
+    },
+    {
+      id: uuidv4(),
+      name: 'Handcrafted Kundan & Pearl Choker Set',
+      description: '22K yellow gold-plated Kundan necklace with lustrous freshwater pearls and matching statement jhumki earrings. Handcrafted for festive celebrations.',
+      price: 2499,
+      original_price: 3499,
+      image_url: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-jewelry',
+      stock: 40,
+      rating: 4.8,
+      reviews_count: 380,
+      is_featured: 1
+    },
+    {
+      id: uuidv4(),
+      name: 'Cuttack Silver Filigree Jhumkas (925 Silver)',
+      description: 'Traditional Tarakasi pure sterling silver filigree bell earrings handcrafted by generational silversmiths of Cuttack, Odisha.',
+      price: 1699,
+      original_price: 2199,
+      image_url: 'https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-jewelry',
+      stock: 35,
+      rating: 4.7,
+      reviews_count: 165
+    },
+    {
+      id: uuidv4(),
+      name: 'Hand-Embroidered Rajasthani Leather Mojris',
+      description: 'Comfortable handcrafted genuine leather juttis with rich resham thread embroidery, cushioned footbed, and traditional curved toe styling.',
+      price: 1299,
+      original_price: 1799,
+      image_url: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-jewelry',
+      stock: 70,
+      rating: 4.5,
+      reviews_count: 210
+    },
+    {
+      id: uuidv4(),
+      name: 'AuraPods ANC Wireless Earbuds (Deep Bass Edition)',
+      description: 'Active Noise Cancellation up to 35dB, 50-hour battery life with Fast Charge, quad mic ENC, and tuned specifically for rich Indian music acoustics.',
+      price: 1999,
+      original_price: 3499,
+      image_url: 'https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-gadgets',
+      stock: 180,
+      rating: 4.6,
+      reviews_count: 1450,
+      is_featured: 1
+    },
+    {
+      id: uuidv4(),
+      name: 'AuraFit Apex Smartwatch (1.96" AMOLED)',
+      description: 'Vibrant always-on AMOLED display with Bluetooth calling, Hindi & English voice assistant, heart rate, SpO2 sensor and 100+ Indian sports modes.',
+      price: 2699,
+      original_price: 4499,
+      image_url: 'https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=600&q=80',
+      category_id: 'cat-gadgets',
+      stock: 110,
+      rating: 4.5,
+      reviews_count: 980
+    },
   ];
 
   for (const p of products) {
@@ -287,22 +519,33 @@ function seedDatabase() {
     );
   }
 
-  // --- Generate realistic order history (past 90 days) ---
+  // --- Realistic Indian Orders & Reviews ---
   const customerIds = users.filter(u => u.role === 'customer').map(u => u.id);
   const productList = products;
   const statuses = ['delivered', 'delivered', 'delivered', 'shipped', 'processing', 'pending', 'cancelled'];
 
+  const indianAddresses = [
+    '14/B Indiranagar, 100ft Road, Bengaluru, Karnataka 560038',
+    '42 Park Street, Flat 4A, Kolkata, West Bengal 700016',
+    'B-204 Bandra West, Hill Road, Mumbai, Maharashtra 400050',
+    'Flat 301, Sector 15, Noida, Uttar Pradesh 201301',
+    '78 C-Scheme, Subhash Marg, Jaipur, Rajasthan 302001',
+    'Plot 12, Road No. 36, Jubilee Hills, Hyderabad, Telangana 500033',
+    '25 Panampilly Nagar, Main Avenue, Kochi, Kerala 682036',
+    '502 Deccan Gymkhana, Pune, Maharashtra 411004',
+  ];
+
   const reviewComments = [
-    'Excellent quality! Highly recommend.',
-    'Good value for money, met my expectations.',
-    'Fast shipping, product as described.',
-    'Love it! Will buy again.',
-    'Decent product, could be better packaging.',
-    'Great product, using it daily.',
-    'Perfect gift, the recipient loved it!',
-    'Solid build quality, very impressed.',
-    'Works as advertised, no complaints.',
-    'Premium feel, worth every penny.',
+    'Superb quality Banarasi weave! The zari shine is pure royalty. Highly recommend!',
+    'Authentic Darjeeling first flush flavor. The floral aroma is unmatchable.',
+    'Very well packed and prompt delivery to Bengaluru. The brass finish is solid.',
+    'The Kumkumadi oil is pure magic. Natural radiant glow within a week of use!',
+    'Received in pristine condition in Kolkata. Genuine handcrafted Indian quality.',
+    'Great value for money! The Kundan choker set looks heavy and exquisite.',
+    'The aroma of the Malabar cardamom filled the entire kitchen when I opened the tin.',
+    'Pure soft Kashmiri Pashmina. Warm, light, and very elegant embroidery.',
+    'The Jaipur blue pottery set is an absolute conversation starter on my dining table.',
+    'Outstanding sound clarity and deep bass on the earbuds. Works great with regional tunes!',
   ];
 
   const orderCount = 80 + Math.floor(Math.random() * 41);
@@ -314,9 +557,10 @@ function seedDatabase() {
 
     const userId = customerIds[Math.floor(Math.random() * customerIds.length)];
     const status = daysAgo > 14 ? 'delivered' : statuses[Math.floor(Math.random() * statuses.length)];
+    const address = indianAddresses[Math.floor(Math.random() * indianAddresses.length)];
     const orderId = uuidv4();
 
-    const itemCount = 1 + Math.floor(Math.random() * 4);
+    const itemCount = 1 + Math.floor(Math.random() * 3);
     let total = 0;
     const usedProducts = new Set();
 
@@ -327,14 +571,14 @@ function seedDatabase() {
       } while (usedProducts.has(product.id));
       usedProducts.add(product.id);
 
-      const qty = 1 + Math.floor(Math.random() * 3);
+      const qty = 1 + Math.floor(Math.random() * 2);
       const price = product.price;
       total += price * qty;
 
       dbRun('INSERT INTO order_items (id, order_id, product_id, quantity, price) VALUES (?, ?, ?, ?, ?)', [uuidv4(), orderId, product.id, qty, price]);
 
       if (status === 'delivered' && Math.random() < 0.7) {
-        const rating = 3 + Math.floor(Math.random() * 3);
+        const rating = 4 + (Math.random() > 0.3 ? 1 : 0);
         const comment = reviewComments[Math.floor(Math.random() * reviewComments.length)];
         const reviewDate = new Date(orderDate);
         reviewDate.setDate(reviewDate.getDate() + Math.floor(Math.random() * 7) + 1);
@@ -342,10 +586,11 @@ function seedDatabase() {
       }
     }
 
-    dbRun('INSERT INTO orders (id, user_id, total, status, shipping_address, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)', [orderId, userId, Math.round(total * 100) / 100, status, '123 Main St, City, State 12345', dateStr, dateStr]);
+    dbRun('INSERT INTO orders (id, user_id, total, status, shipping_address, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)', [orderId, userId, Math.round(total), status, address, dateStr, dateStr]);
   }
 
-  console.log(`✅ Database seeded: ${users.length} users, ${categories.length} categories, ${products.length} products, ${orderCount} orders`);
+  console.log(`✅ Indian Store database seeded: ${categories.length} categories, ${products.length} Indian products, ${orderCount} orders`);
 }
 
 module.exports = { getDb, getDbSync, initializeDatabase, dbGet, dbAll, dbRun, saveDb };
+
