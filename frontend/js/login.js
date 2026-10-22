@@ -64,11 +64,11 @@ function initURLParams() {
 
   // Pre-alerts
   if (params.get('requireAdmin') === '1') {
-    showPortalAlert('🛡️ Administrator privileges required. Please sign in with an authorized admin account to access the dashboard.', 'admin-notice');
+    showPortalAlert('Administrator privileges required. Please sign in with an authorized admin account to access the dashboard.', 'admin-notice');
   } else if (params.get('adminDenied') === '1') {
-    showPortalAlert('⚠️ Access Denied: The account you are signed into does not have administrator privileges.', 'error');
+    showPortalAlert('Access denied: the account you are signed into does not have administrator privileges.', 'error');
   } else if (params.get('registered') === '1') {
-    showPortalAlert('🎉 Account created successfully! Please sign in to continue.', 'success');
+    showPortalAlert('Account created successfully. Please sign in to continue.', 'success');
   }
 }
 
@@ -110,7 +110,7 @@ function selectRole(role) {
     customerCard.classList.remove('selected');
     adminCard.classList.add('selected');
     adminPanel.style.display = 'block';
-    if (regBtn) regBtn.innerHTML = '<span>🛡️ Register as Administrator</span>';
+    if (regBtn) regBtn.innerHTML = '<span>Register as Administrator</span>';
     setTimeout(() => {
       const codeInput = document.getElementById('regAdminCode');
       if (codeInput) codeInput.focus();
@@ -119,23 +119,25 @@ function selectRole(role) {
     adminCard.classList.remove('selected');
     customerCard.classList.add('selected');
     adminPanel.style.display = 'none';
-    if (regBtn) regBtn.innerHTML = '<span>🛍️ Create Customer Account</span>';
+    if (regBtn) regBtn.innerHTML = '<span>Create Customer Account</span>';
     const codeInput = document.getElementById('regAdminCode');
     if (codeInput) codeInput.value = '';
   }
 }
 
 // ═══ SHOW / HIDE PASSWORD TOGGLES ═══
+const EYE_ICON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>';
+const EYE_OFF_ICON = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a21.8 21.8 0 0 1 5.06-6.06M9.9 4.24A10.4 10.4 0 0 1 12 4c7 0 11 7 11 7a21.75 21.75 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
 function togglePasswordVisibility(inputId, btn) {
   const input = document.getElementById(inputId);
   if (!input) return;
   if (input.type === 'password') {
     input.type = 'text';
-    btn.textContent = '🙈';
+    btn.innerHTML = EYE_OFF_ICON;
     btn.title = 'Hide password';
   } else {
     input.type = 'password';
-    btn.textContent = '👁️';
+    btn.innerHTML = EYE_ICON;
     btn.title = 'Show password';
   }
 }
@@ -302,9 +304,9 @@ async function handleRegister() {
     localStorage.setItem('aurora_user', JSON.stringify(user));
 
     if (user.role === 'admin') {
-      showToast('🎉 Administrator account created successfully!', 'success');
+      showToast('Administrator account created successfully.', 'success');
     } else {
-      showToast(`🎉 Welcome to Aurora, ${name}!`, 'success');
+      showToast(`Welcome to Aurora, ${name}.`, 'success');
     }
 
     completeAuthNavigation(user);
@@ -313,9 +315,9 @@ async function handleRegister() {
     isSubmitting = false;
     btn.disabled = false;
     if (selectedRole === 'admin') {
-      btn.innerHTML = '<span>🛡️ Register as Administrator</span>';
+      btn.innerHTML = '<span>Register as Administrator</span>';
     } else {
-      btn.innerHTML = '<span>🛍️ Create Customer Account</span>';
+      btn.innerHTML = '<span>Create Customer Account</span>';
     }
 
     const msg = getFirebaseAuthErrorMessage(err.code, err.message);
@@ -354,12 +356,12 @@ function completeAuthNavigation(user) {
   const redirect = params.get('redirect');
 
   if (user.role === 'admin') {
-    showPortalAlert('🛡️ Administrator verified. Launching Admin Dashboard...', 'success');
+    showPortalAlert('Administrator verified. Launching admin dashboard...', 'success');
     setTimeout(() => {
       window.location.href = redirect && redirect.startsWith('/admin') ? redirect : '/admin';
     }, 700);
   } else {
-    showPortalAlert(`✨ Authenticated as ${user.name}. Entering Aurora...`, 'success');
+    showPortalAlert(`Authenticated as ${user.name}. Entering Aurora...`, 'success');
     setTimeout(() => {
       window.location.href = redirect && !redirect.startsWith('/admin') ? redirect : '/';
     }, 700);
@@ -371,18 +373,7 @@ function showPortalAlert(message, type = 'error') {
   const alertEl = document.getElementById('portalAlert');
   if (!alertEl) return;
   alertEl.className = `portal-alert ${type}`;
-
-  const iconMap = {
-    error: '⚠️',
-    success: '✅',
-    info: 'ℹ️',
-    'admin-notice': '🛡️'
-  };
-
-  alertEl.innerHTML = `
-    <span style="font-size: 1.1rem; flex-shrink: 0;">${iconMap[type] || 'ℹ️'}</span>
-    <div>${message}</div>
-  `;
+  alertEl.innerHTML = `<div>${message}</div>`;
   alertEl.style.display = 'flex';
 }
 
@@ -413,13 +404,9 @@ function showToast(message, type = 'info') {
   const container = document.getElementById('toastContainer');
   if (!container) return;
 
-  const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
-  toast.innerHTML = `
-    <span style="font-size: 1.1rem;">${icons[type]}</span>
-    <span>${message}</span>
-  `;
+  toast.innerHTML = `<span>${message}</span>`;
   container.appendChild(toast);
   setTimeout(() => toast.remove(), 3500);
 }

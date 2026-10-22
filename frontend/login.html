@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sign In & Register — Aurora Shopping Platform</title>
   <meta name="description" content="Unified authentication portal for Aurora customers and store administrators.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌌</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2316181B'/><text x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='600' fill='%23FAF8F4' text-anchor='middle'>A</text></svg>">
   <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
@@ -18,12 +18,11 @@
   <!-- ═══ TOP NAVIGATION ═══ -->
   <nav class="portal-top-nav">
     <a href="/" class="back-link" id="backToShopLink">
-      <span>←</span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
       <span>Back to Storefront</span>
     </a>
     <div class="top-security-badge">
-      <span>🛡️</span>
-      <span>256-Bit SSL Encrypted Portal</span>
+      <span>256-bit SSL encrypted</span>
     </div>
   </nav>
 
@@ -33,7 +32,7 @@
     <!-- Portal Brand Header -->
     <header class="portal-header">
       <a href="/" class="portal-logo" title="Aurora Shopping Platform">
-        <div class="logo-icon-orb">🌌</div>
+        <div class="logo-icon-orb">A</div>
         <h1 class="portal-brand-title">Aurora</h1>
       </a>
       <p class="portal-subtitle" id="portalSubtitle">
@@ -47,10 +46,10 @@
       <!-- Segmented Tab Switcher -->
       <div class="tab-switcher" role="tablist">
         <button class="tab-btn active" id="tabSignIn" onclick="switchAuthTab('signin')" role="tab" aria-selected="true">
-          <span>🔑</span> Sign In
+          Sign In
         </button>
         <button class="tab-btn" id="tabRegister" onclick="switchAuthTab('register')" role="tab" aria-selected="false">
-          <span>📝</span> Create Account
+          Create Account
         </button>
       </div>
 
@@ -66,7 +65,6 @@
           <div class="form-group">
             <label for="signinEmail">Email Address</label>
             <div class="input-wrapper">
-              <span class="input-icon">✉️</span>
               <input type="email" id="signinEmail" class="form-input" placeholder="name@example.com" required autocomplete="email">
             </div>
           </div>
@@ -77,9 +75,8 @@
               <button type="button" class="forgot-link" onclick="showForgotPasswordView()">Forgot Password?</button>
             </label>
             <div class="input-wrapper">
-              <span class="input-icon">🔒</span>
               <input type="password" id="signinPassword" class="form-input" placeholder="Enter your password" required autocomplete="current-password">
-              <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('signinPassword', this)" title="Show password">👁️</button>
+              <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('signinPassword', this)" title="Show password"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
             </div>
           </div>
 
@@ -114,7 +111,6 @@
           <div class="role-cards-grid">
             <div class="role-card selected" id="roleCardCustomer" onclick="selectRole('customer')" role="button" tabindex="0">
               <div class="role-card-top">
-                <span class="role-card-icon">🛍️</span>
                 <span class="role-pill customer">Customer</span>
               </div>
               <div class="role-card-title">Shopper</div>
@@ -123,7 +119,6 @@
 
             <div class="role-card admin-type" id="roleCardAdmin" onclick="selectRole('admin')" role="button" tabindex="0">
               <div class="role-card-top">
-                <span class="role-card-icon">🛡️</span>
                 <span class="role-pill admin">Admin</span>
               </div>
               <div class="role-card-title">Administrator</div>
@@ -134,26 +129,23 @@
           <!-- Secret Admin Code Panel (Shows only when Admin is selected) -->
           <div class="admin-code-panel" id="adminCodePanel" style="display: none;">
             <div class="admin-code-panel-header">
-              <div class="shield-badge">🔑</div>
               <span class="title">Administrator Access Code</span>
               <span class="required-tag">Required</span>
             </div>
             <div class="admin-code-input-wrapper">
               <div class="input-wrapper">
-                <span class="input-icon">🔐</span>
                 <input type="password" id="regAdminCode" class="form-input" placeholder="Enter private admin security code" autocomplete="off">
-                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('regAdminCode', this)" title="Show code">👁️</button>
+                <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('regAdminCode', this)" title="Show code"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
               </div>
             </div>
             <p class="admin-code-hint">
-              🛡️ Master security authorization required. Default secret code: <strong>AURORA-ADMIN-2026</strong>.
+              Master security authorization required. Default secret code: <strong>AURORA-ADMIN-2026</strong>.
             </p>
           </div>
 
           <div class="form-group">
             <label for="regName">Full Name</label>
             <div class="input-wrapper">
-              <span class="input-icon">👤</span>
               <input type="text" id="regName" class="form-input" placeholder="e.g. Alex Morgan" required autocomplete="name">
             </div>
           </div>
@@ -161,7 +153,6 @@
           <div class="form-group">
             <label for="regEmail">Email Address</label>
             <div class="input-wrapper">
-              <span class="input-icon">✉️</span>
               <input type="email" id="regEmail" class="form-input" placeholder="name@example.com" required autocomplete="email">
             </div>
           </div>
@@ -169,14 +160,13 @@
           <div class="form-group">
             <label for="regPassword">Password</label>
             <div class="input-wrapper">
-              <span class="input-icon">🔒</span>
               <input type="password" id="regPassword" class="form-input" placeholder="At least 6 characters" required autocomplete="new-password">
-              <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('regPassword', this)" title="Show password">👁️</button>
+              <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('regPassword', this)" title="Show password"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg></button>
             </div>
           </div>
 
           <button type="submit" class="btn-submit" id="registerSubmitBtn">
-            <span>🛍️ Create Customer Account</span>
+            <span>Create Customer Account</span>
           </button>
         </form>
 
@@ -207,7 +197,6 @@
           <div class="form-group">
             <label for="forgotEmail">Email Address</label>
             <div class="input-wrapper">
-              <span class="input-icon">✉️</span>
               <input type="email" id="forgotEmail" class="form-input" placeholder="name@example.com" required>
             </div>
           </div>

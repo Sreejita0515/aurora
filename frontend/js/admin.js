@@ -120,7 +120,7 @@ async function loadDashboard() {
     if (loader) {
       loader.innerHTML = `
         <div class="empty-state">
-          <div class="empty-icon">⚠️</div>
+          <div class="empty-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
           <h3>Connection Failed</h3>
           <p>Make sure the backend server is running on port 3000</p>
           <button class="btn btn-primary" style="margin-top: 1rem;" onclick="loadDashboard()">Retry</button>
@@ -173,34 +173,34 @@ function renderOverview() {
 
   kpiGrid.innerHTML = `
     <div class="kpi-card">
-      <div class="kpi-icon">💰</div>
+
       <div class="kpi-label">Total Revenue</div>
       <div class="kpi-value">$${formatNumber(o.totalRevenue)}</div>
       <span class="kpi-change ${growthClass}">${growthIcon} ${Math.abs(o.revenueGrowth)}%</span>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon">📦</div>
+
       <div class="kpi-label">Total Orders</div>
       <div class="kpi-value">${o.totalOrders}</div>
       <span class="kpi-change neutral">${o.pendingOrders} pending</span>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon">👥</div>
+
       <div class="kpi-label">Customers</div>
       <div class="kpi-value">${o.totalCustomers}</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon">🛒</div>
+
       <div class="kpi-label">Avg Order Value</div>
       <div class="kpi-value">$${o.avgOrderValue.toFixed(2)}</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon">📈</div>
+
       <div class="kpi-label">Last 30 Days</div>
       <div class="kpi-value">$${formatNumber(o.last30Revenue)}</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon">❌</div>
+
       <div class="kpi-label">Cancel Rate</div>
       <div class="kpi-value">${o.cancelRate}%</div>
       <span class="kpi-change ${o.cancelRate > 5 ? 'negative' : 'positive'}">${o.cancelRate > 5 ? '⚠ High' : '✓ Normal'}</span>
@@ -218,7 +218,6 @@ function renderOverview() {
   const topRecs = dashboardData.recommendations.slice(0, 3);
   quickInsights.innerHTML = topRecs.map(rec => `
     <div style="display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border-color);">
-      <span style="font-size: 1.3rem;">${rec.icon}</span>
       <div style="flex: 1;">
         <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 2px;">${rec.title}</div>
         <div style="color: var(--text-secondary); font-size: 0.8rem; line-height: 1.5;">${rec.description.substring(0, 120)}...</div>
@@ -246,7 +245,7 @@ function renderSales() {
     const share = totalRevenue > 0 ? (cat.revenue / totalRevenue * 100).toFixed(1) : 0;
     return `
       <tr>
-        <td class="product-name-cell">${cat.icon} ${cat.category}</td>
+        <td class="product-name-cell">${cat.category}</td>
         <td class="revenue-cell">$${formatNumber(cat.revenue)}</td>
         <td class="number-cell">${cat.orders}</td>
         <td>
@@ -276,7 +275,7 @@ function renderProducts() {
       </td>
       <td class="number-cell">${p.total_sold}</td>
       <td class="revenue-cell">$${formatNumber(p.total_revenue)}</td>
-      <td><span class="stars" style="font-size: 0.75rem; color: #fbbf24;">${'★'.repeat(Math.floor(p.rating))}</span> ${p.rating}</td>
+      <td><span class="stars" style="font-size: 0.75rem; color: #93630E;">${'★'.repeat(Math.floor(p.rating))}</span> ${p.rating}</td>
     </tr>
   `).join('');
 
@@ -299,7 +298,7 @@ function renderProducts() {
   reviewTbody.innerHTML = perf.bestReviewed.map(p => `
     <tr>
       <td class="product-name-cell">${p.name}</td>
-      <td><span class="stars" style="font-size: 0.75rem; color: #fbbf24;">${'★'.repeat(Math.floor(p.rating))}</span> ${p.rating}</td>
+      <td><span class="stars" style="font-size: 0.75rem; color: #93630E;">${'★'.repeat(Math.floor(p.rating))}</span> ${p.rating}</td>
       <td class="number-cell">${p.reviews_count}</td>
       <td class="number-cell">$${p.price.toFixed(2)}</td>
     </tr>
@@ -313,33 +312,33 @@ function renderCustomers() {
   // Customer KPIs
   document.getElementById('customerKpis').innerHTML = `
     <div class="kpi-card">
-      <div class="kpi-icon">👥</div>
+
       <div class="kpi-label">Total Buyers</div>
       <div class="kpi-value">${cust.totalBuyers}</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon">🔄</div>
+
       <div class="kpi-label">Repeat Rate</div>
       <div class="kpi-value">${cust.repeatRate}%</div>
       <span class="kpi-change ${cust.repeatRate >= 50 ? 'positive' : 'negative'}">${cust.repeatRate >= 50 ? '✓ Healthy' : '⚠ Below target'}</span>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon">🆕</div>
+
       <div class="kpi-label">New (30 days)</div>
       <div class="kpi-value">${cust.newCustomers30d}</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon">👑</div>
+
       <div class="kpi-label">VIP Customers</div>
       <div class="kpi-value">${cust.segments.vip}</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon">⭐</div>
+
       <div class="kpi-label">Regular</div>
       <div class="kpi-value">${cust.segments.regular}</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon">🌱</div>
+
       <div class="kpi-label">Occasional</div>
       <div class="kpi-value">${cust.segments.occasional}</div>
     </div>
@@ -370,23 +369,23 @@ function renderInventory() {
 
   document.getElementById('inventoryKpis').innerHTML = `
     <div class="kpi-card">
-      <div class="kpi-icon">💎</div>
+
       <div class="kpi-label">Inventory Value</div>
       <div class="kpi-value">$${formatNumber(inv.inventoryValue)}</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon">🚨</div>
+
       <div class="kpi-label">Low Stock Items</div>
       <div class="kpi-value">${inv.lowStock.length}</div>
       <span class="kpi-change ${inv.lowStock.length > 3 ? 'negative' : 'neutral'}">${inv.lowStock.length > 3 ? '⚠ Action needed' : '✓ OK'}</span>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon">📦</div>
+
       <div class="kpi-label">Overstocked Items</div>
       <div class="kpi-value">${inv.overstock.length}</div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon">🏷️</div>
+
       <div class="kpi-label">Categories</div>
       <div class="kpi-value">${inv.stockByCategory.length}</div>
     </div>
@@ -395,7 +394,7 @@ function renderInventory() {
   // Low stock table
   const lowTbody = document.querySelector('#lowStockTable tbody');
   if (inv.lowStock.length === 0) {
-    lowTbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 2rem;">No low stock items 🎉</td></tr>';
+    lowTbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted); padding: 2rem;">No low stock items</td></tr>';
   } else {
     lowTbody.innerHTML = inv.lowStock.map(item => {
       const statusClass = item.stock < 10 ? 'critical' : 'low';
@@ -431,8 +430,8 @@ function renderAIRecommendations() {
   if (recs.length === 0) {
     container.innerHTML = `
       <div class="empty-state">
-        <div class="empty-icon">🎉</div>
-        <h3>All clear!</h3>
+        <div class="empty-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+        <h3>All clear</h3>
         <p>No urgent recommendations at this time.</p>
       </div>
     `;
@@ -443,7 +442,6 @@ function renderAIRecommendations() {
     <div class="recommendation-card ${rec.priority}">
       <div class="rec-header">
         <div class="rec-title">
-          <span class="rec-icon">${rec.icon}</span>
           ${rec.title}
         </div>
         <span class="rec-priority ${rec.priority}">${rec.priority}</span>
@@ -567,7 +565,7 @@ function renderCategoryDonut() {
   if (!data || data.length === 0) return;
 
   const total = data.reduce((s, c) => s + c.revenue, 0);
-  const colors = ['#7c3aed', '#a855f7', '#c084fc', '#22c55e', '#3b82f6', '#f59e0b'];
+  const colors = ['#1F5C53', '#B5664A', '#B5872E', '#45617A', '#6B7A54', '#9C5B6B'];
 
   // Build conic gradient
   let gradientParts = [];
@@ -591,7 +589,7 @@ function renderCategoryDonut() {
         return `
           <div class="donut-legend-item">
             <div class="legend-dot" style="background: ${colors[i % colors.length]};"></div>
-            <span>${cat.icon} ${cat.category}</span>
+            <span>${cat.category}</span>
             <span style="margin-left: auto; color: var(--text-muted); font-size: 0.8rem;">${pct}%</span>
           </div>
         `;
@@ -606,11 +604,11 @@ function renderStatusDistribution(data) {
 
   const total = data.reduce((s, d) => s + d.count, 0);
   const statusColors = {
-    pending: '#f59e0b',
-    processing: '#3b82f6',
-    shipped: '#a855f7',
-    delivered: '#22c55e',
-    cancelled: '#ef4444',
+    pending: '#93630E',
+    processing: '#35618F',
+    shipped: '#1F5C53',
+    delivered: '#1F7A52',
+    cancelled: '#B23B30',
   };
 
   container.innerHTML = `
@@ -642,14 +640,10 @@ function formatNumber(num) {
 
 function showToast(message, type = 'info') {
   const container = document.getElementById('toastContainer');
-  const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
 
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
-  toast.innerHTML = `
-    <span class="toast-icon">${icons[type]}</span>
-    <span class="toast-message">${message}</span>
-  `;
+  toast.innerHTML = `<span class="toast-message">${message}</span>`;
 
   container.appendChild(toast);
   setTimeout(() => toast.remove(), 3000);

@@ -263,7 +263,7 @@ async function handleLogin() {
     if (btn) { btn.disabled = true; btn.textContent = 'Signing In...'; }
     await firebase.auth().signInWithEmailAndPassword(email, password);
     closeAuthModal();
-    showToast(`Welcome back! 🎉`, 'success');
+    showToast(`Welcome back.`, 'success');
   } catch (err) {
     console.error('Firebase login error:', err);
     const msg = getFirebaseAuthErrorMessage(err.code, err.message);
@@ -307,7 +307,7 @@ async function handleRegister() {
 
     closeAuthModal();
     const roleLabel = adminCode ? 'Admin account' : 'Account';
-    showToast(`${roleLabel} created! Welcome, ${name}! 🎉`, 'success');
+    showToast(`${roleLabel} created. Welcome, ${name}.`, 'success');
   } catch (err) {
     pendingAdminCode = ''; // clear on error
     console.error('Firebase register error:', err);
@@ -364,7 +364,7 @@ async function handleGoogleSignIn() {
     provider.setCustomParameters({ prompt: 'select_account' });
     await firebase.auth().signInWithPopup(provider);
     closeAuthModal();
-    showToast('Signed in with Google! 🎉', 'success');
+    showToast('Signed in with Google.', 'success');
   } catch (err) {
     console.error('Google sign-in error:', err);
     if (err.code !== 'auth/popup-closed-by-user') {
@@ -428,7 +428,6 @@ async function loadCategories() {
       chip.dataset.category = cat.id;
       chip.onclick = () => filterCategory(cat.id, chip);
       chip.innerHTML = `
-        <span class="cat-icon">${cat.icon}</span>
         ${cat.name}
         <span class="cat-count">${cat.product_count}</span>
       `;
@@ -478,7 +477,7 @@ async function loadProducts() {
     if (allProducts.length === 0) {
       grid.innerHTML = `
         <div class="empty-state" style="grid-column: 1 / -1;">
-          <div class="empty-icon">🔍</div>
+          <div class="empty-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
           <h3>No products found</h3>
           <p>Try adjusting your search or filters</p>
         </div>
@@ -488,7 +487,7 @@ async function loadProducts() {
 
     grid.innerHTML = allProducts.map(product => createProductCard(product)).join('');
   } catch (err) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column: 1/-1;"><div class="empty-icon">⚠️</div><h3>Failed to load products</h3><p>Make sure the backend server is running on port 3000</p></div>`;
+    grid.innerHTML = `<div class="empty-state" style="grid-column: 1/-1;"><div class="empty-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><h3>Failed to load products</h3><p>Make sure the backend server is running on port 3000</p></div>`;
     console.error('Failed to load products:', err);
   }
 }
@@ -507,14 +506,14 @@ function createProductCard(product) {
     <div class="product-card" onclick="openProductDetail('${product.id}')">
       <div class="product-image">
         <img src="${product.image_url}" alt="${product.name}" loading="lazy"
-             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 400%22><rect fill=%22%231a1a2e%22 width=%22400%22 height=%22400%22/><text x=%22200%22 y=%22200%22 text-anchor=%22middle%22 fill=%22%235a5a7a%22 font-size=%2240%22>📦</text></svg>'">
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 400%22><rect fill=%22%23F1EDE4%22 width=%22400%22 height=%22400%22/><text x=%22200%22 y=%22200%22 text-anchor=%22middle%22 fill=%22%239D9A94%22 font-size=%2240%22>📦</text></svg>'">
         ${badge}
         <div class="product-actions-overlay">
           <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); addToCart('${product.id}')">Add to Cart</button>
         </div>
       </div>
       <div class="product-info">
-        <div class="product-category">${product.category_icon} ${product.category_name}</div>
+        <div class="product-category">${product.category_name}</div>
         <div class="product-name">${product.name}</div>
         <div class="product-rating">
           <span class="stars">${stars}</span>
@@ -559,10 +558,10 @@ async function openProductDetail(productId) {
       <div class="product-detail-content">
         <div class="product-detail-image">
           <img src="${p.image_url}" alt="${p.name}"
-               onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 400%22><rect fill=%22%231a1a2e%22 width=%22400%22 height=%22400%22/><text x=%22200%22 y=%22200%22 text-anchor=%22middle%22 fill=%22%235a5a7a%22 font-size=%2240%22>📦</text></svg>'">
+               onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 400%22><rect fill=%22%23F1EDE4%22 width=%22400%22 height=%22400%22/><text x=%22200%22 y=%22200%22 text-anchor=%22middle%22 fill=%22%239D9A94%22 font-size=%2240%22>📦</text></svg>'">
         </div>
         <div class="product-detail-info">
-          <div class="category-label">${p.category_icon} ${p.category_name}</div>
+          <div class="category-label">${p.category_name}</div>
           <h3>${p.name}</h3>
           <div class="product-rating" style="margin: 8px 0;">
             <span class="stars">${stars}</span>
@@ -576,7 +575,7 @@ async function openProductDetail(productId) {
           <div class="stock-info ${stockClass}">${stockText}</div>
           <button class="btn btn-primary btn-lg" style="width: 100%;" onclick="addToCart('${p.id}'); closeProductDetail();"
                   ${p.stock === 0 ? 'disabled style="opacity: 0.5; width: 100%;"' : ''}>
-            ${p.stock === 0 ? 'Out of Stock' : '🛒 Add to Cart'}
+            ${p.stock === 0 ? 'Out of Stock' : 'Add to Cart'}
           </button>
         </div>
       </div>
@@ -650,7 +649,7 @@ async function addToCart(productId) {
     });
     cart = await res.json();
     updateCartUI();
-    showToast('Added to cart! 🛒', 'success');
+    showToast('Added to cart.', 'success');
   } catch (err) {
     showToast('Failed to add to cart', 'error');
   }
@@ -691,9 +690,9 @@ function updateCartUI() {
   if (!cart.items || cart.items.length === 0) {
     itemsContainer.innerHTML = `
       <div class="cart-empty">
-        <div class="empty-icon">🛒</div>
+        <div class="empty-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l-1 13H7L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg></div>
         <p>Your cart is empty</p>
-        <p style="font-size: 0.85rem; color: var(--text-muted);">Add items to get started!</p>
+        <p style="font-size: 0.85rem; color: var(--text-muted);">Add items to get started.</p>
       </div>
     `;
     footer.style.display = 'none';
@@ -707,7 +706,7 @@ function updateCartUI() {
   itemsContainer.innerHTML = cart.items.map(item => `
     <div class="cart-item">
       <img src="${item.image_url}" alt="${item.name}"
-           onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 72 72%22><rect fill=%22%231a1a2e%22 width=%2272%22 height=%2272%22/><text x=%2236%22 y=%2236%22 text-anchor=%22middle%22 fill=%22%235a5a7a%22 font-size=%2220%22>📦</text></svg>'">
+           onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 72 72%22><rect fill=%22%23F1EDE4%22 width=%2272%22 height=%2272%22/><text x=%2236%22 y=%2236%22 text-anchor=%22middle%22 fill=%22%239D9A94%22 font-size=%2220%22>📦</text></svg>'">
       <div class="cart-item-info">
         <div class="item-name">${item.name}</div>
         <div class="item-price">$${(item.price * item.quantity).toFixed(2)}</div>
@@ -754,7 +753,7 @@ async function placeOrder() {
     cart = { items: [], total: 0, count: 0 };
     updateCartUI();
     toggleCart();
-    showToast('Order placed successfully! 🎉', 'success');
+    showToast('Order placed successfully.', 'success');
 
     // Switch to orders tab
     setTimeout(() => switchTab('orders'), 500);
@@ -767,7 +766,7 @@ async function loadOrders() {
   if (!currentUser) {
     document.getElementById('ordersContainer').innerHTML = `
       <div class="empty-state">
-        <div class="empty-icon">🔐</div>
+        <div class="empty-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
         <h3>Sign in to view orders</h3>
         <p>You need to be signed in to see your order history</p>
         <button class="btn btn-primary" style="margin-top: 1rem;" onclick="toggleAuthModal()">Sign In</button>
@@ -784,9 +783,9 @@ async function loadOrders() {
     if (data.orders.length === 0) {
       document.getElementById('ordersContainer').innerHTML = `
         <div class="empty-state">
-          <div class="empty-icon">📋</div>
+          <div class="empty-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8z"/><path d="M3.27 6.96 12 12l8.73-5.04M12 22.08V12"/></svg></div>
           <h3>No orders yet</h3>
-          <p>Start shopping to see your orders here!</p>
+          <p>Start shopping to see your orders here.</p>
           <button class="btn btn-primary" style="margin-top: 1rem;" onclick="switchTab('shop')">Browse Products</button>
         </div>
       `;
@@ -806,7 +805,7 @@ async function loadOrders() {
           ${order.items.map(item => `
             <div class="order-item-row">
               <img src="${item.image_url}" alt="${item.product_name}"
-                   onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22><rect fill=%22%231a1a2e%22 width=%2248%22 height=%2248%22/><text x=%2224%22 y=%2228%22 text-anchor=%22middle%22 fill=%22%235a5a7a%22 font-size=%2216%22>📦</text></svg>'">
+                   onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22><rect fill=%22%23F1EDE4%22 width=%2248%22 height=%2248%22/><text x=%2224%22 y=%2228%22 text-anchor=%22middle%22 fill=%22%239D9A94%22 font-size=%2216%22>📦</text></svg>'">
               <div class="item-details">
                 <div class="name">${item.product_name}</div>
                 <div class="qty">Qty: ${item.quantity} × $${item.price.toFixed(2)}</div>
@@ -823,7 +822,7 @@ async function loadOrders() {
   } catch (err) {
     document.getElementById('ordersContainer').innerHTML = `
       <div class="empty-state">
-        <div class="empty-icon">⚠️</div>
+        <div class="empty-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
         <h3>Failed to load orders</h3>
         <p>Please try again later</p>
       </div>
@@ -856,14 +855,10 @@ function switchTab(tabName) {
 // ═══ TOAST NOTIFICATIONS ═══
 function showToast(message, type = 'info') {
   const container = document.getElementById('toastContainer');
-  const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
 
   const toast = document.createElement('div');
   toast.className = `toast ${type}`;
-  toast.innerHTML = `
-    <span class="toast-icon">${icons[type]}</span>
-    <span class="toast-message">${message}</span>
-  `;
+  toast.innerHTML = `<span class="toast-message">${message}</span>`;
 
   container.appendChild(toast);
   setTimeout(() => toast.remove(), 3000);

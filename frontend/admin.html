@@ -7,7 +7,7 @@
   <title>Aurora Admin — AI Dashboard</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/admin.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2316181B'/><text x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='600' fill='%23FAF8F4' text-anchor='middle'>A</text></svg>">
 </head>
 <body>
 
@@ -20,12 +20,12 @@
       <span class="brand-text">Aurora</span>
     </a>
     <ul class="navbar-nav">
-      <li><a href="/" class="nav-link">🛍️ Shop</a></li>
-      <li><span class="nav-link active">⚙️ Admin Dashboard</span></li>
+      <li><a href="/" class="nav-link">Shop</a></li>
+      <li><span class="nav-link active">Admin Dashboard</span></li>
     </ul>
     <div class="navbar-actions">
       <div class="last-updated">
-        <span>🔄</span>
+        <span></span>
         <span id="lastUpdated">Loading...</span>
       </div>
       <button class="btn btn-secondary btn-sm" id="refreshBtn" onclick="loadDashboard()">
@@ -47,31 +47,31 @@
       <div class="sidebar-section">
         <div class="sidebar-section-title">Analytics</div>
         <button class="sidebar-link active" data-section="overview" onclick="showSection('overview')">
-          <span class="link-icon">📊</span> Overview
+          <span class="link-icon"></span> Overview
         </button>
         <button class="sidebar-link" data-section="sales" onclick="showSection('sales')">
-          <span class="link-icon">💰</span> Sales Analysis
+          <span class="link-icon"></span> Sales Analysis
         </button>
         <button class="sidebar-link" data-section="products" onclick="showSection('products')">
-          <span class="link-icon">📦</span> Products
+          <span class="link-icon"></span> Products
         </button>
         <button class="sidebar-link" data-section="customers" onclick="showSection('customers')">
-          <span class="link-icon">👥</span> Customers
+          <span class="link-icon"></span> Customers
         </button>
         <button class="sidebar-link" data-section="inventory" onclick="showSection('inventory')">
-          <span class="link-icon">🏭</span> Inventory
+          <span class="link-icon"></span> Inventory
         </button>
       </div>
       <div class="sidebar-section">
         <div class="sidebar-section-title">AI Agent</div>
         <button class="sidebar-link" data-section="ai" onclick="showSection('ai')">
-          <span class="link-icon">🤖</span> AI Recommendations
+          <span class="link-icon"></span> AI Recommendations
         </button>
       </div>
       <div class="sidebar-section">
         <div class="sidebar-section-title">Management</div>
         <button class="sidebar-link" data-section="orders" onclick="showSection('orders')">
-          <span class="link-icon">📋</span> Recent Orders
+          <span class="link-icon"></span> Recent Orders
         </button>
       </div>
     </aside>
@@ -84,7 +84,7 @@
       <div class="admin-section" id="section-overview" style="display:none;">
         <div class="admin-page-header">
           <div>
-            <h1>📊 Dashboard Overview</h1>
+            <h1>Dashboard Overview</h1>
             <p class="page-subtitle">Real-time business metrics and insights</p>
           </div>
         </div>
@@ -96,13 +96,13 @@
         <div class="dashboard-grid">
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title">📈 Revenue Trend (30 Days)</div>
+              <div class="panel-title">Revenue Trend (30 Days)</div>
             </div>
             <div class="bar-chart" id="revenueChart"></div>
           </div>
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title">📊 Revenue by Category</div>
+              <div class="panel-title">Revenue by Category</div>
             </div>
             <div class="donut-chart-container" id="categoryChart"></div>
           </div>
@@ -111,7 +111,7 @@
         <!-- Quick AI Summary -->
         <div class="panel" style="margin-bottom: 2rem;">
           <div class="panel-header">
-            <div class="panel-title">🤖 AI Quick Insights</div>
+            <div class="panel-title">AI Quick Insights</div>
             <button class="btn btn-sm btn-secondary" onclick="showSection('ai')">View All →</button>
           </div>
           <div id="quickInsights"></div>
@@ -122,7 +122,7 @@
       <div class="admin-section" id="section-sales" style="display:none;">
         <div class="admin-page-header">
           <div>
-            <h1>💰 Sales Analysis</h1>
+            <h1>Sales Analysis</h1>
             <p class="page-subtitle">Revenue breakdown and sales trends</p>
           </div>
         </div>
@@ -130,13 +130,13 @@
         <div class="dashboard-grid">
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title">📅 Weekly Sales Pattern</div>
+              <div class="panel-title">Weekly Sales Pattern</div>
             </div>
             <div class="bar-chart" id="weeklyChart"></div>
           </div>
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title">📊 Order Status Distribution</div>
+              <div class="panel-title">Order Status Distribution</div>
             </div>
             <div id="statusDistribution"></div>
           </div>
@@ -144,7 +144,7 @@
 
         <div class="panel">
           <div class="panel-header">
-            <div class="panel-title">🏷️ Revenue by Category</div>
+            <div class="panel-title">Revenue by Category</div>
           </div>
           <table class="data-table" id="categoryRevenueTable">
             <thead>
@@ -164,7 +164,7 @@
       <div class="admin-section" id="section-products" style="display:none;">
         <div class="admin-page-header">
           <div>
-            <h1>📦 Product Performance</h1>
+            <h1>Product Performance</h1>
             <p class="page-subtitle">Top sellers and underperforming products</p>
           </div>
         </div>
@@ -172,7 +172,7 @@
         <div class="dashboard-grid">
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title">🏆 Top Selling Products</div>
+              <div class="panel-title">Top Selling Products</div>
             </div>
             <table class="data-table" id="topProductsTable">
               <thead>
@@ -183,7 +183,7 @@
           </div>
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title">⚠️ Needs Attention</div>
+              <div class="panel-title">Needs Attention</div>
             </div>
             <table class="data-table" id="underperformersTable">
               <thead>
@@ -211,7 +211,7 @@
       <div class="admin-section" id="section-customers" style="display:none;">
         <div class="admin-page-header">
           <div>
-            <h1>👥 Customer Insights</h1>
+            <h1>Customer Insights</h1>
             <p class="page-subtitle">Customer behavior and retention analysis</p>
           </div>
         </div>
@@ -220,7 +220,7 @@
 
         <div class="panel">
           <div class="panel-header">
-            <div class="panel-title">🏅 Customer Spending Leaderboard</div>
+            <div class="panel-title">Customer Spending Leaderboard</div>
           </div>
           <table class="data-table" id="customerTable">
             <thead>
@@ -235,7 +235,7 @@
       <div class="admin-section" id="section-inventory" style="display:none;">
         <div class="admin-page-header">
           <div>
-            <h1>🏭 Inventory Health</h1>
+            <h1>Inventory Health</h1>
             <p class="page-subtitle">Stock levels and inventory optimization</p>
           </div>
         </div>
@@ -245,7 +245,7 @@
         <div class="dashboard-grid">
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title">🚨 Low Stock Alerts</div>
+              <div class="panel-title">Low Stock Alerts</div>
             </div>
             <table class="data-table" id="lowStockTable">
               <thead>
@@ -256,7 +256,7 @@
           </div>
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title">📦 Stock by Category</div>
+              <div class="panel-title">Stock by Category</div>
             </div>
             <table class="data-table" id="stockCategoryTable">
               <thead>
@@ -272,10 +272,10 @@
       <div class="admin-section" id="section-ai" style="display:none;">
         <div class="admin-page-header">
           <div>
-            <h1>🤖 AI Decision Agent</h1>
+            <h1>AI Decision Agent</h1>
             <p class="page-subtitle">Data-driven recommendations to optimize your business</p>
           </div>
-          <div class="ai-badge">🧠 AI Powered</div>
+          <div class="ai-badge">AI Powered</div>
         </div>
         <div id="aiRecommendations"></div>
       </div>
@@ -284,7 +284,7 @@
       <div class="admin-section" id="section-orders" style="display:none;">
         <div class="admin-page-header">
           <div>
-            <h1>📋 Recent Orders</h1>
+            <h1>Recent Orders</h1>
             <p class="page-subtitle">Manage and track all customer orders</p>
           </div>
         </div>
