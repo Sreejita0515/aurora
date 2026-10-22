@@ -7,6 +7,7 @@
   <meta name="description" content="Unified authentication portal for Aurora customers and store administrators.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2316181B'/><text x='50' y='68' font-family='Georgia,serif' font-size='58' font-weight='600' fill='%23FAF8F4' text-anchor='middle'>A</text></svg>">
   <link rel="stylesheet" href="css/login.css">
+  <script src="js/theme.js"></script>
 </head>
 <body>
 
@@ -21,8 +22,13 @@
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
       <span>Back to Storefront</span>
     </a>
-    <div class="top-security-badge">
-      <span>256-bit SSL encrypted</span>
+    <div class="top-nav-right">
+      <div class="top-security-badge">
+        <span>256-bit SSL encrypted</span>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <span class="theme-toggle-icon"></span>
+      </button>
     </div>
   </nav>
 

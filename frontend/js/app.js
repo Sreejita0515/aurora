@@ -512,7 +512,7 @@ function createProductCard(product) {
     <div class="product-card" onclick="openProductDetail('${product.id}')">
       <div class="product-image">
         <img src="${product.image_url}" alt="${product.name}" loading="lazy"
-             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 400%22><rect fill=%22%23F1EDE4%22 width=%22400%22 height=%22400%22/><text x=%22200%22 y=%22200%22 text-anchor=%22middle%22 fill=%22%239D9A94%22 font-size=%2240%22>📦</text></svg>'">
+             onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 400%22><rect fill=%22%23F1EDE4%22 width=%22400%22 height=%22400%22/><g transform=%22translate(160,160) scale(3.3333)%22 fill=%22none%22 stroke=%22%239D9A94%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><rect x=%223%22 y=%223%22 width=%2218%22 height=%2218%22 rx=%222%22 ry=%222%22/><circle cx=%228.5%22 cy=%228.5%22 r=%221.5%22/><polyline points=%2221 15 16 10 5 21%22/></g></svg>'">
         ${badge}
         <div class="product-actions-overlay">
           <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); addToCart('${product.id}')">Add to Cart</button>
@@ -558,13 +558,13 @@ async function openProductDetail(productId) {
     let stockClass = 'in-stock';
     let stockText = `✓ In Stock (${p.stock} available)`;
     if (p.stock === 0) { stockClass = 'out-of-stock'; stockText = '✕ Out of Stock'; }
-    else if (p.stock < 20) { stockClass = 'low-stock'; stockText = `⚠ Low Stock (${p.stock} left)`; }
+    else if (p.stock < 20) { stockClass = 'low-stock'; stockText = `Low Stock (${p.stock} left)`; }
 
     body.innerHTML = `
       <div class="product-detail-content">
         <div class="product-detail-image">
           <img src="${p.image_url}" alt="${p.name}"
-               onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 400%22><rect fill=%22%23F1EDE4%22 width=%22400%22 height=%22400%22/><text x=%22200%22 y=%22200%22 text-anchor=%22middle%22 fill=%22%239D9A94%22 font-size=%2240%22>📦</text></svg>'">
+               onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 400 400%22><rect fill=%22%23F1EDE4%22 width=%22400%22 height=%22400%22/><g transform=%22translate(160,160) scale(3.3333)%22 fill=%22none%22 stroke=%22%239D9A94%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><rect x=%223%22 y=%223%22 width=%2218%22 height=%2218%22 rx=%222%22 ry=%222%22/><circle cx=%228.5%22 cy=%228.5%22 r=%221.5%22/><polyline points=%2221 15 16 10 5 21%22/></g></svg>'">
         </div>
         <div class="product-detail-info">
           <div class="category-label">${p.category_name}</div>
@@ -712,7 +712,7 @@ function updateCartUI() {
   itemsContainer.innerHTML = cart.items.map(item => `
     <div class="cart-item">
       <img src="${item.image_url}" alt="${item.name}"
-           onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 72 72%22><rect fill=%22%23F1EDE4%22 width=%2272%22 height=%2272%22/><text x=%2236%22 y=%2236%22 text-anchor=%22middle%22 fill=%22%239D9A94%22 font-size=%2220%22>📦</text></svg>'">
+           onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 72 72%22><rect fill=%22%23F1EDE4%22 width=%2272%22 height=%2272%22/><g transform=%22translate(22,22) scale(1.1667)%22 fill=%22none%22 stroke=%22%239D9A94%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><rect x=%223%22 y=%223%22 width=%2218%22 height=%2218%22 rx=%222%22 ry=%222%22/><circle cx=%228.5%22 cy=%228.5%22 r=%221.5%22/><polyline points=%2221 15 16 10 5 21%22/></g></svg>'">
       <div class="cart-item-info">
         <div class="item-name">${item.name}</div>
         <div class="item-price">${formatPrice(item.price * item.quantity)}</div>
@@ -811,7 +811,7 @@ async function loadOrders() {
           ${order.items.map(item => `
             <div class="order-item-row">
               <img src="${item.image_url}" alt="${item.product_name}"
-                   onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22><rect fill=%22%23F1EDE4%22 width=%2248%22 height=%2248%22/><text x=%2224%22 y=%2228%22 text-anchor=%22middle%22 fill=%22%239D9A94%22 font-size=%2216%22>📦</text></svg>'">
+                   onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 48 48%22><rect fill=%22%23F1EDE4%22 width=%2248%22 height=%2248%22/><g transform=%22translate(14,14) scale(0.8333)%22 fill=%22none%22 stroke=%22%239D9A94%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><rect x=%223%22 y=%223%22 width=%2218%22 height=%2218%22 rx=%222%22 ry=%222%22/><circle cx=%228.5%22 cy=%228.5%22 r=%221.5%22/><polyline points=%2221 15 16 10 5 21%22/></g></svg>'">
               <div class="item-details">
                 <div class="name">${item.product_name}</div>
                 <div class="qty">Qty: ${item.quantity} × ${formatPrice(item.price)}</div>

@@ -41,6 +41,49 @@
 
   --font-primary: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-display: 'Fraunces', Georgia, serif;
+
+  --ink-tint-soft: rgba(28, 27, 31, 0.03);
+  --ink-tint-hover: rgba(28, 27, 31, 0.06);
+  --ink-tint-border: rgba(28, 27, 31, 0.2);
+  --card-shadow: 0 20px 48px rgba(22, 24, 27, 0.1);
+  --shadow-lg: 0 20px 48px rgba(28, 27, 31, 0.14);
+}
+
+/* ── Dark Mode ── */
+[data-theme="dark"] {
+  --bg-primary: #15171A;
+  --bg-secondary: #1C1F23;
+  --bg-card: #1F2226;
+  --bg-card-border: rgba(244, 242, 237, 0.1);
+  --bg-input: #1C1F23;
+
+  --text-primary: #F4F2ED;
+  --text-secondary: #B8B5AE;
+  --text-muted: #7D7A74;
+
+  --accent-primary: #4FB3A4;
+  --accent-secondary: #4FB3A4;
+  --accent-gradient: linear-gradient(135deg, #4FB3A4 0%, #2E8577 100%);
+  --accent-glow: rgba(79, 179, 164, 0.18);
+
+  --admin-accent: #E8A23D;
+  --admin-accent-glow: rgba(232, 162, 61, 0.18);
+  --admin-bg: rgba(232, 162, 61, 0.1);
+  --admin-border: rgba(232, 162, 61, 0.3);
+
+  --success: #3DD68C;
+  --success-bg: rgba(61, 214, 140, 0.12);
+  --warning: #E8A23D;
+  --danger: #E8685C;
+  --danger-bg: rgba(232, 104, 92, 0.12);
+  --info: #5B9BD5;
+  --info-bg: rgba(91, 155, 213, 0.12);
+
+  --ink-tint-soft: rgba(244, 242, 237, 0.04);
+  --ink-tint-hover: rgba(244, 242, 237, 0.08);
+  --ink-tint-border: rgba(244, 242, 237, 0.2);
+  --card-shadow: 0 20px 48px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.45);
 }
 
 *, *::before, *::after {
@@ -61,6 +104,7 @@ body {
   padding: 2rem 1rem;
   position: relative;
   overflow-x: hidden;
+  transition: background-color 0.25s ease, color 0.25s ease;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -90,7 +134,7 @@ body {
   font-size: 0.9rem;
   font-weight: 500;
   padding: 8px 16px;
-  background: rgba(28, 27, 31, 0.03);
+  background: var(--ink-tint-soft);
   border: 1px solid var(--bg-card-border);
   border-radius: var(--radius-full);
   transition: all 0.2s ease;
@@ -99,8 +143,8 @@ body {
 
 .back-link:hover {
   color: var(--text-primary);
-  background: rgba(28, 27, 31, 0.06);
-  border-color: rgba(28, 27, 31, 0.18);
+  background: var(--ink-tint-hover);
+  border-color: var(--ink-tint-border);
   transform: translateX(-2px);
 }
 
@@ -112,6 +156,32 @@ body {
   color: var(--text-muted);
   padding: 6px 14px;
   font-weight: 600;
+}
+
+.top-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: var(--ink-tint-soft);
+  border: 1px solid var(--bg-card-border);
+  border-radius: var(--radius-full);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background: var(--ink-tint-hover);
+  border-color: var(--ink-tint-border);
 }
 
 /* ── Main Portal Container ── */
@@ -172,7 +242,7 @@ body {
   border: 1px solid var(--bg-card-border);
   border-radius: var(--radius-xl);
   padding: 2.25rem;
-  box-shadow: 0 20px 48px rgba(22, 24, 27, 0.1);
+  box-shadow: var(--card-shadow);
   position: relative;
 }
 
@@ -309,7 +379,7 @@ body {
 .form-input:focus {
   border-color: var(--accent-primary);
   box-shadow: 0 0 0 3px var(--accent-glow);
-  background: #FFFFFF;
+  background: var(--bg-input);
 }
 
 .password-toggle-btn {
@@ -413,7 +483,7 @@ body {
   background: #FFFFFF;
   border: 1px solid var(--bg-card-border);
   border-radius: var(--radius-md);
-  color: var(--text-primary);
+  color: #16181B;
   font-size: 0.88rem;
   font-weight: 600;
   font-family: inherit;
@@ -426,8 +496,8 @@ body {
 }
 
 .btn-google:hover {
-  background: var(--bg-secondary);
-  border-color: rgba(28, 27, 31, 0.2);
+  background: #F1EDE4;
+  border-color: var(--ink-tint-border);
   transform: translateY(-1px);
 }
 /* ═══════════════════════════════════════════════════
@@ -462,7 +532,7 @@ body {
 
 .role-card:hover {
   background: var(--bg-secondary);
-  border-color: rgba(28, 27, 31, 0.2);
+  border-color: var(--ink-tint-border);
 }
 
 .role-card.selected {
