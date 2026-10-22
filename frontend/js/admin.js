@@ -592,17 +592,62 @@ function renderCustomerBehaviour() {
     </tr>
   `).join('');
 
+  // Cancellations & Churn Alert Table
+  const cancelledCountEl = document.getElementById('cancelledOrdersCount');
+  const cancellTbody = document.querySelector('#cancellationsTable tbody');
+  const allCancellations = cust.allCancellations || [];
+  if (cancelledCountEl) cancelledCountEl.textContent = allCancellations.length;
+
+  if (cancellTbody) {
+    if (allCancellations.length === 0) {
+      cancellTbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">🎉 Zero order cancellations recorded. Customer retention is optimal.</td></tr>';
+    } else {
+      cancellTbody.innerHTML = allCancellations.map(c => `
+        <tr>
+          <td>
+            <div class="clickable-customer" onclick="openCustomerModal('${c.user_id}')" title="Click to view all orders by ${c.customer_name}">
+              <span>👤 ${c.customer_name}</span>
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">${c.customer_email}</div>
+          </td>
+          <td>
+            <span style="font-family: monospace; font-weight: 700; color: #f87171;">#${c.id.substring(0, 8)}</span>
+          </td>
+          <td style="font-weight: 700; color: #f87171;">₹${formatNumber(c.total)}</td>
+          <td><span class="badge-neutral">${c.items_count || 1} item(s)</span></td>
+          <td style="font-size: 0.85rem; color: var(--text-muted);">${new Date(c.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
+          <td>
+            <button class="btn-action-apply" style="padding: 4px 10px; font-size: 0.75rem; background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;" onclick="openCustomerModal('${c.user_id}')">
+              View Profile & Orders 🔍
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+  }
+
   // Customer RFM segmentation table
   const custTbody = document.querySelector('#customerSegmentTable tbody');
   custTbody.innerHTML = cust.customers.map(c => `
     <tr>
       <td>
-        <div style="font-weight: 700; color: var(--text-primary);">${c.name}</div>
+        <div class="clickable-customer" onclick="openCustomerModal('${c.id}')" title="Click to view ${c.name}'s complete profile & orders">
+          <span>👤 ${c.name}</span>
+        </div>
         <div style="font-size: 0.75rem; color: var(--text-muted);">${c.email}</div>
       </td>
       <td><span class="${c.segmentBadge}">${c.segmentLabel}</span></td>
-      <td>${c.totalOrders}</td>
+      <td><strong>${c.totalOrders}</strong></td>
       <td style="font-weight: 700;">₹${c.totalSpent.toLocaleString('en-IN')}</td>
+      <td>
+        ${c.cancelledCount > 0 ? `
+          <span class="badge-danger" style="font-weight: 700; cursor: pointer;" onclick="openCustomerModal('${c.id}')" title="Customer has cancelled orders">
+            ⚠️ ${c.cancelledCount} Cancelled
+          </span>
+        ` : `
+          <span style="color: var(--text-muted); font-size: 0.8rem;">0</span>
+        `}
+      </td>
       <td>${c.daysSinceLastOrder < 999 ? `${c.daysSinceLastOrder}d ago` : 'Never'}</td>
       <td>
         <span class="${c.churnRiskPercent < 30 ? 'badge-success' : c.churnRiskPercent < 65 ? 'badge-warning' : 'badge-danger'}">
@@ -610,7 +655,11 @@ function renderCustomerBehaviour() {
         </span>
       </td>
       <td style="font-weight: 700; color: #34d399;">₹${c.predictedCLV.toLocaleString('en-IN')}</td>
-      <td style="font-size: 0.85rem; color: #c4b5fd;">${c.retentionAction}</td>
+      <td>
+        <button class="btn-action-apply" style="padding: 4px 10px; font-size: 0.75rem;" onclick="openCustomerModal('${c.id}')">
+          View Orders 🔍
+        </button>
+      </td>
     </tr>
   `).join('');
 
@@ -919,47 +968,85 @@ function renderSales() {
   }).join('');
 }
 
+let allLiveOrders = [];
+
 async function loadRecentOrders() {
   try {
     const headers = await getAdminAuthHeaders();
     const res = await fetch(`${API}/admin/orders`, { headers });
     if (!res.ok) throw new Error('Failed to load orders');
     const data = await res.json();
-    renderOrdersTable(data.orders);
+    allLiveOrders = data.orders || [];
+
+    // Update filter counts
+    const filterAllCount = document.getElementById('filterAllCount');
+    const filterCancelledCount = document.getElementById('filterCancelledCount');
+    if (filterAllCount) filterAllCount.textContent = allLiveOrders.length;
+    if (filterCancelledCount) {
+      const cCount = allLiveOrders.filter(o => o.status === 'cancelled').length;
+      filterCancelledCount.textContent = cCount;
+    }
+
+    renderOrdersTable(allLiveOrders);
   } catch (err) {
     showToast(`Failed to load orders: ${err.message}`, 'error');
+  }
+}
+
+function filterLiveOrders(status) {
+  document.querySelectorAll('#orderStatusFilters .c-filter-btn').forEach(btn => btn.classList.remove('active'));
+  const targetBtn = document.getElementById(`filterBtn-${status}`);
+  if (targetBtn) targetBtn.classList.add('active');
+
+  if (status === 'all') {
+    renderOrdersTable(allLiveOrders);
+  } else if (status === 'pending') {
+    renderOrdersTable(allLiveOrders.filter(o => o.status === 'pending' || o.status === 'processing'));
+  } else {
+    renderOrdersTable(allLiveOrders.filter(o => o.status === status));
   }
 }
 
 function renderOrdersTable(orders) {
   const tbody = document.querySelector('#ordersTable tbody');
   if (!orders || orders.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">No orders found</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 1.5rem;">No orders found matching this filter</td></tr>';
     return;
   }
 
   tbody.innerHTML = orders.map(o => `
-    <tr>
-      <td><span style="font-family: monospace; font-size: 0.8rem;">#${o.id.substring(0, 8)}</span></td>
+    <tr style="${o.status === 'cancelled' ? 'background: rgba(239, 68, 68, 0.05);' : ''}">
       <td>
-        <div style="font-weight: 600;">${o.customer_name || 'Customer'}</div>
+        <span style="font-family: monospace; font-size: 0.8rem; font-weight: 700; color: ${o.status === 'cancelled' ? '#f87171' : 'var(--accent-secondary)'};">
+          #${o.id.substring(0, 8)}
+        </span>
+      </td>
+      <td>
+        <div class="clickable-customer" onclick="openCustomerModal('${o.user_id}')" title="Click to view all orders by ${o.customer_name || 'Customer'}">
+          <span>👤 ${o.customer_name || 'Customer'}</span>
+        </div>
         <div style="font-size: 0.75rem; color: var(--text-muted);">${o.customer_email || ''}</div>
       </td>
       <td><strong>${formatPrice(o.total)}</strong></td>
       <td>
         <span class="${o.status === 'delivered' ? 'badge-success' : o.status === 'cancelled' ? 'badge-danger' : 'badge-warning'}">
-          ${o.status.toUpperCase()}
+          ${o.status === 'cancelled' ? '⚠️ CANCELLED' : o.status.toUpperCase()}
         </span>
       </td>
-      <td>${new Date(o.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}</td>
+      <td>${new Date(o.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
       <td>
-        <select onchange="updateOrderStatus('${o.id}', this.value)" style="padding: 4px 8px; border-radius: 4px; background: rgba(0,0,0,0.4); color: white; border: 1px solid var(--border-color);">
-          <option value="pending" ${o.status === 'pending' ? 'selected' : ''}>Pending</option>
-          <option value="processing" ${o.status === 'processing' ? 'selected' : ''}>Processing</option>
-          <option value="shipped" ${o.status === 'shipped' ? 'selected' : ''}>Shipped</option>
-          <option value="delivered" ${o.status === 'delivered' ? 'selected' : ''}>Delivered</option>
-          <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
-        </select>
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <select onchange="updateOrderStatus('${o.id}', this.value)" style="padding: 4px 8px; border-radius: 4px; background: rgba(0,0,0,0.4); color: white; border: 1px solid var(--border-color); font-size: 0.75rem;">
+            <option value="pending" ${o.status === 'pending' ? 'selected' : ''}>Pending</option>
+            <option value="processing" ${o.status === 'processing' ? 'selected' : ''}>Processing</option>
+            <option value="shipped" ${o.status === 'shipped' ? 'selected' : ''}>Shipped</option>
+            <option value="delivered" ${o.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+            <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+          </select>
+          <button class="btn-action-apply" style="padding: 4px 8px; font-size: 0.75rem;" onclick="openCustomerModal('${o.user_id}')" title="Inspect Customer Orders">
+            🔍
+          </button>
+        </div>
       </td>
     </tr>
   `).join('');
@@ -1106,3 +1193,211 @@ function showToast(message, type = 'info') {
   container.appendChild(toast);
   setTimeout(() => toast.remove(), 3500);
 }
+
+// ═════════════════════════════════════════════════════════════════════════
+// CUSTOMER PROFILE & ORDER HISTORY MODAL
+// ═════════════════════════════════════════════════════════════════════════
+let currentModalCustomerData = null;
+let currentModalFilter = 'all';
+
+async function openCustomerModal(userId) {
+  if (!userId) {
+    showToast('Customer ID missing', 'warning');
+    return;
+  }
+
+  const modal = document.getElementById('customerOrdersModal');
+  const ordersList = document.getElementById('cModalOrdersList');
+  if (modal) {
+    modal.classList.add('open');
+    modal.style.display = 'flex';
+  }
+  if (ordersList) {
+    ordersList.innerHTML = '<div style="text-align: center; padding: 3rem; color: var(--text-muted);"><div class="spinner" style="margin: 0 auto 1rem;"></div>Loading customer profile and order history...</div>';
+  }
+
+  try {
+    const headers = await getAdminAuthHeaders();
+    const res = await fetch(`${API}/admin/customers/${userId}/orders`, { headers });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Failed to fetch customer orders');
+    }
+    const data = await res.json();
+    currentModalCustomerData = data;
+    currentModalFilter = 'all';
+
+    const { customer, orders } = data;
+
+    // Set Header Info
+    const avatar = document.getElementById('cModalAvatar');
+    if (avatar) avatar.textContent = (customer.name || customer.email || 'U').charAt(0).toUpperCase();
+
+    const nameEl = document.getElementById('cModalName');
+    if (nameEl) nameEl.textContent = customer.name || 'Anonymous Customer';
+
+    const emailEl = document.getElementById('cModalEmail');
+    if (emailEl) emailEl.textContent = customer.email || '';
+
+    // Segment & Churn data from Customer Behaviour Agent if available
+    let churnRisk = '15%';
+    let segmentBadgeHtml = '<span class="badge-gold">Verified Customer</span>';
+    if (dashboardData && dashboardData.agents && dashboardData.agents.customerBehaviour) {
+      const segmented = dashboardData.agents.customerBehaviour.customers.find(c => c.id === userId);
+      if (segmented) {
+        churnRisk = `${segmented.churnRiskPercent}%`;
+        segmentBadgeHtml = `<span class="${segmented.segmentBadge}">${segmented.segmentLabel}</span>`;
+      }
+    }
+
+    const badgeContainer = document.getElementById('cModalSegmentBadge');
+    if (badgeContainer) {
+      badgeContainer.outerHTML = `<span id="cModalSegmentBadge">${segmentBadgeHtml}</span>`;
+    }
+
+    // Set KPI Bar
+    document.getElementById('cModalTotalOrders').textContent = customer.total_orders || orders.length;
+    document.getElementById('cModalTotalSpent').textContent = `₹${Math.round(customer.total_spent || 0).toLocaleString('en-IN')}`;
+    
+    const cancelledCountEl = document.getElementById('cModalCancelledCount');
+    const cancelledCount = customer.cancelled_orders_count || orders.filter(o => o.status === 'cancelled').length;
+    cancelledCountEl.textContent = cancelledCount > 0 ? `${cancelledCount} Cancelled` : '0';
+    if (cancelledCount > 0) {
+      cancelledCountEl.classList.add('cancelled-alert');
+    } else {
+      cancelledCountEl.classList.remove('cancelled-alert');
+    }
+
+    document.getElementById('cModalChurnRisk').textContent = churnRisk;
+    document.getElementById('cModalAvgOrder').textContent = `₹${Math.round(customer.avg_order || 0).toLocaleString('en-IN')}`;
+    document.getElementById('cModalOrderCount').textContent = orders.length;
+
+    // Reset filter buttons
+    document.querySelectorAll('.c-order-filters .c-filter-btn').forEach(btn => btn.classList.remove('active'));
+    const btnAll = document.getElementById('cFilterAll');
+    if (btnAll) btnAll.classList.add('active');
+
+    renderModalOrders(orders);
+  } catch (err) {
+    console.error('Error opening customer modal:', err);
+    if (ordersList) {
+      ordersList.innerHTML = `<div style="text-align: center; padding: 2rem; color: #f87171;">⚠️ ${err.message}</div>`;
+    }
+  }
+}
+
+function filterModalOrders(status) {
+  currentModalFilter = status;
+  document.querySelectorAll('.c-order-filters .c-filter-btn').forEach(btn => btn.classList.remove('active'));
+  
+  if (status === 'all') {
+    const el = document.getElementById('cFilterAll');
+    if (el) el.classList.add('active');
+  } else if (status === 'delivered') {
+    const el = document.getElementById('cFilterDelivered');
+    if (el) el.classList.add('active');
+  } else if (status === 'cancelled') {
+    const el = document.getElementById('cFilterCancelled');
+    if (el) el.classList.add('active');
+  }
+
+  if (!currentModalCustomerData || !currentModalCustomerData.orders) return;
+
+  let filtered = currentModalCustomerData.orders;
+  if (status === 'delivered') {
+    filtered = filtered.filter(o => o.status === 'delivered');
+  } else if (status === 'cancelled') {
+    filtered = filtered.filter(o => o.status === 'cancelled');
+  }
+
+  renderModalOrders(filtered);
+}
+
+function renderModalOrders(orders) {
+  const container = document.getElementById('cModalOrdersList');
+  if (!container) return;
+
+  if (!orders || orders.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 3rem 1rem; color: var(--text-muted);">
+        <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">📭</div>
+        <p style="font-size: 0.95rem;">No orders match this filter.</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = orders.map(order => {
+    const isCancelled = order.status === 'cancelled';
+    const statusBadge = isCancelled
+      ? '<span class="badge-danger" style="font-weight: 800;">⚠️ CANCELLED</span>'
+      : order.status === 'delivered'
+      ? '<span class="badge-success">✓ DELIVERED</span>'
+      : `<span class="badge-warning">${order.status.toUpperCase()}</span>`;
+
+    const itemsHtml = (order.items || []).map(item => `
+      <div class="order-card-item-row">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          ${item.image_url ? `<img src="${item.image_url}" alt="" style="width: 28px; height: 28px; border-radius: 4px; object-fit: cover;">` : ''}
+          <span style="font-weight: 600; color: var(--text-primary);">${item.product_name || 'Item'}</span>
+          <span style="color: var(--text-muted); font-size: 0.8rem;">× ${item.quantity}</span>
+        </div>
+        <div style="font-weight: 700; color: var(--text-secondary);">₹${(item.price * item.quantity).toLocaleString('en-IN')}</div>
+      </div>
+    `).join('');
+
+    return `
+      <div class="customer-order-card ${isCancelled ? 'is-cancelled' : ''}">
+        <div class="order-card-top">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="order-id-badge">#${order.id.substring(0, 8)}</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">${new Date(order.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+          </div>
+          <div>${statusBadge}</div>
+        </div>
+
+        ${isCancelled ? `
+          <div style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; padding: 6px 12px; margin-bottom: 0.75rem; font-size: 0.8rem; color: #fca5a5; display: flex; align-items: center; gap: 8px;">
+            <span>⚠️</span>
+            <span><strong>Cancelled Order:</strong> This order was cancelled by the customer. Amount of ₹${Number(order.total).toLocaleString('en-IN')} was voided/refunded.</span>
+          </div>
+        ` : ''}
+
+        <div class="order-card-items">
+          ${itemsHtml || '<div style="font-size: 0.8rem; color: var(--text-muted);">No line item records found</div>'}
+        </div>
+
+        <div class="order-card-bottom">
+          <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+            <span>📍 ${order.shipping_address ? (order.shipping_address.length > 35 ? order.shipping_address.substring(0, 35) + '...' : order.shipping_address) : 'No address specified'}</span>
+            <span>💳 ${order.payment_method ? order.payment_method.toUpperCase() : 'PREPAID'}</span>
+          </div>
+          <div style="font-size: 1.05rem; font-weight: 800; color: ${isCancelled ? '#f87171' : 'var(--accent-secondary)'};">
+            Total: ₹${Number(order.total).toLocaleString('en-IN')}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function closeCustomerModal() {
+  const modal = document.getElementById('customerOrdersModal');
+  if (modal) {
+    modal.classList.remove('open');
+    modal.style.display = 'none';
+  }
+}
+
+function handleCustomerModalBackdrop(e) {
+  if (e.target && e.target.id === 'customerOrdersModal') {
+    closeCustomerModal();
+  }
+}
+
+// Close modal on Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    closeCustomerModal();
+  }
+});

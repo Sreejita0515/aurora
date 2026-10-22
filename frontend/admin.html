@@ -304,11 +304,37 @@
           </div>
         </div>
 
+        <!-- Cancellations & At-Risk Churn Alert Panel -->
+        <div class="cancellations-alert-card" id="cancellationsAlertCard">
+          <div class="cancellations-alert-header">
+            <h3>⚠️ Cancelled Orders & Churn Intelligence (<span id="cancelledOrdersCount">0</span> Cancelled)</h3>
+            <span class="badge-danger">High Churn Probability</span>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Customers who experienced cancellations require proactive follow-up and service intervention to prevent permanent churn.
+          </p>
+          <div style="overflow-x: auto;">
+            <table class="data-table" id="cancellationsTable">
+              <thead>
+                <tr>
+                  <th>Customer (Click to View)</th>
+                  <th>Cancelled Order</th>
+                  <th>Amount</th>
+                  <th>Items</th>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
         <!-- Customer RFM Segmentation & Churn Prevention Table -->
         <div class="panel" style="margin-bottom: 2rem;">
           <div class="panel-header">
             <div class="panel-title">🏅 Customer RFM Segment Leaderboard & Churn Risk</div>
-            <span class="badge-gold">Predicted 12M CLV</span>
+            <span class="badge-gold">Predicted 12M CLV • Click any customer to view orders</span>
           </div>
           <div style="overflow-x: auto;">
             <table class="data-table" id="customerSegmentTable">
@@ -318,10 +344,11 @@
                   <th>Segment</th>
                   <th>Orders</th>
                   <th>Total Spent</th>
+                  <th>Cancellations</th>
                   <th>Last Order</th>
                   <th>Churn Risk</th>
                   <th>Predicted 12M CLV</th>
-                  <th>Recommended Retention Action</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -503,19 +530,88 @@
         <div class="admin-page-header">
           <div>
             <h1>📋 Live Customer Orders</h1>
-            <p class="page-subtitle">Real-time dispatch, tracking, and fulfillment</p>
+            <p class="page-subtitle">Real-time dispatch, tracking, and fulfillment • Click customer name to view history</p>
           </div>
         </div>
+
+        <!-- Orders Filter Bar -->
+        <div style="display: flex; gap: 8px; margin-bottom: 1.25rem; flex-wrap: wrap;" id="orderStatusFilters">
+          <button class="c-filter-btn active" id="filterBtn-all" onclick="filterLiveOrders('all')">All Orders (<span id="filterAllCount">0</span>)</button>
+          <button class="c-filter-btn" id="filterBtn-delivered" onclick="filterLiveOrders('delivered')">✓ Delivered</button>
+          <button class="c-filter-btn" id="filterBtn-shipped" onclick="filterLiveOrders('shipped')">🚚 Shipped</button>
+          <button class="c-filter-btn" id="filterBtn-pending" onclick="filterLiveOrders('pending')">⏳ Pending / Processing</button>
+          <button class="c-filter-btn" id="filterBtn-cancelled" style="color: #f87171; border-color: rgba(239,68,68,0.4);" onclick="filterLiveOrders('cancelled')">⚠️ Cancelled (<span id="filterCancelledCount">0</span>)</button>
+        </div>
+
         <div class="panel">
           <table class="data-table" id="ordersTable">
             <thead>
-              <tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th><th>Actions</th></tr>
+              <tr><th>Order ID</th><th>Customer (Click to View)</th><th>Total</th><th>Status</th><th>Date</th><th>Actions</th></tr>
             </thead>
             <tbody></tbody>
           </table>
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- ═══ CUSTOMER PROFILE & ORDER HISTORY MODAL ═══ -->
+  <div class="modal-overlay customer-modal-overlay" id="customerOrdersModal" onclick="handleCustomerModalBackdrop(event)">
+    <div class="customer-modal">
+      <div class="modal-header" style="padding: 1.5rem 1.75rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+        <div class="customer-modal-title">
+          <div class="customer-avatar" id="cModalAvatar">U</div>
+          <div>
+            <h2 id="cModalName" style="font-size: 1.25rem; margin: 0; color: var(--text-primary);">Customer Name</h2>
+            <div class="customer-modal-subtitle">
+              <span id="cModalEmail">email@example.com</span>
+              <span>•</span>
+              <span id="cModalSegmentBadge" class="badge-gold">VIP</span>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeCustomerModal()">✕</button>
+      </div>
+
+      <!-- Customer KPI Bar -->
+      <div class="customer-stats-bar" id="cModalStats">
+        <div class="c-stat-item">
+          <div class="c-stat-label">Total Orders</div>
+          <div class="c-stat-val" id="cModalTotalOrders">0</div>
+        </div>
+        <div class="c-stat-item">
+          <div class="c-stat-label">Total Spent</div>
+          <div class="c-stat-val" id="cModalTotalSpent">₹0</div>
+        </div>
+        <div class="c-stat-item">
+          <div class="c-stat-label">Cancelled Orders</div>
+          <div class="c-stat-val cancelled-alert" id="cModalCancelledCount">0</div>
+        </div>
+        <div class="c-stat-item">
+          <div class="c-stat-label">Churn Risk</div>
+          <div class="c-stat-val" id="cModalChurnRisk">0%</div>
+        </div>
+        <div class="c-stat-item">
+          <div class="c-stat-label">Avg Order Value</div>
+          <div class="c-stat-val" id="cModalAvgOrder">₹0</div>
+        </div>
+      </div>
+
+      <!-- Customer Orders Body -->
+      <div class="customer-orders-body">
+        <div class="customer-orders-header">
+          <h3>📦 Order History (<span id="cModalOrderCount">0</span>)</h3>
+          <div class="c-order-filters">
+            <button class="c-filter-btn active" id="cFilterAll" onclick="filterModalOrders('all')">All</button>
+            <button class="c-filter-btn" id="cFilterDelivered" onclick="filterModalOrders('delivered')">Delivered</button>
+            <button class="c-filter-btn" id="cFilterCancelled" onclick="filterModalOrders('cancelled')">⚠️ Cancelled</button>
+          </div>
+        </div>
+        <div class="customer-orders-list" id="cModalOrdersList">
+          <div class="loading-spinner"><div class="spinner"></div></div>
+        </div>
+      </div>
     </div>
   </div>
 

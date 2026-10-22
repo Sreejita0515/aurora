@@ -1014,4 +1014,231 @@
   transform: translateY(-1px);
 }
 
+/* ═══════════════════════════════════════════════════
+   CUSTOMER ORDERS & CANCELLATION INTELLIGENCE
+   ═══════════════════════════════════════════════════ */
+
+/* ── Clickable Customer Trigger ── */
+.clickable-customer {
+  cursor: pointer;
+  color: var(--accent-secondary);
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+.clickable-customer:hover {
+  color: #c4b5fd;
+  text-decoration: underline;
+}
+
+/* ── Customer Orders Modal ── */
+.modal-overlay.customer-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 20, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 6000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+.modal-overlay.customer-modal-overlay.open {
+  opacity: 1 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+}
+.customer-modal {
+  background: rgba(18, 18, 32, 0.98);
+  border: 1px solid rgba(124, 58, 237, 0.35);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7), 0 0 35px rgba(124, 58, 237, 0.15);
+  border-radius: var(--radius-xl);
+  width: 100%;
+  max-width: 840px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes modalSlideUp {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.customer-modal-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.customer-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: white;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+}
+.customer-modal-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 2px;
+}
+
+.customer-stats-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid var(--border-color);
+}
+.c-stat-item {
+  text-align: center;
+  padding: 6px;
+}
+.c-stat-label {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.c-stat-val {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-top: 2px;
+}
+.c-stat-val.cancelled-alert {
+  color: #f87171;
+}
+
+.customer-orders-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.customer-orders-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.customer-orders-header h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.c-order-filters {
+  display: flex;
+  gap: 6px;
+}
+.c-filter-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.c-filter-btn.active, .c-filter-btn:hover {
+  background: rgba(124, 58, 237, 0.2);
+  color: var(--accent-secondary);
+  border-color: rgba(124, 58, 237, 0.4);
+}
+
+.customer-order-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.85rem;
+  transition: all var(--transition-fast);
+}
+.customer-order-card:hover {
+  border-color: rgba(124, 58, 237, 0.3);
+  background: rgba(255, 255, 255, 0.035);
+}
+.customer-order-card.is-cancelled {
+  border-left: 4px solid #ef4444;
+  background: rgba(239, 68, 68, 0.04);
+}
+
+.order-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+.order-id-badge {
+  font-family: monospace;
+  font-weight: 700;
+  color: var(--accent-secondary);
+  font-size: 0.85rem;
+}
+.order-card-items {
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 0.85rem;
+  margin-bottom: 0.6rem;
+}
+.order-card-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  padding: 4px 0;
+}
+.order-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 0.6rem;
+}
+
+/* ── Cancelled Orders Table / Alert Banner ── */
+.cancellations-alert-card {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(15, 23, 42, 0.8) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+.cancellations-alert-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.cancellations-alert-header h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f87171;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+
 

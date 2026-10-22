@@ -410,16 +410,29 @@ class AIDecisionAgent {
   getCustomerBehaviourAgent() {
     const customers = this.db.prepare(`
       SELECT u.id, u.name, u.email,
-        COUNT(o.id) as total_orders,
-        COALESCE(SUM(o.total), 0) as total_spent,
-        COALESCE(AVG(o.total), 0) as avg_order,
-        MAX(o.created_at) as last_order_date,
+        COUNT(CASE WHEN o.status != 'cancelled' THEN o.id ELSE NULL END) as total_orders,
+        COALESCE(SUM(CASE WHEN o.status != 'cancelled' THEN o.total ELSE 0 END), 0) as total_spent,
+        COALESCE(AVG(CASE WHEN o.status != 'cancelled' THEN o.total ELSE NULL END), 0) as avg_order,
+        COUNT(CASE WHEN o.status = 'cancelled' THEN o.id ELSE NULL END) as cancelled_count,
+        COALESCE(SUM(CASE WHEN o.status = 'cancelled' THEN o.total ELSE 0 END), 0) as cancelled_total,
+        MAX(CASE WHEN o.status != 'cancelled' THEN o.created_at ELSE NULL END) as last_order_date,
         MIN(o.created_at) as first_order_date
       FROM users u
-      LEFT JOIN orders o ON u.id = o.user_id AND o.status != 'cancelled'
+      LEFT JOIN orders o ON u.id = o.user_id
       WHERE u.role = 'customer'
       GROUP BY u.id
       ORDER BY total_spent DESC
+    `).all();
+
+    // Specific cancellations list with order details and line items count
+    const allCancellations = this.db.prepare(`
+      SELECT o.id, o.user_id, o.total, o.shipping_address, o.created_at, o.updated_at,
+        u.name AS customer_name, u.email AS customer_email,
+        (SELECT COUNT(*) FROM order_items WHERE order_id = o.id) AS items_count
+      FROM orders o
+      JOIN users u ON o.user_id = u.id
+      WHERE o.status = 'cancelled'
+      ORDER BY o.created_at DESC
     `).all();
 
     const now = new Date();
@@ -429,6 +442,8 @@ class AIDecisionAgent {
     let atRiskCount = 0;
     let hibernatingCount = 0;
     let totalPredicted12mCLV = 0;
+    let totalCancelledOrders = 0;
+    let totalCancelledAmount = 0;
 
     const segmentedCustomers = customers.map(c => {
       const lastDate = c.last_order_date ? new Date(c.last_order_date) : null;
@@ -436,6 +451,11 @@ class AIDecisionAgent {
       const totalOrders = c.total_orders;
       const totalSpent = Math.round(c.total_spent);
       const avgOrder = Math.round(c.avg_order);
+      const cancelledCount = c.cancelled_count || 0;
+      const cancelledAmount = Math.round(c.cancelled_total || 0);
+
+      totalCancelledOrders += cancelledCount;
+      totalCancelledAmount += cancelledAmount;
 
       let segment = 'REGULAR';
       let segmentLabel = 'Loyal Enthusiast';
@@ -480,8 +500,14 @@ class AIDecisionAgent {
         retentionAction = 'Enroll in seasonal festive reactivation blast.';
       }
 
+      // If customer has cancellations, elevate churn risk and prioritize service follow-up
+      if (cancelledCount > 0) {
+        churnRiskPercent = Math.min(95, churnRiskPercent + 25);
+        retentionAction = `⚠️ Cancelled ${cancelledCount} order(s) (₹${cancelledAmount.toLocaleString('en-IN')}). Priority: Dispatch customer care check-in & replacement offer.`;
+      }
+
       // Predicted 12-Month CLV = (Order Frequency per year) * Avg Order Value * (1 - churnRisk)
-      const annualFrequency = Math.max(1, (totalOrders / 3) * 12); // Extrapolated cadence
+      const annualFrequency = Math.max(1, (totalOrders / 3) * 12);
       const predictedCLV = Math.round(annualFrequency * avgOrder * (1 - (churnRiskPercent / 100)));
       totalPredicted12mCLV += predictedCLV;
 
@@ -492,6 +518,9 @@ class AIDecisionAgent {
         totalOrders,
         totalSpent,
         avgOrder,
+        cancelledCount,
+        cancelledAmount,
+        hasCancellations: cancelledCount > 0,
         daysSinceLastOrder,
         lastOrderFormatted: lastDate ? lastDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) : 'Never',
         segment,
@@ -502,6 +531,9 @@ class AIDecisionAgent {
         retentionAction,
       };
     });
+
+    // Filter customers who specifically cancelled an order
+    const cancelledCustomers = segmentedCustomers.filter(c => c.cancelledCount > 0);
 
     // Regional Buying Analytics (India Geographic Distribution from actual shipping addresses)
     const regionalOrders = this.db.prepare(`
@@ -557,6 +589,10 @@ class AIDecisionAgent {
       hibernatingCount,
       totalPredicted12mCLV,
       averageCustomerCLV: customers.length > 0 ? Math.round(totalPredicted12mCLV / customers.length) : 0,
+      totalCancelledOrders,
+      totalCancelledAmount,
+      cancelledCustomers,
+      allCancellations,
       customers: segmentedCustomers,
       regionalSummary,
       funnelAnalysis: {
