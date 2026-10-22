@@ -2,7 +2,7 @@
   "metadata": {
     "algorithm": "RandomForestClassifier (scikit-learn)",
     "version": "churn_rf_v1.0.0",
-    "trained_at": "2026-10-22T11:54:24.121413+00:00",
+    "trained_at": "2026-10-22T17:51:10.173882+00:00",
     "sample_size": {
       "total_observations": 54,
       "unique_active_customers": 9,

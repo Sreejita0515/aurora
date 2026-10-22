@@ -1,7 +1,7 @@
 {
   "metadata": {
     "version": "rf_demand_v1.0.0",
-    "trained_at": "2026-10-22T11:27:36.336342+00:00",
+    "trained_at": "2026-10-22T17:51:13.160715+00:00",
     "feature_count": 19,
     "algorithm": "RandomForestRegressor (scikit-learn)",
     "evaluation": {
