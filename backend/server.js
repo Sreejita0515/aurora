@@ -390,6 +390,70 @@ app.use(express.static(path.join(__dirname, '..', 'frontend')));
     } catch (e) { res.status(500).json({ error: e.message }); }
   });
 
+  // ═══════════════════════════════════════════════════
+  // E-COMMERCE DECISION AGENTS (Strictly Admin-Only)
+  // ═══════════════════════════════════════════════════
+  app.get('/api/admin/decision-agents', requireAdmin, (req, res) => {
+    try {
+      const analysis = new AIDecisionAgent(db).analyze();
+      res.json({
+        timestamp: analysis.timestamp,
+        agents: analysis.agents,
+        overview: analysis.overview,
+        recommendations: analysis.recommendations,
+      });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // Apply Smart Pricing recommendation directly to database
+  app.post('/api/admin/decision-agents/pricing/apply', requireAdmin, (req, res) => {
+    try {
+      const { productId, newPrice } = req.body;
+      if (!productId || typeof newPrice !== 'number' || newPrice <= 0) {
+        return res.status(400).json({ error: 'Valid productId and positive newPrice are required' });
+      }
+      db.prepare('UPDATE products SET price = ? WHERE id = ?').run(newPrice, productId);
+      saveDb();
+      const product = db.prepare('SELECT * FROM products WHERE id = ?').get(productId);
+      res.json({ success: true, message: `Price updated to ₹${newPrice}`, product });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // Simulate pricing elasticity & margin impact
+  app.post('/api/admin/decision-agents/pricing/simulate', requireAdmin, (req, res) => {
+    try {
+      const { productId, targetPrice } = req.body;
+      if (!productId || typeof targetPrice !== 'number' || targetPrice <= 0) {
+        return res.status(400).json({ error: 'Valid productId and positive targetPrice are required' });
+      }
+      const simulation = new AIDecisionAgent(db).simulatePricing(productId, targetPrice);
+      res.json(simulation);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // Simulate business strategy what-if scenario
+  app.post('/api/admin/decision-agents/strategy/simulate', requireAdmin, (req, res) => {
+    try {
+      const simulation = new AIDecisionAgent(db).simulateStrategy(req.body || {});
+      res.json(simulation);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // Apply inventory restock simulation or batch order
+  app.post('/api/admin/decision-agents/inventory/restock', requireAdmin, (req, res) => {
+    try {
+      const { productId, quantity } = req.body;
+      const qty = parseInt(quantity, 10);
+      if (!productId || isNaN(qty) || qty <= 0) {
+        return res.status(400).json({ error: 'Valid productId and positive quantity are required' });
+      }
+      db.prepare('UPDATE products SET stock = stock + ? WHERE id = ?').run(qty, productId);
+      saveDb();
+      const product = db.prepare('SELECT * FROM products WHERE id = ?').get(productId);
+      res.json({ success: true, message: `Restocked ${qty} units for ${product.name}`, product });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
   app.get('/api/admin/products', requireAdmin, (req, res) => {
     try {
       const products = db.prepare(`

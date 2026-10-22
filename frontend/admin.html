@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Aurora Admin Dashboard — AI-powered business intelligence and management console.">
-  <title>Aurora Admin — AI Dashboard</title>
+  <meta name="description" content="Aurora Admin — E-Commerce AI Decision Agent Platform (Predictive Inventory, Smart Pricing, Customer Behaviour, Bundling, and Strategy).">
+  <title>Aurora Admin — E-Commerce Decision Agent</title>
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/admin.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+  <link rel="stylesheet" href="css/admin.css?v=decisionAgents">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
 </head>
 <body>
 
@@ -18,10 +18,11 @@
     <a href="/" class="navbar-brand">
       <div class="logo">A</div>
       <span class="brand-text">Aurora</span>
+      <span style="font-size: 0.7rem; background: rgba(124,58,237,0.25); border: 1px solid rgba(124,58,237,0.4); padding: 2px 8px; border-radius: 12px; margin-left: 8px; font-weight: 700; color: #c4b5fd;">DECISION AGENT</span>
     </a>
     <ul class="navbar-nav">
-      <li><a href="/" class="nav-link">🛍️ Shop</a></li>
-      <li><span class="nav-link active">⚙️ Admin Dashboard</span></li>
+      <li><a href="/" class="nav-link">🛍️ Storefront</a></li>
+      <li><span class="nav-link active">⚡ AI Decision Console</span></li>
     </ul>
     <div class="navbar-actions">
       <div class="last-updated">
@@ -45,33 +46,37 @@
     <!-- Sidebar -->
     <aside class="admin-sidebar" id="adminSidebar">
       <div class="sidebar-section">
-        <div class="sidebar-section-title">Analytics</div>
-        <button class="sidebar-link active" data-section="overview" onclick="showSection('overview')">
-          <span class="link-icon">📊</span> Overview
+        <div class="sidebar-section-title">⚡ Decision Agents</div>
+        <button class="sidebar-link active" data-section="decision-hub" onclick="showSection('decision-hub')">
+          <span class="link-icon">🧠</span> Decision Hub
+        </button>
+        <button class="sidebar-link" data-section="predictive-inventory" onclick="showSection('predictive-inventory')">
+          <span class="link-icon">🏭</span> Predictive Inventory
+        </button>
+        <button class="sidebar-link" data-section="smart-pricing" onclick="showSection('smart-pricing')">
+          <span class="link-icon">🏷️</span> Smart Pricing
+        </button>
+        <button class="sidebar-link" data-section="customer-behaviour" onclick="showSection('customer-behaviour')">
+          <span class="link-icon">👥</span> Customer Behaviour
+        </button>
+        <button class="sidebar-link" data-section="bundle-cross-selling" onclick="showSection('bundle-cross-selling')">
+          <span class="link-icon">🎁</span> Bundles & Cross-Sell
+        </button>
+        <button class="sidebar-link" data-section="business-strategy" onclick="showSection('business-strategy')">
+          <span class="link-icon">♟️</span> Business Strategy
+        </button>
+      </div>
+
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">📊 Core Operations</div>
+        <button class="sidebar-link" data-section="overview" onclick="showSection('overview')">
+          <span class="link-icon">📈</span> Store Overview
         </button>
         <button class="sidebar-link" data-section="sales" onclick="showSection('sales')">
-          <span class="link-icon">💰</span> Sales Analysis
+          <span class="link-icon">💰</span> Sales Analytics
         </button>
-        <button class="sidebar-link" data-section="products" onclick="showSection('products')">
-          <span class="link-icon">📦</span> Products
-        </button>
-        <button class="sidebar-link" data-section="customers" onclick="showSection('customers')">
-          <span class="link-icon">👥</span> Customers
-        </button>
-        <button class="sidebar-link" data-section="inventory" onclick="showSection('inventory')">
-          <span class="link-icon">🏭</span> Inventory
-        </button>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-section-title">AI Agent</div>
-        <button class="sidebar-link" data-section="ai" onclick="showSection('ai')">
-          <span class="link-icon">🤖</span> AI Recommendations
-        </button>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-section-title">Management</div>
         <button class="sidebar-link" data-section="orders" onclick="showSection('orders')">
-          <span class="link-icon">📋</span> Recent Orders
+          <span class="link-icon">📋</span> Live Orders
         </button>
       </div>
     </aside>
@@ -80,212 +85,425 @@
     <div class="admin-main" id="adminMain">
       <div class="loading-spinner" id="dashboardLoader"><div class="spinner"></div></div>
 
-      <!-- ─── OVERVIEW SECTION ─── -->
-      <div class="admin-section" id="section-overview" style="display:none;">
-        <div class="admin-page-header">
-          <div>
-            <h1>📊 Dashboard Overview</h1>
-            <p class="page-subtitle">Real-time business metrics and insights</p>
+      <!-- ═══════════════════════════════════════════════════
+           SECTION: DECISION HUB (EXECUTIVE SUMMARY)
+           ═══════════════════════════════════════════════════ -->
+      <div class="admin-section" id="section-decision-hub" style="display:none;">
+        <div class="decision-agents-banner">
+          <div class="agents-banner-title">
+            <div class="agents-banner-icon">🧠</div>
+            <div>
+              <h2>E-Commerce Decision Agent Cockpit</h2>
+              <p>5 Multi-Agent Systems Continuously Optimizing Revenue, Inventory, Pricing, and Retention</p>
+            </div>
+          </div>
+          <div class="agents-pill-row">
+            <div class="agent-status-tag"><span class="pulse-dot"></span> Inventory Forecast</div>
+            <div class="agent-status-tag"><span class="pulse-dot"></span> Dynamic Pricing</div>
+            <div class="agent-status-tag"><span class="pulse-dot"></span> RFM Behaviour</div>
+            <div class="agent-status-tag"><span class="pulse-dot"></span> Smart Bundles</div>
+            <div class="agent-status-tag"><span class="pulse-dot"></span> Macro Strategy</div>
           </div>
         </div>
 
-        <!-- KPI Cards -->
-        <div class="kpi-grid" id="kpiGrid"></div>
+        <!-- Macro Decision KPIs -->
+        <div class="kpi-grid" id="decisionHubKpis"></div>
 
-        <!-- Charts Row -->
+        <!-- Executive Action Matrix -->
+        <div class="panel" style="margin-bottom: 2rem;">
+          <div class="panel-header">
+            <div class="panel-title">⚡ Prioritized Strategic Decisions (Ready for Action)</div>
+            <span class="badge-gold">AI Recommended</span>
+          </div>
+          <div id="decisionHubRecommendations"></div>
+        </div>
+
+        <!-- 30-Day Snapshot & Category Share -->
         <div class="dashboard-grid">
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title">📈 Revenue Trend (30 Days)</div>
+              <div class="panel-title">📈 30-Day Revenue Trend</div>
             </div>
-            <div class="bar-chart" id="revenueChart"></div>
+            <div class="bar-chart" id="hubRevenueChart"></div>
           </div>
           <div class="panel">
             <div class="panel-header">
-              <div class="panel-title">📊 Revenue by Category</div>
+              <div class="panel-title">🏷️ Indian Regional Category Share</div>
             </div>
-            <div class="donut-chart-container" id="categoryChart"></div>
+            <div class="donut-chart-container" id="hubCategoryChart"></div>
           </div>
-        </div>
-
-        <!-- Quick AI Summary -->
-        <div class="panel" style="margin-bottom: 2rem;">
-          <div class="panel-header">
-            <div class="panel-title">🤖 AI Quick Insights</div>
-            <button class="btn btn-sm btn-secondary" onclick="showSection('ai')">View All →</button>
-          </div>
-          <div id="quickInsights"></div>
         </div>
       </div>
 
-      <!-- ─── SALES SECTION ─── -->
+      <!-- ═══════════════════════════════════════════════════
+           SECTION: 1. PREDICTIVE INVENTORY AGENT
+           ═══════════════════════════════════════════════════ -->
+      <div class="admin-section" id="section-predictive-inventory" style="display:none;">
+        <div class="admin-page-header">
+          <div>
+            <h1>🏭 Predictive Inventory Agent</h1>
+            <p class="page-subtitle">Stockout forecasting, velocity tracking, festive demand multipliers, and supplier lead times</p>
+          </div>
+          <div class="ai-badge">📦 Active Stock Forecast</div>
+        </div>
+
+        <div class="kpi-grid" id="inventoryAgentKpis"></div>
+
+        <!-- Stockout Runway & Reorder Forecasting Table -->
+        <div class="panel" style="margin-bottom: 2rem;">
+          <div class="panel-header">
+            <div class="panel-title">🚨 Stockout Velocity & Reorder Recommendations</div>
+            <span class="badge-danger">Diwali / Festive Surge Adjusted</span>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="data-table" id="inventoryForecastTable">
+              <thead>
+                <tr>
+                  <th>Product & Craft Origin</th>
+                  <th>Category</th>
+                  <th>Stock</th>
+                  <th>Daily Velocity</th>
+                  <th>Runway</th>
+                  <th>Festive Runway</th>
+                  <th>Reorder Point</th>
+                  <th>Recommended Batch</th>
+                  <th>Lead Time</th>
+                  <th>Restock Cost</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Overstocked / Dead Capital Trap -->
+        <div class="dashboard-grid">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">💰 Trapped Capital & Overstock Clearance</div>
+            </div>
+            <table class="data-table" id="inventoryOverstockTable">
+              <thead>
+                <tr><th>SKU</th><th>Stock</th><th>30d Sales</th><th>Trapped Capital</th><th>Clearance Action</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">📊 Category Inventory Health & Lead Times</div>
+            </div>
+            <table class="data-table" id="inventoryCategoryTable">
+              <thead>
+                <tr><th>Category</th><th>Total Units</th><th>Value (₹)</th><th>Velocity</th><th>Festive Spike</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════
+           SECTION: 2. SMART PRICING AGENT
+           ═══════════════════════════════════════════════════ -->
+      <div class="admin-section" id="section-smart-pricing" style="display:none;">
+        <div class="admin-page-header">
+          <div>
+            <h1>🏷️ Smart Pricing Agent</h1>
+            <p class="page-subtitle">Dynamic price elasticity engine, premium scarcity surge, and margin expansion modeling</p>
+          </div>
+          <div class="ai-badge">💰 Margin Maximizer</div>
+        </div>
+
+        <div class="kpi-grid" id="pricingAgentKpis"></div>
+
+        <!-- Interactive Pricing Simulator Box -->
+        <div class="simulator-box">
+          <div class="simulator-header">
+            <div class="simulator-title">🧪 Live Dynamic Price Elasticity Simulator</div>
+            <span class="badge-info">Algorithmic Volume Predictor</span>
+          </div>
+          <div class="simulator-grid">
+            <div class="sim-field">
+              <label for="simPricingProduct">Select SKU to Simulate</label>
+              <select id="simPricingProduct" onchange="updatePricingSimDefault()"></select>
+            </div>
+            <div class="sim-field">
+              <label for="simTargetPrice">Target Price (₹ INR)</label>
+              <input type="number" id="simTargetPrice" placeholder="Enter target price">
+            </div>
+            <div class="sim-field" style="justify-content: flex-end;">
+              <button class="btn btn-primary" onclick="runPricingSimulation()">⚡ Run Elasticity Simulation</button>
+            </div>
+          </div>
+          <div class="sim-result-card" id="pricingSimResult" style="display:none;"></div>
+        </div>
+
+        <!-- Smart Pricing Recommendations Table -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">🎯 Algorithmic Pricing Recommendations & 1-Click Applicator</div>
+            <span class="badge-success">Projected Profit Uplift Available</span>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="data-table" id="smartPricingTable">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Current Price</th>
+                  <th>AI Recommended</th>
+                  <th>Change</th>
+                  <th>Strategy</th>
+                  <th>Elasticity</th>
+                  <th>Confidence</th>
+                  <th>Monthly Impact</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════
+           SECTION: 3. CUSTOMER BEHAVIOUR AGENT
+           ═══════════════════════════════════════════════════ -->
+      <div class="admin-section" id="section-customer-behaviour" style="display:none;">
+        <div class="admin-page-header">
+          <div>
+            <h1>👥 Customer Behaviour Agent</h1>
+            <p class="page-subtitle">RFM segmentation, churn risk probability, predicted 12-month CLV, and Indian regional trends</p>
+          </div>
+          <div class="ai-badge">🧠 RFM Intelligence</div>
+        </div>
+
+        <div class="kpi-grid" id="customerAgentKpis"></div>
+
+        <!-- Indian Regional Purchasing Distribution -->
+        <div class="panel" style="margin-bottom: 2rem;">
+          <div class="panel-header">
+            <div class="panel-title">🇮🇳 Indian Regional Buying Analytics (Metro & Tier-1 Hubs)</div>
+            <span class="badge-info">Geographic Order Mining</span>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="data-table" id="regionalTrendsTable">
+              <thead>
+                <tr>
+                  <th>City / Region</th>
+                  <th>Completed Orders</th>
+                  <th>Total GMV (₹)</th>
+                  <th>Avg Basket Size</th>
+                  <th>Dominant Category Preference</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Customer RFM Segmentation & Churn Prevention Table -->
+        <div class="panel" style="margin-bottom: 2rem;">
+          <div class="panel-header">
+            <div class="panel-title">🏅 Customer RFM Segment Leaderboard & Churn Risk</div>
+            <span class="badge-gold">Predicted 12M CLV</span>
+          </div>
+          <div style="overflow-x: auto;">
+            <table class="data-table" id="customerSegmentTable">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Segment</th>
+                  <th>Orders</th>
+                  <th>Total Spent</th>
+                  <th>Last Order</th>
+                  <th>Churn Risk</th>
+                  <th>Predicted 12M CLV</th>
+                  <th>Recommended Retention Action</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Cart Abandonment Recovery Funnel -->
+        <div class="panel" id="cartFunnelPanel"></div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════
+           SECTION: 4. BUNDLE & CROSS-SELLING AGENT
+           ═══════════════════════════════════════════════════ -->
+      <div class="admin-section" id="section-bundle-cross-selling" style="display:none;">
+        <div class="admin-page-header">
+          <div>
+            <h1>🎁 Bundle and Cross-Selling Agent</h1>
+            <p class="page-subtitle">Market basket co-purchase mining, high-affinity Indian festive bundles, and attachment rate predictors</p>
+          </div>
+          <div class="ai-badge">🛍️ Basket Maximizer</div>
+        </div>
+
+        <div class="kpi-grid" id="bundleAgentKpis"></div>
+
+        <!-- Curated Indian Smart Bundles Grid -->
+        <div class="panel-header" style="margin-bottom: 1rem;">
+          <div class="panel-title">👑 High-Affinity Indian Curated Smart Bundles</div>
+          <span class="badge-gold">AOV Uplift Driver</span>
+        </div>
+        <div class="bundles-grid" id="smartBundlesGrid"></div>
+
+        <!-- Market Basket Mining & Cross Selling Rules -->
+        <div class="dashboard-grid">
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">🛒 Market Basket Co-Purchases (Real Order Mining)</div>
+            </div>
+            <table class="data-table" id="coPurchasesTable">
+              <thead>
+                <tr><th>Product A</th><th>Product B</th><th>Co-Order Frequency</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">🔗 Intelligent Cross-Selling Rules</div>
+            </div>
+            <table class="data-table" id="crossSellingTable">
+              <thead>
+                <tr><th>Browsing Product</th><th>Recommended Add-On</th><th>Attachment Rate</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════
+           SECTION: 5. BUSINESS STRATEGY AGENT
+           ═══════════════════════════════════════════════════ -->
+      <div class="admin-section" id="section-business-strategy" style="display:none;">
+        <div class="admin-page-header">
+          <div>
+            <h1>♟️ Business Strategy Agent</h1>
+            <p class="page-subtitle">Macro business health score, 3-month GMV forecasting, strategic playbook, and what-if simulation</p>
+          </div>
+          <div class="ai-badge">📈 Executive Advisor</div>
+        </div>
+
+        <!-- Business Health Index Score -->
+        <div class="panel" style="margin-bottom: 2rem;" id="strategyHealthPanel"></div>
+
+        <!-- Interactive Strategic What-If Simulator -->
+        <div class="simulator-box">
+          <div class="simulator-header">
+            <div class="simulator-title">🎮 Strategic What-If Scenario Simulator</div>
+            <span class="badge-gold">P&L Financial Engine</span>
+          </div>
+          <div class="simulator-grid">
+            <div class="sim-field">
+              <label for="simFestiveDiscount">Festive Discount %</label>
+              <input type="number" id="simFestiveDiscount" value="12" min="0" max="40">
+            </div>
+            <div class="sim-field">
+              <label for="simShippingThreshold">Free Shipping Threshold (₹)</label>
+              <input type="number" id="simShippingThreshold" value="1499" step="100">
+            </div>
+            <div class="sim-field">
+              <label for="simMarketingBudget">Marketing Ad Spend (₹)</label>
+              <input type="number" id="simMarketingBudget" value="30000" step="5000">
+            </div>
+            <div class="sim-field">
+              <label for="simConversionLift">Expected Conversion Lift %</label>
+              <input type="number" id="simConversionLift" value="20" min="0" max="100">
+            </div>
+          </div>
+          <button class="btn btn-primary" style="margin-bottom: 1.25rem;" onclick="runStrategySimulation()">🚀 Run Strategic Financial Simulation</button>
+          <div class="sim-result-card" id="strategySimResult" style="display:none;"></div>
+        </div>
+
+        <!-- 3-Month GMV Trajectory Forecast -->
+        <div class="panel" style="margin-bottom: 2rem;">
+          <div class="panel-header">
+            <div class="panel-title">📊 3-Month GMV Trajectory Forecast (Pre-Festive to Wedding Season)</div>
+            <span class="badge-success">Festive Surge Modeled</span>
+          </div>
+          <table class="data-table" id="gmvTrajectoryTable">
+            <thead>
+              <tr><th>Horizon</th><th>Conservative (₹)</th><th>Expected Base (₹)</th><th>Aggressive Festive Peak (₹)</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <!-- Strategic Playbook -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-title">📋 Executive Decision Playbook (Prioritized Growth Moves)</div>
+          </div>
+          <div id="strategicPlaybookContainer"></div>
+        </div>
+      </div>
+
+      <!-- ═══════════════════════════════════════════════════
+           CORE OPERATIONS: OVERVIEW, SALES & ORDERS
+           ═══════════════════════════════════════════════════ -->
+      <div class="admin-section" id="section-overview" style="display:none;">
+        <div class="admin-page-header">
+          <div>
+            <h1>📊 Store Operations Overview</h1>
+            <p class="page-subtitle">Real-time core e-commerce metrics and orders count</p>
+          </div>
+        </div>
+        <div class="kpi-grid" id="kpiGrid"></div>
+        <div class="dashboard-grid">
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">📈 30-Day Revenue Trend</div></div>
+            <div class="bar-chart" id="revenueChart"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-header"><div class="panel-title">📊 Category Revenue Breakdown</div></div>
+            <div class="donut-chart-container" id="categoryChart"></div>
+          </div>
+        </div>
+      </div>
+
       <div class="admin-section" id="section-sales" style="display:none;">
         <div class="admin-page-header">
           <div>
             <h1>💰 Sales Analysis</h1>
-            <p class="page-subtitle">Revenue breakdown and sales trends</p>
+            <p class="page-subtitle">Revenue breakdown and weekly sales cadence</p>
           </div>
         </div>
-
         <div class="dashboard-grid">
           <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title">📅 Weekly Sales Pattern</div>
-            </div>
+            <div class="panel-header"><div class="panel-title">📅 Weekly Order Pattern</div></div>
             <div class="bar-chart" id="weeklyChart"></div>
           </div>
           <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title">📊 Order Status Distribution</div>
-            </div>
+            <div class="panel-header"><div class="panel-title">📊 Order Fulfillment Status</div></div>
             <div id="statusDistribution"></div>
           </div>
         </div>
-
         <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">🏷️ Revenue by Category</div>
-          </div>
+          <div class="panel-header"><div class="panel-title">🏷️ Category Sales Ledger</div></div>
           <table class="data-table" id="categoryRevenueTable">
             <thead>
-              <tr>
-                <th>Category</th>
-                <th>Revenue</th>
-                <th>Orders</th>
-                <th>Share</th>
-              </tr>
+              <tr><th>Category</th><th>Revenue</th><th>Orders</th><th>Share</th></tr>
             </thead>
             <tbody></tbody>
           </table>
         </div>
       </div>
 
-      <!-- ─── PRODUCTS SECTION ─── -->
-      <div class="admin-section" id="section-products" style="display:none;">
-        <div class="admin-page-header">
-          <div>
-            <h1>📦 Product Performance</h1>
-            <p class="page-subtitle">Top sellers and underperforming products</p>
-          </div>
-        </div>
-
-        <div class="dashboard-grid">
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title">🏆 Top Selling Products</div>
-            </div>
-            <table class="data-table" id="topProductsTable">
-              <thead>
-                <tr><th>Product</th><th>Sold</th><th>Revenue</th><th>Rating</th></tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title">⚠️ Needs Attention</div>
-            </div>
-            <table class="data-table" id="underperformersTable">
-              <thead>
-                <tr><th>Product</th><th>Sold</th><th>Revenue</th><th>Stock</th></tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">⭐ Best Reviewed Products</div>
-          </div>
-          <table class="data-table" id="bestReviewedTable">
-            <thead>
-              <tr><th>Product</th><th>Rating</th><th>Reviews</th><th>Price</th></tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ─── CUSTOMERS SECTION ─── -->
-      <div class="admin-section" id="section-customers" style="display:none;">
-        <div class="admin-page-header">
-          <div>
-            <h1>👥 Customer Insights</h1>
-            <p class="page-subtitle">Customer behavior and retention analysis</p>
-          </div>
-        </div>
-
-        <div class="kpi-grid" id="customerKpis"></div>
-
-        <div class="panel">
-          <div class="panel-header">
-            <div class="panel-title">🏅 Customer Spending Leaderboard</div>
-          </div>
-          <table class="data-table" id="customerTable">
-            <thead>
-              <tr><th>Customer</th><th>Orders</th><th>Total Spent</th><th>Avg Order</th><th>Last Order</th></tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- ─── INVENTORY SECTION ─── -->
-      <div class="admin-section" id="section-inventory" style="display:none;">
-        <div class="admin-page-header">
-          <div>
-            <h1>🏭 Inventory Health</h1>
-            <p class="page-subtitle">Stock levels and inventory optimization</p>
-          </div>
-        </div>
-
-        <div class="kpi-grid" id="inventoryKpis"></div>
-
-        <div class="dashboard-grid">
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title">🚨 Low Stock Alerts</div>
-            </div>
-            <table class="data-table" id="lowStockTable">
-              <thead>
-                <tr><th>Product</th><th>Stock</th><th>Monthly Sales</th><th>Status</th></tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-          <div class="panel">
-            <div class="panel-header">
-              <div class="panel-title">📦 Stock by Category</div>
-            </div>
-            <table class="data-table" id="stockCategoryTable">
-              <thead>
-                <tr><th>Category</th><th>Products</th><th>Total Stock</th><th>Value</th></tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ─── AI RECOMMENDATIONS SECTION ─── -->
-      <div class="admin-section" id="section-ai" style="display:none;">
-        <div class="admin-page-header">
-          <div>
-            <h1>🤖 AI Decision Agent</h1>
-            <p class="page-subtitle">Data-driven recommendations to optimize your business</p>
-          </div>
-          <div class="ai-badge">🧠 AI Powered</div>
-        </div>
-        <div id="aiRecommendations"></div>
-      </div>
-
-      <!-- ─── ORDERS SECTION ─── -->
       <div class="admin-section" id="section-orders" style="display:none;">
         <div class="admin-page-header">
           <div>
-            <h1>📋 Recent Orders</h1>
-            <p class="page-subtitle">Manage and track all customer orders</p>
+            <h1>📋 Live Customer Orders</h1>
+            <p class="page-subtitle">Real-time dispatch, tracking, and fulfillment</p>
           </div>
         </div>
         <div class="panel">
@@ -303,12 +521,10 @@
 
   <div class="toast-container" id="toastContainer"></div>
 
-
   <!-- Firebase JS SDK (compat mode for vanilla JS) -->
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
   <script>
-    // Firebase configuration — Aurora project
     const firebaseConfig = {
       apiKey: "AIzaSyAkiDmaGHoOpg9Dl9_vrgGTW4CRtoZlR0g",
       authDomain: "aurora-ee3eb.firebaseapp.com",
