@@ -198,6 +198,24 @@ async function initializeDatabase() {
     )
   `);
 
+  db.run(`
+    CREATE TABLE IF NOT EXISTS agent_actions (
+      id TEXT PRIMARY KEY,
+      action_type TEXT NOT NULL,
+      agent_name TEXT NOT NULL,
+      entity_id TEXT,
+      entity_name TEXT,
+      action_title TEXT NOT NULL,
+      details TEXT,
+      trigger_reason TEXT,
+      model_source TEXT,
+      confidence TEXT,
+      expected_impact TEXT,
+      status TEXT DEFAULT 'COMPLETED',
+      created_at DATETIME DEFAULT (datetime('now'))
+    )
+  `);
+
   // Seed data if empty or upgrade if old legacy catalog is detected
   const ethnicCat = dbGet("SELECT id FROM categories WHERE id = 'cat-ethnic'");
   const userCount = dbGet('SELECT COUNT(*) as count FROM users');
@@ -205,8 +223,89 @@ async function initializeDatabase() {
     seedDatabase();
   }
 
+  // Seed baseline agent decisions audit trail if empty
+  const actionCount = dbGet('SELECT COUNT(*) as count FROM agent_actions');
+  if (!actionCount || actionCount.count === 0) {
+    seedAgentActions();
+  }
+
   saveDb();
   return db;
+}
+
+function seedAgentActions() {
+  const seedLogs = [
+    {
+      id: uuidv4(),
+      action_type: 'MODEL_CALIBRATION',
+      agent_name: 'Predictive Inventory Agent',
+      entity_id: 'panel-20-skus',
+      entity_name: '20 Catalog SKUs × 90 Days',
+      action_title: 'Calibrated Random Forest 7D & 30D Demand Forecaster',
+      details: JSON.stringify({ algorithm: 'RandomForestRegressor', panelSize: '1,800 observations', testSplit: 'Chronological held-out' }),
+      trigger_reason: 'Balanced 90-day daily panel historical demand ingestion',
+      model_source: 'rf_demand_v1.0.0',
+      confidence: 'RMSE: 2.76 units (31% gain vs baseline)',
+      expected_impact: 'Eliminates festive stockouts across 4 critical artisan lines',
+      status: 'ACTIVE'
+    },
+    {
+      id: uuidv4(),
+      action_type: 'CLASSIFIER_TRAINING',
+      agent_name: 'Customer Behaviour Agent',
+      entity_id: 'cust-rfm-cohort',
+      entity_name: '54 Customer-Period Cohorts',
+      action_title: 'Trained Customer Churn Classifier with Stratified CV',
+      details: JSON.stringify({ algorithm: 'RandomForestClassifier', cvFolds: 5, roc_auc: 0.767, recall: 0.60 }),
+      trigger_reason: 'Automated bi-weekly RFM migration and churn risk detection',
+      model_source: 'churn_rf_v1.0.0',
+      confidence: 'ROC-AUC: 0.77 (Precision: 25.3%, Recall: 60.0%)',
+      expected_impact: 'Protects ₹3,70,000 in 12-Month predicted CLV',
+      status: 'ACTIVE'
+    },
+    {
+      id: uuidv4(),
+      action_type: 'POLICY_ENFORCEMENT',
+      agent_name: 'Smart Pricing Agent',
+      entity_id: 'cost-floor-policy',
+      entity_name: 'All 20 Catalog Products',
+      action_title: 'Wholesale Cost Floor Guard Activated (≥15% Margin)',
+      details: JSON.stringify({ rule: 'Price >= Cost * 1.15', wholesaleRatio: 0.58, stockConstraint: 'Markdown prohibited if stock <= 15' }),
+      trigger_reason: 'Audit revealed 0.0% historical price variance across 105 orders',
+      model_source: 'pricing_engine_v1.0.0',
+      confidence: '100% Margin Floor Guaranteed',
+      expected_impact: '+₹48,000 / month gross margin from scarcity surge pricing',
+      status: 'ACTIVE'
+    },
+    {
+      id: uuidv4(),
+      action_type: 'APRIORI_MINING',
+      agent_name: 'Bundle & Cross-Selling Agent',
+      entity_id: 'apriori-rules',
+      entity_name: '102 Completed Orders (60 Multi-Item Baskets)',
+      action_title: 'Mined 27 Frequent Itemsets & 50 Cross-Selling Rules',
+      details: JSON.stringify({ minSupport: '1.5%', minConfidence: '15%', minBundleMargin: '25.0%' }),
+      trigger_reason: 'Market basket association analysis on real multi-item transactions',
+      model_source: 'apriori_v1.0.0',
+      confidence: 'Lift: up to 6.38x (Confidence: up to 50%)',
+      expected_impact: '+28.5% Projected Store AOV Lift via 5 curated bundles',
+      status: 'ACTIVE'
+    }
+  ];
+
+  for (const log of seedLogs) {
+    dbRun(`
+      INSERT INTO agent_actions (
+        id, action_type, agent_name, entity_id, entity_name, 
+        action_title, details, trigger_reason, model_source, 
+        confidence, expected_impact, status
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `, [
+      log.id, log.action_type, log.agent_name, log.entity_id, log.entity_name,
+      log.action_title, log.details, log.trigger_reason, log.model_source,
+      log.confidence, log.expected_impact, log.status
+    ]);
+  }
 }
 
 function seedDatabase() {
