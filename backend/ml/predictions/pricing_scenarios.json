@@ -1,0 +1,4216 @@
+{
+  "agentName": "Smart Pricing Agent",
+  "agentIcon": "\ud83c\udff7\ufe0f",
+  "engineMetadata": {
+    "engineVersion": "pricing_engine_v1.0.0",
+    "timestamp": "2026-10-22T12:16:26.680530+00:00",
+    "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+    "dataAudit": {
+      "historicalPriceVariance": 0.0,
+      "totalOrdersAudited": 105,
+      "catalogMRPPurchasesOnly": true,
+      "status": "Zero historical price variation; empirical econometric regression unidentifiable; rule-based scenario sensitivity utilized."
+    },
+    "parameters": {
+      "wholesaleCostRatio": 0.58,
+      "minGrossMarginMarkup": 1.15,
+      "guaranteedGrossMarginFloorPct": 15.0,
+      "sensitivityScenarios": {
+        "inelastic": -0.5,
+        "unit_elastic": -1.0,
+        "elastic": -1.5
+      }
+    },
+    "summary": {
+      "totalProducts": 20,
+      "actionableCount": 16,
+      "surgeOpportunitiesCount": 4,
+      "markdownOpportunitiesCount": 5,
+      "totalProjectedMonthlyProfitUplift": 6300.0
+    }
+  },
+  "totalProjectedMonthlyUplift": 6300.0,
+  "actionableCount": 16,
+  "recommendations": [
+    {
+      "id": "704ec85f-3b97-41dd-9e34-bdd1a91af365",
+      "name": "Hand-Casted Brass Ganesha Idol",
+      "category": "Handicrafts & Home Decor",
+      "currentPrice": 2199.0,
+      "recommendedPrice": 2449,
+      "priceDelta": 250.0,
+      "priceDeltaPercent": 11,
+      "stock": 35,
+      "rating": 4.9,
+      "velocity": 0.13,
+      "sold30d": 4,
+      "runwayDays": 262,
+      "wholesaleCost": 1275,
+      "costFloor": 1466,
+      "breakevenUnits": 4,
+      "strategy": "SURGE_PREMIUM",
+      "strategyLabel": "Premium Surge (+8% to +12%)",
+      "strategyBadge": "badge-danger",
+      "elasticity": -0.45,
+      "confidence": 94,
+      "rationale": "Artisan craft scarcity (35 units in warehouse, 4.9\u2605 rating). High willingness-to-pay shields against volume drop; a strategic surge captures pure gross margin while extending inventory runway.",
+      "projectedMonthlyUnits": 4,
+      "monthlyRevenueDelta": 1000.0,
+      "monthlyProfitDelta": 1000.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 4,
+          "projectedRevenue": 9796,
+          "projectedGrossProfit": 4696,
+          "revenueDelta": 1000.0,
+          "profitDelta": 1000.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 4,
+          "projectedRevenue": 9796,
+          "projectedGrossProfit": 4696,
+          "revenueDelta": 1000.0,
+          "profitDelta": 1000.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 3,
+          "projectedRevenue": 7347,
+          "projectedGrossProfit": 3522,
+          "revenueDelta": -1449.0,
+          "profitDelta": -174.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Hand-Casted Brass Ganesha Idol",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 1275,
+          "costFloor": 1466,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b92,199 | Estimated Wholesale Cost (58%): \u20b91,275 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b91,466 | Recommended Price: \u20b92,449 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.45,
+            "rating": 4.9,
+            "stock": 35,
+            "velocity": 0.13,
+            "runwayDays": 262
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.45 based on Premium Surge (+8% to +12%). Observed catalog sales: 4 units/30d (0.13/day). Stock runway: 262 days across 35 units.",
+          "value": -0.45
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 4,
+            "currentPrice": 2199.0,
+            "recommendedPrice": 2449,
+            "priceDelta": 250.0,
+            "priceDeltaPercent": 11,
+            "elasticity": -0.45
+          },
+          "derivation": "4 units \u00d7 [1 + (-0.45 \u00d7 (+250 / 2199))] = 4 \u00d7 0.949 = 4 units/month",
+          "value": 4
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 3696.0,
+            "newUnitMargin": 1174,
+            "breakevenUnits": 4,
+            "breakevenDeltaUnits": 0
+          },
+          "derivation": "Baseline Monthly Profit: \u20b93,696 | New Unit Gross Margin: \u20b91,174 | Break-Even Volume: 4 units (+0 units vs baseline to maintain current profit).",
+          "value": 4
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 8796.0,
+            "projectedRevenue": 9796,
+            "currentProfit": 3696.0,
+            "projectedProfit": 4696,
+            "wholesaleCostPrice": 1275,
+            "costFloor": 1466
+          },
+          "derivation": "Baseline Profit = 4 \u00d7 \u20b9924 = \u20b93,696 | Projected Profit = 4 \u00d7 \u20b91,174 = \u20b94,696 | Monthly Gross Margin Delta: +1,000.0 (Revenue Delta: +1,000.0)",
+          "revenueDelta": 1000.0,
+          "profitDelta": 1000.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 4,
+            "projectedRevenue": 9796,
+            "projectedGrossProfit": 4696,
+            "revenueDelta": 1000.0,
+            "profitDelta": 1000.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 4,
+            "projectedRevenue": 9796,
+            "projectedGrossProfit": 4696,
+            "revenueDelta": 1000.0,
+            "profitDelta": 1000.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 3,
+            "projectedRevenue": 7347,
+            "projectedGrossProfit": 3522,
+            "revenueDelta": -1449.0,
+            "profitDelta": -174.0
+          },
+          "profitDeltaRange": [
+            -174.0,
+            1000.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "c874c59f-0036-404c-b4a9-a97b3fe6b071",
+      "name": "Banarasi Katan Silk Saree",
+      "category": "Ethnic & Festive Wear",
+      "currentPrice": 6499.0,
+      "recommendedPrice": 7249,
+      "priceDelta": 750.0,
+      "priceDeltaPercent": 12,
+      "stock": 25,
+      "rating": 4.9,
+      "velocity": 0.03,
+      "sold30d": 1,
+      "runwayDays": 750,
+      "wholesaleCost": 3769,
+      "costFloor": 4334,
+      "breakevenUnits": 1,
+      "strategy": "SURGE_PREMIUM",
+      "strategyLabel": "Premium Surge (+8% to +12%)",
+      "strategyBadge": "badge-danger",
+      "elasticity": -0.45,
+      "confidence": 94,
+      "rationale": "Artisan craft scarcity (25 units in warehouse, 4.9\u2605 rating). High willingness-to-pay shields against volume drop; a strategic surge captures pure gross margin while extending inventory runway.",
+      "projectedMonthlyUnits": 1,
+      "monthlyRevenueDelta": 750.0,
+      "monthlyProfitDelta": 750.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 1,
+          "projectedRevenue": 7249,
+          "projectedGrossProfit": 3480,
+          "revenueDelta": 750.0,
+          "profitDelta": 750.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 1,
+          "projectedRevenue": 7249,
+          "projectedGrossProfit": 3480,
+          "revenueDelta": 750.0,
+          "profitDelta": 750.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 1,
+          "projectedRevenue": 7249,
+          "projectedGrossProfit": 3480,
+          "revenueDelta": 750.0,
+          "profitDelta": 750.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Banarasi Katan Silk Saree",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 3769,
+          "costFloor": 4334,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b96,499 | Estimated Wholesale Cost (58%): \u20b93,769 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b94,334 | Recommended Price: \u20b97,249 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.45,
+            "rating": 4.9,
+            "stock": 25,
+            "velocity": 0.03,
+            "runwayDays": 750
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.45 based on Premium Surge (+8% to +12%). Observed catalog sales: 1 units/30d (0.03/day). Stock runway: 750 days across 25 units.",
+          "value": -0.45
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 1,
+            "currentPrice": 6499.0,
+            "recommendedPrice": 7249,
+            "priceDelta": 750.0,
+            "priceDeltaPercent": 12,
+            "elasticity": -0.45
+          },
+          "derivation": "1 units \u00d7 [1 + (-0.45 \u00d7 (+750 / 6499))] = 1 \u00d7 0.948 = 1 units/month",
+          "value": 1
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 2730.0,
+            "newUnitMargin": 3480,
+            "breakevenUnits": 1,
+            "breakevenDeltaUnits": 0
+          },
+          "derivation": "Baseline Monthly Profit: \u20b92,730 | New Unit Gross Margin: \u20b93,480 | Break-Even Volume: 1 units (+0 units vs baseline to maintain current profit).",
+          "value": 1
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 6499.0,
+            "projectedRevenue": 7249,
+            "currentProfit": 2730.0,
+            "projectedProfit": 3480,
+            "wholesaleCostPrice": 3769,
+            "costFloor": 4334
+          },
+          "derivation": "Baseline Profit = 1 \u00d7 \u20b92,730 = \u20b92,730 | Projected Profit = 1 \u00d7 \u20b93,480 = \u20b93,480 | Monthly Gross Margin Delta: +750.0 (Revenue Delta: +750.0)",
+          "revenueDelta": 750.0,
+          "profitDelta": 750.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 1,
+            "projectedRevenue": 7249,
+            "projectedGrossProfit": 3480,
+            "revenueDelta": 750.0,
+            "profitDelta": 750.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 1,
+            "projectedRevenue": 7249,
+            "projectedGrossProfit": 3480,
+            "revenueDelta": 750.0,
+            "profitDelta": 750.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 1,
+            "projectedRevenue": 7249,
+            "projectedGrossProfit": 3480,
+            "revenueDelta": 750.0,
+            "profitDelta": 750.0
+          },
+          "profitDeltaRange": [
+            750.0,
+            750.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "da1e080e-8942-4e4e-bbd1-c138e408870a",
+      "name": "Kanjeevaram Temple Border Silk Dupatta",
+      "category": "Ethnic & Festive Wear",
+      "currentPrice": 2799.0,
+      "recommendedPrice": 2949,
+      "priceDelta": 150.0,
+      "priceDeltaPercent": 5,
+      "stock": 40,
+      "rating": 4.6,
+      "velocity": 0.17,
+      "sold30d": 5,
+      "runwayDays": 240,
+      "wholesaleCost": 1623,
+      "costFloor": 1866,
+      "breakevenUnits": 5,
+      "strategy": "MARGIN_EXPANSION",
+      "strategyLabel": "Margin Capture (+5%)",
+      "strategyBadge": "badge-success",
+      "elasticity": -0.7,
+      "confidence": 89,
+      "rationale": "Solid demand velocity (5 units in 30d) with healthy inventory buffer (40 units). A disciplined +5% price adjustment yields direct profit lift.",
+      "projectedMonthlyUnits": 5,
+      "monthlyRevenueDelta": 750.0,
+      "monthlyProfitDelta": 750.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 5,
+          "projectedRevenue": 14745,
+          "projectedGrossProfit": 6630,
+          "revenueDelta": 750.0,
+          "profitDelta": 750.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 5,
+          "projectedRevenue": 14745,
+          "projectedGrossProfit": 6630,
+          "revenueDelta": 750.0,
+          "profitDelta": 750.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 5,
+          "projectedRevenue": 14745,
+          "projectedGrossProfit": 6630,
+          "revenueDelta": 750.0,
+          "profitDelta": 750.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Kanjeevaram Temple Border Silk Dupatta",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 1623,
+          "costFloor": 1866,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b92,799 | Estimated Wholesale Cost (58%): \u20b91,623 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b91,866 | Recommended Price: \u20b92,949 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.7,
+            "rating": 4.6,
+            "stock": 40,
+            "velocity": 0.17,
+            "runwayDays": 240
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.70 based on Margin Capture (+5%). Observed catalog sales: 5 units/30d (0.17/day). Stock runway: 240 days across 40 units.",
+          "value": -0.7
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 5,
+            "currentPrice": 2799.0,
+            "recommendedPrice": 2949,
+            "priceDelta": 150.0,
+            "priceDeltaPercent": 5,
+            "elasticity": -0.7
+          },
+          "derivation": "5 units \u00d7 [1 + (-0.7 \u00d7 (+150 / 2799))] = 5 \u00d7 0.962 = 5 units/month",
+          "value": 5
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 5880.0,
+            "newUnitMargin": 1326,
+            "breakevenUnits": 5,
+            "breakevenDeltaUnits": 0
+          },
+          "derivation": "Baseline Monthly Profit: \u20b95,880 | New Unit Gross Margin: \u20b91,326 | Break-Even Volume: 5 units (+0 units vs baseline to maintain current profit).",
+          "value": 5
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 13995.0,
+            "projectedRevenue": 14745,
+            "currentProfit": 5880.0,
+            "projectedProfit": 6630,
+            "wholesaleCostPrice": 1623,
+            "costFloor": 1866
+          },
+          "derivation": "Baseline Profit = 5 \u00d7 \u20b91,176 = \u20b95,880 | Projected Profit = 5 \u00d7 \u20b91,326 = \u20b96,630 | Monthly Gross Margin Delta: +750.0 (Revenue Delta: +750.0)",
+          "revenueDelta": 750.0,
+          "profitDelta": 750.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 5,
+            "projectedRevenue": 14745,
+            "projectedGrossProfit": 6630,
+            "revenueDelta": 750.0,
+            "profitDelta": 750.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 5,
+            "projectedRevenue": 14745,
+            "projectedGrossProfit": 6630,
+            "revenueDelta": 750.0,
+            "profitDelta": 750.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 5,
+            "projectedRevenue": 14745,
+            "projectedGrossProfit": 6630,
+            "revenueDelta": 750.0,
+            "profitDelta": 750.0
+          },
+          "profitDeltaRange": [
+            750.0,
+            750.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "cdaddc3c-1fe0-4666-95b0-01d6f5268b85",
+      "name": "Royal Jaipur Blue Pottery Tea Set",
+      "category": "Handicrafts & Home Decor",
+      "currentPrice": 1799.0,
+      "recommendedPrice": 1899,
+      "priceDelta": 100.0,
+      "priceDeltaPercent": 6,
+      "stock": 45,
+      "rating": 4.8,
+      "velocity": 0.23,
+      "sold30d": 7,
+      "runwayDays": 193,
+      "wholesaleCost": 1043,
+      "costFloor": 1199,
+      "breakevenUnits": 7,
+      "strategy": "MARGIN_EXPANSION",
+      "strategyLabel": "Margin Capture (+5%)",
+      "strategyBadge": "badge-success",
+      "elasticity": -0.7,
+      "confidence": 89,
+      "rationale": "Solid demand velocity (7 units in 30d) with healthy inventory buffer (45 units). A disciplined +5% price adjustment yields direct profit lift.",
+      "projectedMonthlyUnits": 7,
+      "monthlyRevenueDelta": 700.0,
+      "monthlyProfitDelta": 700.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 7,
+          "projectedRevenue": 13293,
+          "projectedGrossProfit": 5992,
+          "revenueDelta": 700.0,
+          "profitDelta": 700.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 7,
+          "projectedRevenue": 13293,
+          "projectedGrossProfit": 5992,
+          "revenueDelta": 700.0,
+          "profitDelta": 700.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 6,
+          "projectedRevenue": 11394,
+          "projectedGrossProfit": 5136,
+          "revenueDelta": -1199.0,
+          "profitDelta": -156.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Royal Jaipur Blue Pottery Tea Set",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 1043,
+          "costFloor": 1199,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b91,799 | Estimated Wholesale Cost (58%): \u20b91,043 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b91,199 | Recommended Price: \u20b91,899 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.7,
+            "rating": 4.8,
+            "stock": 45,
+            "velocity": 0.23,
+            "runwayDays": 193
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.70 based on Margin Capture (+5%). Observed catalog sales: 7 units/30d (0.23/day). Stock runway: 193 days across 45 units.",
+          "value": -0.7
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 7,
+            "currentPrice": 1799.0,
+            "recommendedPrice": 1899,
+            "priceDelta": 100.0,
+            "priceDeltaPercent": 6,
+            "elasticity": -0.7
+          },
+          "derivation": "7 units \u00d7 [1 + (-0.7 \u00d7 (+100 / 1799))] = 7 \u00d7 0.961 = 7 units/month",
+          "value": 7
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 5292.0,
+            "newUnitMargin": 856,
+            "breakevenUnits": 7,
+            "breakevenDeltaUnits": 0
+          },
+          "derivation": "Baseline Monthly Profit: \u20b95,292 | New Unit Gross Margin: \u20b9856 | Break-Even Volume: 7 units (+0 units vs baseline to maintain current profit).",
+          "value": 7
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 12593.0,
+            "projectedRevenue": 13293,
+            "currentProfit": 5292.0,
+            "projectedProfit": 5992,
+            "wholesaleCostPrice": 1043,
+            "costFloor": 1199
+          },
+          "derivation": "Baseline Profit = 7 \u00d7 \u20b9756 = \u20b95,292 | Projected Profit = 7 \u00d7 \u20b9856 = \u20b95,992 | Monthly Gross Margin Delta: +700.0 (Revenue Delta: +700.0)",
+          "revenueDelta": 700.0,
+          "profitDelta": 700.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 7,
+            "projectedRevenue": 13293,
+            "projectedGrossProfit": 5992,
+            "revenueDelta": 700.0,
+            "profitDelta": 700.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 7,
+            "projectedRevenue": 13293,
+            "projectedGrossProfit": 5992,
+            "revenueDelta": 700.0,
+            "profitDelta": 700.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 6,
+            "projectedRevenue": 11394,
+            "projectedGrossProfit": 5136,
+            "revenueDelta": -1199.0,
+            "profitDelta": -156.0
+          },
+          "profitDeltaRange": [
+            -156.0,
+            700.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "296b1fca-6533-40ed-8db3-45caddddd10b",
+      "name": "Cuttack Silver Filigree Jhumkas (925 Silver)",
+      "category": "Jewelry & Footwear",
+      "currentPrice": 1699.0,
+      "recommendedPrice": 1849,
+      "priceDelta": 150.0,
+      "priceDeltaPercent": 9,
+      "stock": 35,
+      "rating": 4.7,
+      "velocity": 0.13,
+      "sold30d": 4,
+      "runwayDays": 262,
+      "wholesaleCost": 985,
+      "costFloor": 1133,
+      "breakevenUnits": 4,
+      "strategy": "SURGE_PREMIUM",
+      "strategyLabel": "Premium Surge (+8% to +12%)",
+      "strategyBadge": "badge-danger",
+      "elasticity": -0.45,
+      "confidence": 94,
+      "rationale": "Artisan craft scarcity (35 units in warehouse, 4.7\u2605 rating). High willingness-to-pay shields against volume drop; a strategic surge captures pure gross margin while extending inventory runway.",
+      "projectedMonthlyUnits": 4,
+      "monthlyRevenueDelta": 600.0,
+      "monthlyProfitDelta": 600.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 4,
+          "projectedRevenue": 7396,
+          "projectedGrossProfit": 3456,
+          "revenueDelta": 600.0,
+          "profitDelta": 600.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 4,
+          "projectedRevenue": 7396,
+          "projectedGrossProfit": 3456,
+          "revenueDelta": 600.0,
+          "profitDelta": 600.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 3,
+          "projectedRevenue": 5547,
+          "projectedGrossProfit": 2592,
+          "revenueDelta": -1249.0,
+          "profitDelta": -264.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Cuttack Silver Filigree Jhumkas (925 Silver)",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 985,
+          "costFloor": 1133,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b91,699 | Estimated Wholesale Cost (58%): \u20b9985 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b91,133 | Recommended Price: \u20b91,849 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.45,
+            "rating": 4.7,
+            "stock": 35,
+            "velocity": 0.13,
+            "runwayDays": 262
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.45 based on Premium Surge (+8% to +12%). Observed catalog sales: 4 units/30d (0.13/day). Stock runway: 262 days across 35 units.",
+          "value": -0.45
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 4,
+            "currentPrice": 1699.0,
+            "recommendedPrice": 1849,
+            "priceDelta": 150.0,
+            "priceDeltaPercent": 9,
+            "elasticity": -0.45
+          },
+          "derivation": "4 units \u00d7 [1 + (-0.45 \u00d7 (+150 / 1699))] = 4 \u00d7 0.960 = 4 units/month",
+          "value": 4
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 2856.0,
+            "newUnitMargin": 864,
+            "breakevenUnits": 4,
+            "breakevenDeltaUnits": 0
+          },
+          "derivation": "Baseline Monthly Profit: \u20b92,856 | New Unit Gross Margin: \u20b9864 | Break-Even Volume: 4 units (+0 units vs baseline to maintain current profit).",
+          "value": 4
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 6796.0,
+            "projectedRevenue": 7396,
+            "currentProfit": 2856.0,
+            "projectedProfit": 3456,
+            "wholesaleCostPrice": 985,
+            "costFloor": 1133
+          },
+          "derivation": "Baseline Profit = 4 \u00d7 \u20b9714 = \u20b92,856 | Projected Profit = 4 \u00d7 \u20b9864 = \u20b93,456 | Monthly Gross Margin Delta: +600.0 (Revenue Delta: +600.0)",
+          "revenueDelta": 600.0,
+          "profitDelta": 600.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 4,
+            "projectedRevenue": 7396,
+            "projectedGrossProfit": 3456,
+            "revenueDelta": 600.0,
+            "profitDelta": 600.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 4,
+            "projectedRevenue": 7396,
+            "projectedGrossProfit": 3456,
+            "revenueDelta": 600.0,
+            "profitDelta": 600.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 3,
+            "projectedRevenue": 5547,
+            "projectedGrossProfit": 2592,
+            "revenueDelta": -1249.0,
+            "profitDelta": -264.0
+          },
+          "profitDeltaRange": [
+            -264.0,
+            600.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "1cd3784e-2367-4d15-bfa7-c07919dfaa3f",
+      "name": "AuraPods ANC Wireless Earbuds (Deep Bass Edition)",
+      "category": "Smart Devices & Audio",
+      "currentPrice": 1999.0,
+      "recommendedPrice": 2099,
+      "priceDelta": 100.0,
+      "priceDeltaPercent": 5,
+      "stock": 180,
+      "rating": 4.6,
+      "velocity": 0.17,
+      "sold30d": 5,
+      "runwayDays": 1080,
+      "wholesaleCost": 1159,
+      "costFloor": 1333,
+      "breakevenUnits": 5,
+      "strategy": "MARGIN_EXPANSION",
+      "strategyLabel": "Margin Capture (+5%)",
+      "strategyBadge": "badge-success",
+      "elasticity": -0.7,
+      "confidence": 89,
+      "rationale": "Solid demand velocity (5 units in 30d) with healthy inventory buffer (180 units). A disciplined +5% price adjustment yields direct profit lift.",
+      "projectedMonthlyUnits": 5,
+      "monthlyRevenueDelta": 500.0,
+      "monthlyProfitDelta": 500.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 5,
+          "projectedRevenue": 10495,
+          "projectedGrossProfit": 4700,
+          "revenueDelta": 500.0,
+          "profitDelta": 500.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 5,
+          "projectedRevenue": 10495,
+          "projectedGrossProfit": 4700,
+          "revenueDelta": 500.0,
+          "profitDelta": 500.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 5,
+          "projectedRevenue": 10495,
+          "projectedGrossProfit": 4700,
+          "revenueDelta": 500.0,
+          "profitDelta": 500.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: AuraPods ANC Wireless Earbuds (Deep Bass Edition)",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 1159,
+          "costFloor": 1333,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b91,999 | Estimated Wholesale Cost (58%): \u20b91,159 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b91,333 | Recommended Price: \u20b92,099 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.7,
+            "rating": 4.6,
+            "stock": 180,
+            "velocity": 0.17,
+            "runwayDays": 1080
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.70 based on Margin Capture (+5%). Observed catalog sales: 5 units/30d (0.17/day). Stock runway: 1080 days across 180 units.",
+          "value": -0.7
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 5,
+            "currentPrice": 1999.0,
+            "recommendedPrice": 2099,
+            "priceDelta": 100.0,
+            "priceDeltaPercent": 5,
+            "elasticity": -0.7
+          },
+          "derivation": "5 units \u00d7 [1 + (-0.7 \u00d7 (+100 / 1999))] = 5 \u00d7 0.965 = 5 units/month",
+          "value": 5
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 4200.0,
+            "newUnitMargin": 940,
+            "breakevenUnits": 5,
+            "breakevenDeltaUnits": 0
+          },
+          "derivation": "Baseline Monthly Profit: \u20b94,200 | New Unit Gross Margin: \u20b9940 | Break-Even Volume: 5 units (+0 units vs baseline to maintain current profit).",
+          "value": 5
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 9995.0,
+            "projectedRevenue": 10495,
+            "currentProfit": 4200.0,
+            "projectedProfit": 4700,
+            "wholesaleCostPrice": 1159,
+            "costFloor": 1333
+          },
+          "derivation": "Baseline Profit = 5 \u00d7 \u20b9840 = \u20b94,200 | Projected Profit = 5 \u00d7 \u20b9940 = \u20b94,700 | Monthly Gross Margin Delta: +500.0 (Revenue Delta: +500.0)",
+          "revenueDelta": 500.0,
+          "profitDelta": 500.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 5,
+            "projectedRevenue": 10495,
+            "projectedGrossProfit": 4700,
+            "revenueDelta": 500.0,
+            "profitDelta": 500.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 5,
+            "projectedRevenue": 10495,
+            "projectedGrossProfit": 4700,
+            "revenueDelta": 500.0,
+            "profitDelta": 500.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 5,
+            "projectedRevenue": 10495,
+            "projectedGrossProfit": 4700,
+            "revenueDelta": 500.0,
+            "profitDelta": 500.0
+          },
+          "profitDeltaRange": [
+            500.0,
+            500.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "51018454-6638-412d-ae50-d1302ab87c54",
+      "name": "Chikankari Hand-Embroidered Kurta",
+      "category": "Ethnic & Festive Wear",
+      "currentPrice": 1899.0,
+      "recommendedPrice": 1649,
+      "priceDelta": -250.0,
+      "priceDeltaPercent": -13,
+      "stock": 65,
+      "rating": 4.7,
+      "velocity": 0.07,
+      "sold30d": 2,
+      "runwayDays": 975,
+      "wholesaleCost": 1101,
+      "costFloor": 1266,
+      "breakevenUnits": 3,
+      "strategy": "VELOCITY_MARKDOWN",
+      "strategyLabel": "Velocity Markdown (-10% to -12%)",
+      "strategyBadge": "badge-warning",
+      "elasticity": -1.5,
+      "confidence": 91,
+      "rationale": "Excess working capital trapped across 65 units (2 sold in 30d). A strategic markdown stimulates turnover while strictly honoring the \u20b91,266 wholesale cost floor.",
+      "projectedMonthlyUnits": 2,
+      "monthlyRevenueDelta": -500.0,
+      "monthlyProfitDelta": -500.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 2,
+          "projectedRevenue": 3298,
+          "projectedGrossProfit": 1096,
+          "revenueDelta": -500.0,
+          "profitDelta": -500.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 2,
+          "projectedRevenue": 3298,
+          "projectedGrossProfit": 1096,
+          "revenueDelta": -500.0,
+          "profitDelta": -500.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 2,
+          "projectedRevenue": 3298,
+          "projectedGrossProfit": 1096,
+          "revenueDelta": -500.0,
+          "profitDelta": -500.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Chikankari Hand-Embroidered Kurta",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 1101,
+          "costFloor": 1266,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b91,899 | Estimated Wholesale Cost (58%): \u20b91,101 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b91,266 | Recommended Price: \u20b91,649 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -1.5,
+            "rating": 4.7,
+            "stock": 65,
+            "velocity": 0.07,
+            "runwayDays": 975
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -1.50 based on Velocity Markdown (-10% to -12%). Observed catalog sales: 2 units/30d (0.07/day). Stock runway: 975 days across 65 units.",
+          "value": -1.5
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 2,
+            "currentPrice": 1899.0,
+            "recommendedPrice": 1649,
+            "priceDelta": -250.0,
+            "priceDeltaPercent": -13,
+            "elasticity": -1.5
+          },
+          "derivation": "2 units \u00d7 [1 + (-1.5 \u00d7 (-250 / 1899))] = 2 \u00d7 1.197 = 2 units/month",
+          "value": 2
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 1596.0,
+            "newUnitMargin": 548,
+            "breakevenUnits": 3,
+            "breakevenDeltaUnits": 1
+          },
+          "derivation": "Baseline Monthly Profit: \u20b91,596 | New Unit Gross Margin: \u20b9548 | Break-Even Volume: 3 units (+1 units vs baseline to maintain current profit).",
+          "value": 3
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 3798.0,
+            "projectedRevenue": 3298,
+            "currentProfit": 1596.0,
+            "projectedProfit": 1096,
+            "wholesaleCostPrice": 1101,
+            "costFloor": 1266
+          },
+          "derivation": "Baseline Profit = 2 \u00d7 \u20b9798 = \u20b91,596 | Projected Profit = 2 \u00d7 \u20b9548 = \u20b91,096 | Monthly Gross Margin Delta: -500.0 (Revenue Delta: -500.0)",
+          "revenueDelta": -500.0,
+          "profitDelta": -500.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 2,
+            "projectedRevenue": 3298,
+            "projectedGrossProfit": 1096,
+            "revenueDelta": -500.0,
+            "profitDelta": -500.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 2,
+            "projectedRevenue": 3298,
+            "projectedGrossProfit": 1096,
+            "revenueDelta": -500.0,
+            "profitDelta": -500.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 2,
+            "projectedRevenue": 3298,
+            "projectedGrossProfit": 1096,
+            "revenueDelta": -500.0,
+            "profitDelta": -500.0
+          },
+          "profitDeltaRange": [
+            -500.0,
+            -500.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "40b1055f-f254-4c42-a632-bba4548655bd",
+      "name": "Kashmiri Pashmina Embroidered Shawl",
+      "category": "Ethnic & Festive Wear",
+      "currentPrice": 4299.0,
+      "recommendedPrice": 4749,
+      "priceDelta": 450.0,
+      "priceDeltaPercent": 10,
+      "stock": 30,
+      "rating": 4.8,
+      "velocity": 0.0,
+      "sold30d": 0,
+      "runwayDays": 999,
+      "wholesaleCost": 2493,
+      "costFloor": 2867,
+      "breakevenUnits": 1,
+      "strategy": "SURGE_PREMIUM",
+      "strategyLabel": "Premium Surge (+8% to +12%)",
+      "strategyBadge": "badge-danger",
+      "elasticity": -0.45,
+      "confidence": 94,
+      "rationale": "Artisan craft scarcity (30 units in warehouse, 4.8\u2605 rating). High willingness-to-pay shields against volume drop; a strategic surge captures pure gross margin while extending inventory runway.",
+      "projectedMonthlyUnits": 1,
+      "monthlyRevenueDelta": 450.0,
+      "monthlyProfitDelta": 450.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 1,
+          "projectedRevenue": 4749,
+          "projectedGrossProfit": 2256,
+          "revenueDelta": 450.0,
+          "profitDelta": 450.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 1,
+          "projectedRevenue": 4749,
+          "projectedGrossProfit": 2256,
+          "revenueDelta": 450.0,
+          "profitDelta": 450.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 1,
+          "projectedRevenue": 4749,
+          "projectedGrossProfit": 2256,
+          "revenueDelta": 450.0,
+          "profitDelta": 450.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Kashmiri Pashmina Embroidered Shawl",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 2493,
+          "costFloor": 2867,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b94,299 | Estimated Wholesale Cost (58%): \u20b92,493 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b92,867 | Recommended Price: \u20b94,749 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.45,
+            "rating": 4.8,
+            "stock": 30,
+            "velocity": 0.0,
+            "runwayDays": 999
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.45 based on Premium Surge (+8% to +12%). Observed catalog sales: 0 units/30d (0.00/day). Stock runway: 999 days across 30 units.",
+          "value": -0.45
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 1,
+            "currentPrice": 4299.0,
+            "recommendedPrice": 4749,
+            "priceDelta": 450.0,
+            "priceDeltaPercent": 10,
+            "elasticity": -0.45
+          },
+          "derivation": "1 units \u00d7 [1 + (-0.45 \u00d7 (+450 / 4299))] = 1 \u00d7 0.953 = 1 units/month",
+          "value": 1
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 1806.0,
+            "newUnitMargin": 2256,
+            "breakevenUnits": 1,
+            "breakevenDeltaUnits": 0
+          },
+          "derivation": "Baseline Monthly Profit: \u20b91,806 | New Unit Gross Margin: \u20b92,256 | Break-Even Volume: 1 units (+0 units vs baseline to maintain current profit).",
+          "value": 1
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 4299.0,
+            "projectedRevenue": 4749,
+            "currentProfit": 1806.0,
+            "projectedProfit": 2256,
+            "wholesaleCostPrice": 2493,
+            "costFloor": 2867
+          },
+          "derivation": "Baseline Profit = 1 \u00d7 \u20b91,806 = \u20b91,806 | Projected Profit = 1 \u00d7 \u20b92,256 = \u20b92,256 | Monthly Gross Margin Delta: +450.0 (Revenue Delta: +450.0)",
+          "revenueDelta": 450.0,
+          "profitDelta": 450.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 1,
+            "projectedRevenue": 4749,
+            "projectedGrossProfit": 2256,
+            "revenueDelta": 450.0,
+            "profitDelta": 450.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 1,
+            "projectedRevenue": 4749,
+            "projectedGrossProfit": 2256,
+            "revenueDelta": 450.0,
+            "profitDelta": 450.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 1,
+            "projectedRevenue": 4749,
+            "projectedGrossProfit": 2256,
+            "revenueDelta": 450.0,
+            "profitDelta": 450.0
+          },
+          "profitDeltaRange": [
+            450.0,
+            450.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "f7193ad2-6090-4899-b72e-8adc7fbd7137",
+      "name": "Handcrafted Solid Brass Peacock Diya (Pair)",
+      "category": "Handicrafts & Home Decor",
+      "currentPrice": 1399.0,
+      "recommendedPrice": 1449,
+      "priceDelta": 50.0,
+      "priceDeltaPercent": 4,
+      "stock": 80,
+      "rating": 4.9,
+      "velocity": 0.27,
+      "sold30d": 8,
+      "runwayDays": 300,
+      "wholesaleCost": 811,
+      "costFloor": 933,
+      "breakevenUnits": 8,
+      "strategy": "MARGIN_EXPANSION",
+      "strategyLabel": "Margin Capture (+5%)",
+      "strategyBadge": "badge-success",
+      "elasticity": -0.7,
+      "confidence": 89,
+      "rationale": "Solid demand velocity (8 units in 30d) with healthy inventory buffer (80 units). A disciplined +5% price adjustment yields direct profit lift.",
+      "projectedMonthlyUnits": 8,
+      "monthlyRevenueDelta": 400.0,
+      "monthlyProfitDelta": 400.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 8,
+          "projectedRevenue": 11592,
+          "projectedGrossProfit": 5104,
+          "revenueDelta": 400.0,
+          "profitDelta": 400.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 8,
+          "projectedRevenue": 11592,
+          "projectedGrossProfit": 5104,
+          "revenueDelta": 400.0,
+          "profitDelta": 400.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 8,
+          "projectedRevenue": 11592,
+          "projectedGrossProfit": 5104,
+          "revenueDelta": 400.0,
+          "profitDelta": 400.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Handcrafted Solid Brass Peacock Diya (Pair)",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 811,
+          "costFloor": 933,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b91,399 | Estimated Wholesale Cost (58%): \u20b9811 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b9933 | Recommended Price: \u20b91,449 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.7,
+            "rating": 4.9,
+            "stock": 80,
+            "velocity": 0.27,
+            "runwayDays": 300
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.70 based on Margin Capture (+5%). Observed catalog sales: 8 units/30d (0.27/day). Stock runway: 300 days across 80 units.",
+          "value": -0.7
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 8,
+            "currentPrice": 1399.0,
+            "recommendedPrice": 1449,
+            "priceDelta": 50.0,
+            "priceDeltaPercent": 4,
+            "elasticity": -0.7
+          },
+          "derivation": "8 units \u00d7 [1 + (-0.7 \u00d7 (+50 / 1399))] = 8 \u00d7 0.975 = 8 units/month",
+          "value": 8
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 4704.0,
+            "newUnitMargin": 638,
+            "breakevenUnits": 8,
+            "breakevenDeltaUnits": 0
+          },
+          "derivation": "Baseline Monthly Profit: \u20b94,704 | New Unit Gross Margin: \u20b9638 | Break-Even Volume: 8 units (+0 units vs baseline to maintain current profit).",
+          "value": 8
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 11192.0,
+            "projectedRevenue": 11592,
+            "currentProfit": 4704.0,
+            "projectedProfit": 5104,
+            "wholesaleCostPrice": 811,
+            "costFloor": 933
+          },
+          "derivation": "Baseline Profit = 8 \u00d7 \u20b9588 = \u20b94,704 | Projected Profit = 8 \u00d7 \u20b9638 = \u20b95,104 | Monthly Gross Margin Delta: +400.0 (Revenue Delta: +400.0)",
+          "revenueDelta": 400.0,
+          "profitDelta": 400.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 8,
+            "projectedRevenue": 11592,
+            "projectedGrossProfit": 5104,
+            "revenueDelta": 400.0,
+            "profitDelta": 400.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 8,
+            "projectedRevenue": 11592,
+            "projectedGrossProfit": 5104,
+            "revenueDelta": 400.0,
+            "profitDelta": 400.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 8,
+            "projectedRevenue": 11592,
+            "projectedGrossProfit": 5104,
+            "revenueDelta": 400.0,
+            "profitDelta": 400.0
+          },
+          "profitDeltaRange": [
+            400.0,
+            400.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "301ab982-51bc-4426-a9bf-56730b956a7d",
+      "name": "Himalayan Pure Shilajit & Gold Ashwagandha",
+      "category": "Ayurveda & Herbal Care",
+      "currentPrice": 999.0,
+      "recommendedPrice": 1049,
+      "priceDelta": 50.0,
+      "priceDeltaPercent": 5,
+      "stock": 150,
+      "rating": 4.7,
+      "velocity": 0.27,
+      "sold30d": 8,
+      "runwayDays": 562,
+      "wholesaleCost": 579,
+      "costFloor": 666,
+      "breakevenUnits": 8,
+      "strategy": "MARGIN_EXPANSION",
+      "strategyLabel": "Margin Capture (+5%)",
+      "strategyBadge": "badge-success",
+      "elasticity": -0.7,
+      "confidence": 89,
+      "rationale": "Solid demand velocity (8 units in 30d) with healthy inventory buffer (150 units). A disciplined +5% price adjustment yields direct profit lift.",
+      "projectedMonthlyUnits": 8,
+      "monthlyRevenueDelta": 400.0,
+      "monthlyProfitDelta": 400.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 8,
+          "projectedRevenue": 8392,
+          "projectedGrossProfit": 3760,
+          "revenueDelta": 400.0,
+          "profitDelta": 400.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 8,
+          "projectedRevenue": 8392,
+          "projectedGrossProfit": 3760,
+          "revenueDelta": 400.0,
+          "profitDelta": 400.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 7,
+          "projectedRevenue": 7343,
+          "projectedGrossProfit": 3290,
+          "revenueDelta": -649.0,
+          "profitDelta": -70.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Himalayan Pure Shilajit & Gold Ashwagandha",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 579,
+          "costFloor": 666,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b9999 | Estimated Wholesale Cost (58%): \u20b9579 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b9666 | Recommended Price: \u20b91,049 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.7,
+            "rating": 4.7,
+            "stock": 150,
+            "velocity": 0.27,
+            "runwayDays": 562
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.70 based on Margin Capture (+5%). Observed catalog sales: 8 units/30d (0.27/day). Stock runway: 562 days across 150 units.",
+          "value": -0.7
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 8,
+            "currentPrice": 999.0,
+            "recommendedPrice": 1049,
+            "priceDelta": 50.0,
+            "priceDeltaPercent": 5,
+            "elasticity": -0.7
+          },
+          "derivation": "8 units \u00d7 [1 + (-0.7 \u00d7 (+50 / 999))] = 8 \u00d7 0.965 = 8 units/month",
+          "value": 8
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 3360.0,
+            "newUnitMargin": 470,
+            "breakevenUnits": 8,
+            "breakevenDeltaUnits": 0
+          },
+          "derivation": "Baseline Monthly Profit: \u20b93,360 | New Unit Gross Margin: \u20b9470 | Break-Even Volume: 8 units (+0 units vs baseline to maintain current profit).",
+          "value": 8
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 7992.0,
+            "projectedRevenue": 8392,
+            "currentProfit": 3360.0,
+            "projectedProfit": 3760,
+            "wholesaleCostPrice": 579,
+            "costFloor": 666
+          },
+          "derivation": "Baseline Profit = 8 \u00d7 \u20b9420 = \u20b93,360 | Projected Profit = 8 \u00d7 \u20b9470 = \u20b93,760 | Monthly Gross Margin Delta: +400.0 (Revenue Delta: +400.0)",
+          "revenueDelta": 400.0,
+          "profitDelta": 400.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 8,
+            "projectedRevenue": 8392,
+            "projectedGrossProfit": 3760,
+            "revenueDelta": 400.0,
+            "profitDelta": 400.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 8,
+            "projectedRevenue": 8392,
+            "projectedGrossProfit": 3760,
+            "revenueDelta": 400.0,
+            "profitDelta": 400.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 7,
+            "projectedRevenue": 7343,
+            "projectedGrossProfit": 3290,
+            "revenueDelta": -649.0,
+            "profitDelta": -70.0
+          },
+          "profitDeltaRange": [
+            -70.0,
+            400.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "bbd8f204-0a22-419e-9cf4-86a222be27fa",
+      "name": "Kerala Malabar Cardamom & Black Pepper Tin",
+      "category": "Spices, Teas & Gourmet",
+      "currentPrice": 699.0,
+      "recommendedPrice": 749,
+      "priceDelta": 50.0,
+      "priceDeltaPercent": 7,
+      "stock": 140,
+      "rating": 4.8,
+      "velocity": 0.27,
+      "sold30d": 8,
+      "runwayDays": 525,
+      "wholesaleCost": 405,
+      "costFloor": 466,
+      "breakevenUnits": 7,
+      "strategy": "MARGIN_EXPANSION",
+      "strategyLabel": "Margin Capture (+5%)",
+      "strategyBadge": "badge-success",
+      "elasticity": -0.7,
+      "confidence": 89,
+      "rationale": "Solid demand velocity (8 units in 30d) with healthy inventory buffer (140 units). A disciplined +5% price adjustment yields direct profit lift.",
+      "projectedMonthlyUnits": 8,
+      "monthlyRevenueDelta": 400.0,
+      "monthlyProfitDelta": 400.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 8,
+          "projectedRevenue": 5992,
+          "projectedGrossProfit": 2752,
+          "revenueDelta": 400.0,
+          "profitDelta": 400.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 7,
+          "projectedRevenue": 5243,
+          "projectedGrossProfit": 2408,
+          "revenueDelta": -349.0,
+          "profitDelta": 56.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 7,
+          "projectedRevenue": 5243,
+          "projectedGrossProfit": 2408,
+          "revenueDelta": -349.0,
+          "profitDelta": 56.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Kerala Malabar Cardamom & Black Pepper Tin",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 405,
+          "costFloor": 466,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b9699 | Estimated Wholesale Cost (58%): \u20b9405 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b9466 | Recommended Price: \u20b9749 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.7,
+            "rating": 4.8,
+            "stock": 140,
+            "velocity": 0.27,
+            "runwayDays": 525
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.70 based on Margin Capture (+5%). Observed catalog sales: 8 units/30d (0.27/day). Stock runway: 525 days across 140 units.",
+          "value": -0.7
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 8,
+            "currentPrice": 699.0,
+            "recommendedPrice": 749,
+            "priceDelta": 50.0,
+            "priceDeltaPercent": 7,
+            "elasticity": -0.7
+          },
+          "derivation": "8 units \u00d7 [1 + (-0.7 \u00d7 (+50 / 699))] = 8 \u00d7 0.950 = 8 units/month",
+          "value": 8
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 2352.0,
+            "newUnitMargin": 344,
+            "breakevenUnits": 7,
+            "breakevenDeltaUnits": -1
+          },
+          "derivation": "Baseline Monthly Profit: \u20b92,352 | New Unit Gross Margin: \u20b9344 | Break-Even Volume: 7 units (-1 units vs baseline to maintain current profit).",
+          "value": 7
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 5592.0,
+            "projectedRevenue": 5992,
+            "currentProfit": 2352.0,
+            "projectedProfit": 2752,
+            "wholesaleCostPrice": 405,
+            "costFloor": 466
+          },
+          "derivation": "Baseline Profit = 8 \u00d7 \u20b9294 = \u20b92,352 | Projected Profit = 8 \u00d7 \u20b9344 = \u20b92,752 | Monthly Gross Margin Delta: +400.0 (Revenue Delta: +400.0)",
+          "revenueDelta": 400.0,
+          "profitDelta": 400.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 8,
+            "projectedRevenue": 5992,
+            "projectedGrossProfit": 2752,
+            "revenueDelta": 400.0,
+            "profitDelta": 400.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 7,
+            "projectedRevenue": 5243,
+            "projectedGrossProfit": 2408,
+            "revenueDelta": -349.0,
+            "profitDelta": 56.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 7,
+            "projectedRevenue": 5243,
+            "projectedGrossProfit": 2408,
+            "revenueDelta": -349.0,
+            "profitDelta": 56.0
+          },
+          "profitDeltaRange": [
+            56.0,
+            400.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "5402a25d-89db-44e7-ab20-859bf921e65d",
+      "name": "Kumkumadi Miraculous Ayurvedic Serum (30ml)",
+      "category": "Ayurveda & Herbal Care",
+      "currentPrice": 1499.0,
+      "recommendedPrice": 1549,
+      "priceDelta": 50.0,
+      "priceDeltaPercent": 3,
+      "stock": 120,
+      "rating": 4.8,
+      "velocity": 0.23,
+      "sold30d": 7,
+      "runwayDays": 514,
+      "wholesaleCost": 869,
+      "costFloor": 999,
+      "breakevenUnits": 7,
+      "strategy": "MARGIN_EXPANSION",
+      "strategyLabel": "Margin Capture (+5%)",
+      "strategyBadge": "badge-success",
+      "elasticity": -0.7,
+      "confidence": 89,
+      "rationale": "Solid demand velocity (7 units in 30d) with healthy inventory buffer (120 units). A disciplined +5% price adjustment yields direct profit lift.",
+      "projectedMonthlyUnits": 7,
+      "monthlyRevenueDelta": 350.0,
+      "monthlyProfitDelta": 350.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 7,
+          "projectedRevenue": 10843,
+          "projectedGrossProfit": 4760,
+          "revenueDelta": 350.0,
+          "profitDelta": 350.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 7,
+          "projectedRevenue": 10843,
+          "projectedGrossProfit": 4760,
+          "revenueDelta": 350.0,
+          "profitDelta": 350.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 7,
+          "projectedRevenue": 10843,
+          "projectedGrossProfit": 4760,
+          "revenueDelta": 350.0,
+          "profitDelta": 350.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Kumkumadi Miraculous Ayurvedic Serum (30ml)",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 869,
+          "costFloor": 999,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b91,499 | Estimated Wholesale Cost (58%): \u20b9869 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b9999 | Recommended Price: \u20b91,549 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.7,
+            "rating": 4.8,
+            "stock": 120,
+            "velocity": 0.23,
+            "runwayDays": 514
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.70 based on Margin Capture (+5%). Observed catalog sales: 7 units/30d (0.23/day). Stock runway: 514 days across 120 units.",
+          "value": -0.7
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 7,
+            "currentPrice": 1499.0,
+            "recommendedPrice": 1549,
+            "priceDelta": 50.0,
+            "priceDeltaPercent": 3,
+            "elasticity": -0.7
+          },
+          "derivation": "7 units \u00d7 [1 + (-0.7 \u00d7 (+50 / 1499))] = 7 \u00d7 0.977 = 7 units/month",
+          "value": 7
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 4410.0,
+            "newUnitMargin": 680,
+            "breakevenUnits": 7,
+            "breakevenDeltaUnits": 0
+          },
+          "derivation": "Baseline Monthly Profit: \u20b94,410 | New Unit Gross Margin: \u20b9680 | Break-Even Volume: 7 units (+0 units vs baseline to maintain current profit).",
+          "value": 7
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 10493.0,
+            "projectedRevenue": 10843,
+            "currentProfit": 4410.0,
+            "projectedProfit": 4760,
+            "wholesaleCostPrice": 869,
+            "costFloor": 999
+          },
+          "derivation": "Baseline Profit = 7 \u00d7 \u20b9630 = \u20b94,410 | Projected Profit = 7 \u00d7 \u20b9680 = \u20b94,760 | Monthly Gross Margin Delta: +350.0 (Revenue Delta: +350.0)",
+          "revenueDelta": 350.0,
+          "profitDelta": 350.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 7,
+            "projectedRevenue": 10843,
+            "projectedGrossProfit": 4760,
+            "revenueDelta": 350.0,
+            "profitDelta": 350.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 7,
+            "projectedRevenue": 10843,
+            "projectedGrossProfit": 4760,
+            "revenueDelta": 350.0,
+            "profitDelta": 350.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 7,
+            "projectedRevenue": 10843,
+            "projectedGrossProfit": 4760,
+            "revenueDelta": 350.0,
+            "profitDelta": 350.0
+          },
+          "profitDeltaRange": [
+            350.0,
+            350.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "57c4b93a-c67a-40cd-a47a-4319ae8d9934",
+      "name": "Kashmiri Mogra Saffron (Grade A++ 1g Kesar)",
+      "category": "Spices, Teas & Gourmet",
+      "currentPrice": 999.0,
+      "recommendedPrice": 899,
+      "priceDelta": -100.0,
+      "priceDeltaPercent": -10,
+      "stock": 85,
+      "rating": 4.9,
+      "velocity": 0.03,
+      "sold30d": 1,
+      "runwayDays": 2550,
+      "wholesaleCost": 579,
+      "costFloor": 666,
+      "breakevenUnits": 2,
+      "strategy": "VELOCITY_MARKDOWN",
+      "strategyLabel": "Velocity Markdown (-10% to -12%)",
+      "strategyBadge": "badge-warning",
+      "elasticity": -1.5,
+      "confidence": 91,
+      "rationale": "Excess working capital trapped across 85 units (1 sold in 30d). A strategic markdown stimulates turnover while strictly honoring the \u20b9666 wholesale cost floor.",
+      "projectedMonthlyUnits": 1,
+      "monthlyRevenueDelta": -100.0,
+      "monthlyProfitDelta": -100.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 1,
+          "projectedRevenue": 899,
+          "projectedGrossProfit": 320,
+          "revenueDelta": -100.0,
+          "profitDelta": -100.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 1,
+          "projectedRevenue": 899,
+          "projectedGrossProfit": 320,
+          "revenueDelta": -100.0,
+          "profitDelta": -100.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 1,
+          "projectedRevenue": 899,
+          "projectedGrossProfit": 320,
+          "revenueDelta": -100.0,
+          "profitDelta": -100.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Kashmiri Mogra Saffron (Grade A++ 1g Kesar)",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 579,
+          "costFloor": 666,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b9999 | Estimated Wholesale Cost (58%): \u20b9579 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b9666 | Recommended Price: \u20b9899 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -1.5,
+            "rating": 4.9,
+            "stock": 85,
+            "velocity": 0.03,
+            "runwayDays": 2550
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -1.50 based on Velocity Markdown (-10% to -12%). Observed catalog sales: 1 units/30d (0.03/day). Stock runway: 2550 days across 85 units.",
+          "value": -1.5
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 1,
+            "currentPrice": 999.0,
+            "recommendedPrice": 899,
+            "priceDelta": -100.0,
+            "priceDeltaPercent": -10,
+            "elasticity": -1.5
+          },
+          "derivation": "1 units \u00d7 [1 + (-1.5 \u00d7 (-100 / 999))] = 1 \u00d7 1.150 = 1 units/month",
+          "value": 1
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 420.0,
+            "newUnitMargin": 320,
+            "breakevenUnits": 2,
+            "breakevenDeltaUnits": 1
+          },
+          "derivation": "Baseline Monthly Profit: \u20b9420 | New Unit Gross Margin: \u20b9320 | Break-Even Volume: 2 units (+1 units vs baseline to maintain current profit).",
+          "value": 2
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 999.0,
+            "projectedRevenue": 899,
+            "currentProfit": 420.0,
+            "projectedProfit": 320,
+            "wholesaleCostPrice": 579,
+            "costFloor": 666
+          },
+          "derivation": "Baseline Profit = 1 \u00d7 \u20b9420 = \u20b9420 | Projected Profit = 1 \u00d7 \u20b9320 = \u20b9320 | Monthly Gross Margin Delta: -100.0 (Revenue Delta: -100.0)",
+          "revenueDelta": -100.0,
+          "profitDelta": -100.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 1,
+            "projectedRevenue": 899,
+            "projectedGrossProfit": 320,
+            "revenueDelta": -100.0,
+            "profitDelta": -100.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 1,
+            "projectedRevenue": 899,
+            "projectedGrossProfit": 320,
+            "revenueDelta": -100.0,
+            "profitDelta": -100.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 1,
+            "projectedRevenue": 899,
+            "projectedGrossProfit": 320,
+            "revenueDelta": -100.0,
+            "profitDelta": -100.0
+          },
+          "profitDeltaRange": [
+            -100.0,
+            -100.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "40bbbf0d-86ce-495d-854d-b021d8520d76",
+      "name": "AuraFit Apex Smartwatch (1.96\" AMOLED)",
+      "category": "Smart Devices & Audio",
+      "currentPrice": 2699.0,
+      "recommendedPrice": 2399,
+      "priceDelta": -300.0,
+      "priceDeltaPercent": -11,
+      "stock": 110,
+      "rating": 4.5,
+      "velocity": 0.1,
+      "sold30d": 3,
+      "runwayDays": 1100,
+      "wholesaleCost": 1565,
+      "costFloor": 1800,
+      "breakevenUnits": 5,
+      "strategy": "VELOCITY_MARKDOWN",
+      "strategyLabel": "Velocity Markdown (-10% to -12%)",
+      "strategyBadge": "badge-warning",
+      "elasticity": -1.5,
+      "confidence": 91,
+      "rationale": "Excess working capital trapped across 110 units (3 sold in 30d). A strategic markdown stimulates turnover while strictly honoring the \u20b91,800 wholesale cost floor.",
+      "projectedMonthlyUnits": 4,
+      "monthlyRevenueDelta": 1499.0,
+      "monthlyProfitDelta": -66.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 3,
+          "projectedRevenue": 7197,
+          "projectedGrossProfit": 2502,
+          "revenueDelta": -900.0,
+          "profitDelta": -900.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 3,
+          "projectedRevenue": 7197,
+          "projectedGrossProfit": 2502,
+          "revenueDelta": -900.0,
+          "profitDelta": -900.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 4,
+          "projectedRevenue": 9596,
+          "projectedGrossProfit": 3336,
+          "revenueDelta": 1499.0,
+          "profitDelta": -66.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: AuraFit Apex Smartwatch (1.96\" AMOLED)",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 1565,
+          "costFloor": 1800,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b92,699 | Estimated Wholesale Cost (58%): \u20b91,565 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b91,800 | Recommended Price: \u20b92,399 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -1.5,
+            "rating": 4.5,
+            "stock": 110,
+            "velocity": 0.1,
+            "runwayDays": 1100
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -1.50 based on Velocity Markdown (-10% to -12%). Observed catalog sales: 3 units/30d (0.10/day). Stock runway: 1100 days across 110 units.",
+          "value": -1.5
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 3,
+            "currentPrice": 2699.0,
+            "recommendedPrice": 2399,
+            "priceDelta": -300.0,
+            "priceDeltaPercent": -11,
+            "elasticity": -1.5
+          },
+          "derivation": "3 units \u00d7 [1 + (-1.5 \u00d7 (-300 / 2699))] = 3 \u00d7 1.167 = 4 units/month",
+          "value": 4
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 3402.0,
+            "newUnitMargin": 834,
+            "breakevenUnits": 5,
+            "breakevenDeltaUnits": 2
+          },
+          "derivation": "Baseline Monthly Profit: \u20b93,402 | New Unit Gross Margin: \u20b9834 | Break-Even Volume: 5 units (+2 units vs baseline to maintain current profit).",
+          "value": 5
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 8097.0,
+            "projectedRevenue": 9596,
+            "currentProfit": 3402.0,
+            "projectedProfit": 3336,
+            "wholesaleCostPrice": 1565,
+            "costFloor": 1800
+          },
+          "derivation": "Baseline Profit = 3 \u00d7 \u20b91,134 = \u20b93,402 | Projected Profit = 4 \u00d7 \u20b9834 = \u20b93,336 | Monthly Gross Margin Delta: -66.0 (Revenue Delta: +1,499.0)",
+          "revenueDelta": 1499.0,
+          "profitDelta": -66.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 3,
+            "projectedRevenue": 7197,
+            "projectedGrossProfit": 2502,
+            "revenueDelta": -900.0,
+            "profitDelta": -900.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 3,
+            "projectedRevenue": 7197,
+            "projectedGrossProfit": 2502,
+            "revenueDelta": -900.0,
+            "profitDelta": -900.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 4,
+            "projectedRevenue": 9596,
+            "projectedGrossProfit": 3336,
+            "revenueDelta": 1499.0,
+            "profitDelta": -66.0
+          },
+          "profitDeltaRange": [
+            -900.0,
+            -66.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "fe168761-01b9-45be-b364-2fe3d2a6d291",
+      "name": "Hand-Embroidered Rajasthani Leather Mojris",
+      "category": "Jewelry & Footwear",
+      "currentPrice": 1299.0,
+      "recommendedPrice": 1149,
+      "priceDelta": -150.0,
+      "priceDeltaPercent": -12,
+      "stock": 70,
+      "rating": 4.5,
+      "velocity": 0.1,
+      "sold30d": 3,
+      "runwayDays": 700,
+      "wholesaleCost": 753,
+      "costFloor": 866,
+      "breakevenUnits": 5,
+      "strategy": "VELOCITY_MARKDOWN",
+      "strategyLabel": "Velocity Markdown (-10% to -12%)",
+      "strategyBadge": "badge-warning",
+      "elasticity": -1.5,
+      "confidence": 91,
+      "rationale": "Excess working capital trapped across 70 units (3 sold in 30d). A strategic markdown stimulates turnover while strictly honoring the \u20b9866 wholesale cost floor.",
+      "projectedMonthlyUnits": 4,
+      "monthlyRevenueDelta": 699.0,
+      "monthlyProfitDelta": -54.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 3,
+          "projectedRevenue": 3447,
+          "projectedGrossProfit": 1188,
+          "revenueDelta": -450.0,
+          "profitDelta": -450.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 3,
+          "projectedRevenue": 3447,
+          "projectedGrossProfit": 1188,
+          "revenueDelta": -450.0,
+          "profitDelta": -450.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 4,
+          "projectedRevenue": 4596,
+          "projectedGrossProfit": 1584,
+          "revenueDelta": 699.0,
+          "profitDelta": -54.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Hand-Embroidered Rajasthani Leather Mojris",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 753,
+          "costFloor": 866,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b91,299 | Estimated Wholesale Cost (58%): \u20b9753 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b9866 | Recommended Price: \u20b91,149 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -1.5,
+            "rating": 4.5,
+            "stock": 70,
+            "velocity": 0.1,
+            "runwayDays": 700
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -1.50 based on Velocity Markdown (-10% to -12%). Observed catalog sales: 3 units/30d (0.10/day). Stock runway: 700 days across 70 units.",
+          "value": -1.5
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 3,
+            "currentPrice": 1299.0,
+            "recommendedPrice": 1149,
+            "priceDelta": -150.0,
+            "priceDeltaPercent": -12,
+            "elasticity": -1.5
+          },
+          "derivation": "3 units \u00d7 [1 + (-1.5 \u00d7 (-150 / 1299))] = 3 \u00d7 1.173 = 4 units/month",
+          "value": 4
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 1638.0,
+            "newUnitMargin": 396,
+            "breakevenUnits": 5,
+            "breakevenDeltaUnits": 2
+          },
+          "derivation": "Baseline Monthly Profit: \u20b91,638 | New Unit Gross Margin: \u20b9396 | Break-Even Volume: 5 units (+2 units vs baseline to maintain current profit).",
+          "value": 5
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 3897.0,
+            "projectedRevenue": 4596,
+            "currentProfit": 1638.0,
+            "projectedProfit": 1584,
+            "wholesaleCostPrice": 753,
+            "costFloor": 866
+          },
+          "derivation": "Baseline Profit = 3 \u00d7 \u20b9546 = \u20b91,638 | Projected Profit = 4 \u00d7 \u20b9396 = \u20b91,584 | Monthly Gross Margin Delta: -54.0 (Revenue Delta: +699.0)",
+          "revenueDelta": 699.0,
+          "profitDelta": -54.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 3,
+            "projectedRevenue": 3447,
+            "projectedGrossProfit": 1188,
+            "revenueDelta": -450.0,
+            "profitDelta": -450.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 3,
+            "projectedRevenue": 3447,
+            "projectedGrossProfit": 1188,
+            "revenueDelta": -450.0,
+            "profitDelta": -450.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 4,
+            "projectedRevenue": 4596,
+            "projectedGrossProfit": 1584,
+            "revenueDelta": 699.0,
+            "profitDelta": -54.0
+          },
+          "profitDeltaRange": [
+            -450.0,
+            -54.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "26a16580-1b0b-40e9-808d-3ed267893fe2",
+      "name": "Darjeeling First Flush Muscatel Black Tea (150g)",
+      "category": "Spices, Teas & Gourmet",
+      "currentPrice": 899.0,
+      "recommendedPrice": 799,
+      "priceDelta": -100.0,
+      "priceDeltaPercent": -11,
+      "stock": 90,
+      "rating": 4.7,
+      "velocity": 0.1,
+      "sold30d": 3,
+      "runwayDays": 900,
+      "wholesaleCost": 521,
+      "costFloor": 599,
+      "breakevenUnits": 5,
+      "strategy": "VELOCITY_MARKDOWN",
+      "strategyLabel": "Velocity Markdown (-10% to -12%)",
+      "strategyBadge": "badge-warning",
+      "elasticity": -1.5,
+      "confidence": 91,
+      "rationale": "Excess working capital trapped across 90 units (3 sold in 30d). A strategic markdown stimulates turnover while strictly honoring the \u20b9599 wholesale cost floor.",
+      "projectedMonthlyUnits": 4,
+      "monthlyRevenueDelta": 499.0,
+      "monthlyProfitDelta": -22.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 3,
+          "projectedRevenue": 2397,
+          "projectedGrossProfit": 834,
+          "revenueDelta": -300.0,
+          "profitDelta": -300.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 3,
+          "projectedRevenue": 2397,
+          "projectedGrossProfit": 834,
+          "revenueDelta": -300.0,
+          "profitDelta": -300.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 4,
+          "projectedRevenue": 3196,
+          "projectedGrossProfit": 1112,
+          "revenueDelta": 499.0,
+          "profitDelta": -22.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Darjeeling First Flush Muscatel Black Tea (150g)",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 521,
+          "costFloor": 599,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b9899 | Estimated Wholesale Cost (58%): \u20b9521 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b9599 | Recommended Price: \u20b9799 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -1.5,
+            "rating": 4.7,
+            "stock": 90,
+            "velocity": 0.1,
+            "runwayDays": 900
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -1.50 based on Velocity Markdown (-10% to -12%). Observed catalog sales: 3 units/30d (0.10/day). Stock runway: 900 days across 90 units.",
+          "value": -1.5
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 3,
+            "currentPrice": 899.0,
+            "recommendedPrice": 799,
+            "priceDelta": -100.0,
+            "priceDeltaPercent": -11,
+            "elasticity": -1.5
+          },
+          "derivation": "3 units \u00d7 [1 + (-1.5 \u00d7 (-100 / 899))] = 3 \u00d7 1.167 = 4 units/month",
+          "value": 4
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 1134.0,
+            "newUnitMargin": 278,
+            "breakevenUnits": 5,
+            "breakevenDeltaUnits": 2
+          },
+          "derivation": "Baseline Monthly Profit: \u20b91,134 | New Unit Gross Margin: \u20b9278 | Break-Even Volume: 5 units (+2 units vs baseline to maintain current profit).",
+          "value": 5
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 2697.0,
+            "projectedRevenue": 3196,
+            "currentProfit": 1134.0,
+            "projectedProfit": 1112,
+            "wholesaleCostPrice": 521,
+            "costFloor": 599
+          },
+          "derivation": "Baseline Profit = 3 \u00d7 \u20b9378 = \u20b91,134 | Projected Profit = 4 \u00d7 \u20b9278 = \u20b91,112 | Monthly Gross Margin Delta: -22.0 (Revenue Delta: +499.0)",
+          "revenueDelta": 499.0,
+          "profitDelta": -22.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 3,
+            "projectedRevenue": 2397,
+            "projectedGrossProfit": 834,
+            "revenueDelta": -300.0,
+            "profitDelta": -300.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 3,
+            "projectedRevenue": 2397,
+            "projectedGrossProfit": 834,
+            "revenueDelta": -300.0,
+            "profitDelta": -300.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 4,
+            "projectedRevenue": 3196,
+            "projectedGrossProfit": 1112,
+            "revenueDelta": 499.0,
+            "profitDelta": -22.0
+          },
+          "profitDeltaRange": [
+            -300.0,
+            -22.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "8241a25f-d396-411b-8c3d-8875e7d56881",
+      "name": "Handcrafted Kundan & Pearl Choker Set",
+      "category": "Jewelry & Footwear",
+      "currentPrice": 2499.0,
+      "recommendedPrice": 2499.0,
+      "priceDelta": 0.0,
+      "priceDeltaPercent": 0,
+      "stock": 40,
+      "rating": 4.8,
+      "velocity": 0.0,
+      "sold30d": 0,
+      "runwayDays": 999,
+      "wholesaleCost": 1449,
+      "costFloor": 1666,
+      "breakevenUnits": 1,
+      "strategy": "OPTIMIZE_MARGIN",
+      "strategyLabel": "Balanced Margin",
+      "strategyBadge": "badge-neutral",
+      "elasticity": -0.85,
+      "confidence": 88,
+      "rationale": "Current catalog price is optimally balanced against sales velocity and replenishment cycles.",
+      "projectedMonthlyUnits": 1,
+      "monthlyRevenueDelta": 0.0,
+      "monthlyProfitDelta": 0.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 1,
+          "projectedRevenue": 2499,
+          "projectedGrossProfit": 1050,
+          "revenueDelta": 0.0,
+          "profitDelta": 0.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 1,
+          "projectedRevenue": 2499,
+          "projectedGrossProfit": 1050,
+          "revenueDelta": 0.0,
+          "profitDelta": 0.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 1,
+          "projectedRevenue": 2499,
+          "projectedGrossProfit": 1050,
+          "revenueDelta": 0.0,
+          "profitDelta": 0.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Handcrafted Kundan & Pearl Choker Set",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 1449,
+          "costFloor": 1666,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b92,499 | Estimated Wholesale Cost (58%): \u20b91,449 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b91,666 | Recommended Price: \u20b92,499 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.85,
+            "rating": 4.8,
+            "stock": 40,
+            "velocity": 0.0,
+            "runwayDays": 999
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.85 based on Balanced Margin. Observed catalog sales: 0 units/30d (0.00/day). Stock runway: 999 days across 40 units.",
+          "value": -0.85
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 1,
+            "currentPrice": 2499.0,
+            "recommendedPrice": 2499.0,
+            "priceDelta": 0.0,
+            "priceDeltaPercent": 0,
+            "elasticity": -0.85
+          },
+          "derivation": "1 units \u00d7 [1 + (-0.85 \u00d7 (+0 / 2499))] = 1 \u00d7 1.000 = 1 units/month",
+          "value": 1
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 1050.0,
+            "newUnitMargin": 1050.0,
+            "breakevenUnits": 1,
+            "breakevenDeltaUnits": 0
+          },
+          "derivation": "Baseline Monthly Profit: \u20b91,050 | New Unit Gross Margin: \u20b91,050 | Break-Even Volume: 1 units (+0 units vs baseline to maintain current profit).",
+          "value": 1
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 2499.0,
+            "projectedRevenue": 2499,
+            "currentProfit": 1050.0,
+            "projectedProfit": 1050,
+            "wholesaleCostPrice": 1449,
+            "costFloor": 1666
+          },
+          "derivation": "Baseline Profit = 1 \u00d7 \u20b91,050 = \u20b91,050 | Projected Profit = 1 \u00d7 \u20b91,050 = \u20b91,050 | Monthly Gross Margin Delta: +0.0 (Revenue Delta: +0.0)",
+          "revenueDelta": 0.0,
+          "profitDelta": 0.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 1,
+            "projectedRevenue": 2499,
+            "projectedGrossProfit": 1050,
+            "revenueDelta": 0.0,
+            "profitDelta": 0.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 1,
+            "projectedRevenue": 2499,
+            "projectedGrossProfit": 1050,
+            "revenueDelta": 0.0,
+            "profitDelta": 0.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 1,
+            "projectedRevenue": 2499,
+            "projectedGrossProfit": 1050,
+            "revenueDelta": 0.0,
+            "profitDelta": 0.0
+          },
+          "profitDeltaRange": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "dcb12534-b6f4-4359-adfa-caa7ad957a80",
+      "name": "Kashmir Walnut Wood Carved Keepsake Box",
+      "category": "Handicrafts & Home Decor",
+      "currentPrice": 1499.0,
+      "recommendedPrice": 1499.0,
+      "priceDelta": 0.0,
+      "priceDeltaPercent": 0,
+      "stock": 50,
+      "rating": 4.6,
+      "velocity": 0.07,
+      "sold30d": 2,
+      "runwayDays": 750,
+      "wholesaleCost": 869,
+      "costFloor": 999,
+      "breakevenUnits": 2,
+      "strategy": "OPTIMIZE_MARGIN",
+      "strategyLabel": "Balanced Margin",
+      "strategyBadge": "badge-neutral",
+      "elasticity": -0.85,
+      "confidence": 88,
+      "rationale": "Current catalog price is optimally balanced against sales velocity and replenishment cycles.",
+      "projectedMonthlyUnits": 2,
+      "monthlyRevenueDelta": 0.0,
+      "monthlyProfitDelta": 0.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 2,
+          "projectedRevenue": 2998,
+          "projectedGrossProfit": 1260,
+          "revenueDelta": 0.0,
+          "profitDelta": 0.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 2,
+          "projectedRevenue": 2998,
+          "projectedGrossProfit": 1260,
+          "revenueDelta": 0.0,
+          "profitDelta": 0.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 2,
+          "projectedRevenue": 2998,
+          "projectedGrossProfit": 1260,
+          "revenueDelta": 0.0,
+          "profitDelta": 0.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Kashmir Walnut Wood Carved Keepsake Box",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 869,
+          "costFloor": 999,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b91,499 | Estimated Wholesale Cost (58%): \u20b9869 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b9999 | Recommended Price: \u20b91,499 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.85,
+            "rating": 4.6,
+            "stock": 50,
+            "velocity": 0.07,
+            "runwayDays": 750
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.85 based on Balanced Margin. Observed catalog sales: 2 units/30d (0.07/day). Stock runway: 750 days across 50 units.",
+          "value": -0.85
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 2,
+            "currentPrice": 1499.0,
+            "recommendedPrice": 1499.0,
+            "priceDelta": 0.0,
+            "priceDeltaPercent": 0,
+            "elasticity": -0.85
+          },
+          "derivation": "2 units \u00d7 [1 + (-0.85 \u00d7 (+0 / 1499))] = 2 \u00d7 1.000 = 2 units/month",
+          "value": 2
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 1260.0,
+            "newUnitMargin": 630.0,
+            "breakevenUnits": 2,
+            "breakevenDeltaUnits": 0
+          },
+          "derivation": "Baseline Monthly Profit: \u20b91,260 | New Unit Gross Margin: \u20b9630 | Break-Even Volume: 2 units (+0 units vs baseline to maintain current profit).",
+          "value": 2
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 2998.0,
+            "projectedRevenue": 2998,
+            "currentProfit": 1260.0,
+            "projectedProfit": 1260,
+            "wholesaleCostPrice": 869,
+            "costFloor": 999
+          },
+          "derivation": "Baseline Profit = 2 \u00d7 \u20b9630 = \u20b91,260 | Projected Profit = 2 \u00d7 \u20b9630 = \u20b91,260 | Monthly Gross Margin Delta: +0.0 (Revenue Delta: +0.0)",
+          "revenueDelta": 0.0,
+          "profitDelta": 0.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 2,
+            "projectedRevenue": 2998,
+            "projectedGrossProfit": 1260,
+            "revenueDelta": 0.0,
+            "profitDelta": 0.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 2,
+            "projectedRevenue": 2998,
+            "projectedGrossProfit": 1260,
+            "revenueDelta": 0.0,
+            "profitDelta": 0.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 2,
+            "projectedRevenue": 2998,
+            "projectedGrossProfit": 1260,
+            "revenueDelta": 0.0,
+            "profitDelta": 0.0
+          },
+          "profitDeltaRange": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "8732cdfb-7075-4fe6-a981-f23844786e42",
+      "name": "Royal Assam CTC Masala Chai Blend (500g)",
+      "category": "Spices, Teas & Gourmet",
+      "currentPrice": 499.0,
+      "recommendedPrice": 499,
+      "priceDelta": 0.0,
+      "priceDeltaPercent": 0,
+      "stock": 300,
+      "rating": 4.8,
+      "velocity": 0.17,
+      "sold30d": 5,
+      "runwayDays": 1800,
+      "wholesaleCost": 289,
+      "costFloor": 332,
+      "breakevenUnits": 5,
+      "strategy": "MARGIN_EXPANSION",
+      "strategyLabel": "Margin Capture (+5%)",
+      "strategyBadge": "badge-success",
+      "elasticity": -0.7,
+      "confidence": 89,
+      "rationale": "Solid demand velocity (5 units in 30d) with healthy inventory buffer (300 units). A disciplined +5% price adjustment yields direct profit lift.",
+      "projectedMonthlyUnits": 5,
+      "monthlyRevenueDelta": 0.0,
+      "monthlyProfitDelta": 0.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 5,
+          "projectedRevenue": 2495,
+          "projectedGrossProfit": 1050,
+          "revenueDelta": 0.0,
+          "profitDelta": 0.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 5,
+          "projectedRevenue": 2495,
+          "projectedGrossProfit": 1050,
+          "revenueDelta": 0.0,
+          "profitDelta": 0.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 5,
+          "projectedRevenue": 2495,
+          "projectedGrossProfit": 1050,
+          "revenueDelta": 0.0,
+          "profitDelta": 0.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Royal Assam CTC Masala Chai Blend (500g)",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 289,
+          "costFloor": 332,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b9499 | Estimated Wholesale Cost (58%): \u20b9289 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b9332 | Recommended Price: \u20b9499 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.7,
+            "rating": 4.8,
+            "stock": 300,
+            "velocity": 0.17,
+            "runwayDays": 1800
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.70 based on Margin Capture (+5%). Observed catalog sales: 5 units/30d (0.17/day). Stock runway: 1800 days across 300 units.",
+          "value": -0.7
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 5,
+            "currentPrice": 499.0,
+            "recommendedPrice": 499,
+            "priceDelta": 0.0,
+            "priceDeltaPercent": 0,
+            "elasticity": -0.7
+          },
+          "derivation": "5 units \u00d7 [1 + (-0.7 \u00d7 (+0 / 499))] = 5 \u00d7 1.000 = 5 units/month",
+          "value": 5
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 1050.0,
+            "newUnitMargin": 210,
+            "breakevenUnits": 5,
+            "breakevenDeltaUnits": 0
+          },
+          "derivation": "Baseline Monthly Profit: \u20b91,050 | New Unit Gross Margin: \u20b9210 | Break-Even Volume: 5 units (+0 units vs baseline to maintain current profit).",
+          "value": 5
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 2495.0,
+            "projectedRevenue": 2495,
+            "currentProfit": 1050.0,
+            "projectedProfit": 1050,
+            "wholesaleCostPrice": 289,
+            "costFloor": 332
+          },
+          "derivation": "Baseline Profit = 5 \u00d7 \u20b9210 = \u20b91,050 | Projected Profit = 5 \u00d7 \u20b9210 = \u20b91,050 | Monthly Gross Margin Delta: +0.0 (Revenue Delta: +0.0)",
+          "revenueDelta": 0.0,
+          "profitDelta": 0.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 5,
+            "projectedRevenue": 2495,
+            "projectedGrossProfit": 1050,
+            "revenueDelta": 0.0,
+            "profitDelta": 0.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 5,
+            "projectedRevenue": 2495,
+            "projectedGrossProfit": 1050,
+            "revenueDelta": 0.0,
+            "profitDelta": 0.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 5,
+            "projectedRevenue": 2495,
+            "projectedGrossProfit": 1050,
+            "revenueDelta": 0.0,
+            "profitDelta": 0.0
+          },
+          "profitDeltaRange": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "459ccff6-35a8-4282-9742-cdba710a0441",
+      "name": "Mysore Pure Sandalwood Dhoop Cones (Pack of 60)",
+      "category": "Ayurveda & Herbal Care",
+      "currentPrice": 449.0,
+      "recommendedPrice": 449,
+      "priceDelta": 0.0,
+      "priceDeltaPercent": 0,
+      "stock": 220,
+      "rating": 4.5,
+      "velocity": 0.3,
+      "sold30d": 9,
+      "runwayDays": 733,
+      "wholesaleCost": 260,
+      "costFloor": 299,
+      "breakevenUnits": 9,
+      "strategy": "MARGIN_EXPANSION",
+      "strategyLabel": "Margin Capture (+5%)",
+      "strategyBadge": "badge-success",
+      "elasticity": -0.7,
+      "confidence": 89,
+      "rationale": "Solid demand velocity (9 units in 30d) with healthy inventory buffer (220 units). A disciplined +5% price adjustment yields direct profit lift.",
+      "projectedMonthlyUnits": 9,
+      "monthlyRevenueDelta": 0.0,
+      "monthlyProfitDelta": 0.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 9,
+          "projectedRevenue": 4041,
+          "projectedGrossProfit": 1701,
+          "revenueDelta": 0.0,
+          "profitDelta": 0.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 9,
+          "projectedRevenue": 4041,
+          "projectedGrossProfit": 1701,
+          "revenueDelta": 0.0,
+          "profitDelta": 0.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 9,
+          "projectedRevenue": 4041,
+          "projectedGrossProfit": 1701,
+          "revenueDelta": 0.0,
+          "profitDelta": 0.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Mysore Pure Sandalwood Dhoop Cones (Pack of 60)",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 260,
+          "costFloor": 299,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b9449 | Estimated Wholesale Cost (58%): \u20b9260 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b9299 | Recommended Price: \u20b9449 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.7,
+            "rating": 4.5,
+            "stock": 220,
+            "velocity": 0.3,
+            "runwayDays": 733
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.70 based on Margin Capture (+5%). Observed catalog sales: 9 units/30d (0.30/day). Stock runway: 733 days across 220 units.",
+          "value": -0.7
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 9,
+            "currentPrice": 449.0,
+            "recommendedPrice": 449,
+            "priceDelta": 0.0,
+            "priceDeltaPercent": 0,
+            "elasticity": -0.7
+          },
+          "derivation": "9 units \u00d7 [1 + (-0.7 \u00d7 (+0 / 449))] = 9 \u00d7 1.000 = 9 units/month",
+          "value": 9
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 1701.0,
+            "newUnitMargin": 189,
+            "breakevenUnits": 9,
+            "breakevenDeltaUnits": 0
+          },
+          "derivation": "Baseline Monthly Profit: \u20b91,701 | New Unit Gross Margin: \u20b9189 | Break-Even Volume: 9 units (+0 units vs baseline to maintain current profit).",
+          "value": 9
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 4041.0,
+            "projectedRevenue": 4041,
+            "currentProfit": 1701.0,
+            "projectedProfit": 1701,
+            "wholesaleCostPrice": 260,
+            "costFloor": 299
+          },
+          "derivation": "Baseline Profit = 9 \u00d7 \u20b9189 = \u20b91,701 | Projected Profit = 9 \u00d7 \u20b9189 = \u20b91,701 | Monthly Gross Margin Delta: +0.0 (Revenue Delta: +0.0)",
+          "revenueDelta": 0.0,
+          "profitDelta": 0.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 9,
+            "projectedRevenue": 4041,
+            "projectedGrossProfit": 1701,
+            "revenueDelta": 0.0,
+            "profitDelta": 0.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 9,
+            "projectedRevenue": 4041,
+            "projectedGrossProfit": 1701,
+            "revenueDelta": 0.0,
+            "profitDelta": 0.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 9,
+            "projectedRevenue": 4041,
+            "projectedGrossProfit": 1701,
+            "revenueDelta": 0.0,
+            "profitDelta": 0.0
+          },
+          "profitDeltaRange": [
+            0.0,
+            0.0
+          ]
+        }
+      }
+    }
+  ],
+  "surgeOpportunities": [
+    {
+      "id": "704ec85f-3b97-41dd-9e34-bdd1a91af365",
+      "name": "Hand-Casted Brass Ganesha Idol",
+      "category": "Handicrafts & Home Decor",
+      "currentPrice": 2199.0,
+      "recommendedPrice": 2449,
+      "priceDelta": 250.0,
+      "priceDeltaPercent": 11,
+      "stock": 35,
+      "rating": 4.9,
+      "velocity": 0.13,
+      "sold30d": 4,
+      "runwayDays": 262,
+      "wholesaleCost": 1275,
+      "costFloor": 1466,
+      "breakevenUnits": 4,
+      "strategy": "SURGE_PREMIUM",
+      "strategyLabel": "Premium Surge (+8% to +12%)",
+      "strategyBadge": "badge-danger",
+      "elasticity": -0.45,
+      "confidence": 94,
+      "rationale": "Artisan craft scarcity (35 units in warehouse, 4.9\u2605 rating). High willingness-to-pay shields against volume drop; a strategic surge captures pure gross margin while extending inventory runway.",
+      "projectedMonthlyUnits": 4,
+      "monthlyRevenueDelta": 1000.0,
+      "monthlyProfitDelta": 1000.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 4,
+          "projectedRevenue": 9796,
+          "projectedGrossProfit": 4696,
+          "revenueDelta": 1000.0,
+          "profitDelta": 1000.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 4,
+          "projectedRevenue": 9796,
+          "projectedGrossProfit": 4696,
+          "revenueDelta": 1000.0,
+          "profitDelta": 1000.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 3,
+          "projectedRevenue": 7347,
+          "projectedGrossProfit": 3522,
+          "revenueDelta": -1449.0,
+          "profitDelta": -174.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Hand-Casted Brass Ganesha Idol",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 1275,
+          "costFloor": 1466,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b92,199 | Estimated Wholesale Cost (58%): \u20b91,275 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b91,466 | Recommended Price: \u20b92,449 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.45,
+            "rating": 4.9,
+            "stock": 35,
+            "velocity": 0.13,
+            "runwayDays": 262
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.45 based on Premium Surge (+8% to +12%). Observed catalog sales: 4 units/30d (0.13/day). Stock runway: 262 days across 35 units.",
+          "value": -0.45
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 4,
+            "currentPrice": 2199.0,
+            "recommendedPrice": 2449,
+            "priceDelta": 250.0,
+            "priceDeltaPercent": 11,
+            "elasticity": -0.45
+          },
+          "derivation": "4 units \u00d7 [1 + (-0.45 \u00d7 (+250 / 2199))] = 4 \u00d7 0.949 = 4 units/month",
+          "value": 4
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 3696.0,
+            "newUnitMargin": 1174,
+            "breakevenUnits": 4,
+            "breakevenDeltaUnits": 0
+          },
+          "derivation": "Baseline Monthly Profit: \u20b93,696 | New Unit Gross Margin: \u20b91,174 | Break-Even Volume: 4 units (+0 units vs baseline to maintain current profit).",
+          "value": 4
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 8796.0,
+            "projectedRevenue": 9796,
+            "currentProfit": 3696.0,
+            "projectedProfit": 4696,
+            "wholesaleCostPrice": 1275,
+            "costFloor": 1466
+          },
+          "derivation": "Baseline Profit = 4 \u00d7 \u20b9924 = \u20b93,696 | Projected Profit = 4 \u00d7 \u20b91,174 = \u20b94,696 | Monthly Gross Margin Delta: +1,000.0 (Revenue Delta: +1,000.0)",
+          "revenueDelta": 1000.0,
+          "profitDelta": 1000.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 4,
+            "projectedRevenue": 9796,
+            "projectedGrossProfit": 4696,
+            "revenueDelta": 1000.0,
+            "profitDelta": 1000.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 4,
+            "projectedRevenue": 9796,
+            "projectedGrossProfit": 4696,
+            "revenueDelta": 1000.0,
+            "profitDelta": 1000.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 3,
+            "projectedRevenue": 7347,
+            "projectedGrossProfit": 3522,
+            "revenueDelta": -1449.0,
+            "profitDelta": -174.0
+          },
+          "profitDeltaRange": [
+            -174.0,
+            1000.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "c874c59f-0036-404c-b4a9-a97b3fe6b071",
+      "name": "Banarasi Katan Silk Saree",
+      "category": "Ethnic & Festive Wear",
+      "currentPrice": 6499.0,
+      "recommendedPrice": 7249,
+      "priceDelta": 750.0,
+      "priceDeltaPercent": 12,
+      "stock": 25,
+      "rating": 4.9,
+      "velocity": 0.03,
+      "sold30d": 1,
+      "runwayDays": 750,
+      "wholesaleCost": 3769,
+      "costFloor": 4334,
+      "breakevenUnits": 1,
+      "strategy": "SURGE_PREMIUM",
+      "strategyLabel": "Premium Surge (+8% to +12%)",
+      "strategyBadge": "badge-danger",
+      "elasticity": -0.45,
+      "confidence": 94,
+      "rationale": "Artisan craft scarcity (25 units in warehouse, 4.9\u2605 rating). High willingness-to-pay shields against volume drop; a strategic surge captures pure gross margin while extending inventory runway.",
+      "projectedMonthlyUnits": 1,
+      "monthlyRevenueDelta": 750.0,
+      "monthlyProfitDelta": 750.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 1,
+          "projectedRevenue": 7249,
+          "projectedGrossProfit": 3480,
+          "revenueDelta": 750.0,
+          "profitDelta": 750.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 1,
+          "projectedRevenue": 7249,
+          "projectedGrossProfit": 3480,
+          "revenueDelta": 750.0,
+          "profitDelta": 750.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 1,
+          "projectedRevenue": 7249,
+          "projectedGrossProfit": 3480,
+          "revenueDelta": 750.0,
+          "profitDelta": 750.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Banarasi Katan Silk Saree",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 3769,
+          "costFloor": 4334,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b96,499 | Estimated Wholesale Cost (58%): \u20b93,769 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b94,334 | Recommended Price: \u20b97,249 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.45,
+            "rating": 4.9,
+            "stock": 25,
+            "velocity": 0.03,
+            "runwayDays": 750
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.45 based on Premium Surge (+8% to +12%). Observed catalog sales: 1 units/30d (0.03/day). Stock runway: 750 days across 25 units.",
+          "value": -0.45
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 1,
+            "currentPrice": 6499.0,
+            "recommendedPrice": 7249,
+            "priceDelta": 750.0,
+            "priceDeltaPercent": 12,
+            "elasticity": -0.45
+          },
+          "derivation": "1 units \u00d7 [1 + (-0.45 \u00d7 (+750 / 6499))] = 1 \u00d7 0.948 = 1 units/month",
+          "value": 1
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 2730.0,
+            "newUnitMargin": 3480,
+            "breakevenUnits": 1,
+            "breakevenDeltaUnits": 0
+          },
+          "derivation": "Baseline Monthly Profit: \u20b92,730 | New Unit Gross Margin: \u20b93,480 | Break-Even Volume: 1 units (+0 units vs baseline to maintain current profit).",
+          "value": 1
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 6499.0,
+            "projectedRevenue": 7249,
+            "currentProfit": 2730.0,
+            "projectedProfit": 3480,
+            "wholesaleCostPrice": 3769,
+            "costFloor": 4334
+          },
+          "derivation": "Baseline Profit = 1 \u00d7 \u20b92,730 = \u20b92,730 | Projected Profit = 1 \u00d7 \u20b93,480 = \u20b93,480 | Monthly Gross Margin Delta: +750.0 (Revenue Delta: +750.0)",
+          "revenueDelta": 750.0,
+          "profitDelta": 750.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 1,
+            "projectedRevenue": 7249,
+            "projectedGrossProfit": 3480,
+            "revenueDelta": 750.0,
+            "profitDelta": 750.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 1,
+            "projectedRevenue": 7249,
+            "projectedGrossProfit": 3480,
+            "revenueDelta": 750.0,
+            "profitDelta": 750.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 1,
+            "projectedRevenue": 7249,
+            "projectedGrossProfit": 3480,
+            "revenueDelta": 750.0,
+            "profitDelta": 750.0
+          },
+          "profitDeltaRange": [
+            750.0,
+            750.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "296b1fca-6533-40ed-8db3-45caddddd10b",
+      "name": "Cuttack Silver Filigree Jhumkas (925 Silver)",
+      "category": "Jewelry & Footwear",
+      "currentPrice": 1699.0,
+      "recommendedPrice": 1849,
+      "priceDelta": 150.0,
+      "priceDeltaPercent": 9,
+      "stock": 35,
+      "rating": 4.7,
+      "velocity": 0.13,
+      "sold30d": 4,
+      "runwayDays": 262,
+      "wholesaleCost": 985,
+      "costFloor": 1133,
+      "breakevenUnits": 4,
+      "strategy": "SURGE_PREMIUM",
+      "strategyLabel": "Premium Surge (+8% to +12%)",
+      "strategyBadge": "badge-danger",
+      "elasticity": -0.45,
+      "confidence": 94,
+      "rationale": "Artisan craft scarcity (35 units in warehouse, 4.7\u2605 rating). High willingness-to-pay shields against volume drop; a strategic surge captures pure gross margin while extending inventory runway.",
+      "projectedMonthlyUnits": 4,
+      "monthlyRevenueDelta": 600.0,
+      "monthlyProfitDelta": 600.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 4,
+          "projectedRevenue": 7396,
+          "projectedGrossProfit": 3456,
+          "revenueDelta": 600.0,
+          "profitDelta": 600.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 4,
+          "projectedRevenue": 7396,
+          "projectedGrossProfit": 3456,
+          "revenueDelta": 600.0,
+          "profitDelta": 600.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 3,
+          "projectedRevenue": 5547,
+          "projectedGrossProfit": 2592,
+          "revenueDelta": -1249.0,
+          "profitDelta": -264.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Cuttack Silver Filigree Jhumkas (925 Silver)",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 985,
+          "costFloor": 1133,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b91,699 | Estimated Wholesale Cost (58%): \u20b9985 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b91,133 | Recommended Price: \u20b91,849 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.45,
+            "rating": 4.7,
+            "stock": 35,
+            "velocity": 0.13,
+            "runwayDays": 262
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.45 based on Premium Surge (+8% to +12%). Observed catalog sales: 4 units/30d (0.13/day). Stock runway: 262 days across 35 units.",
+          "value": -0.45
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 4,
+            "currentPrice": 1699.0,
+            "recommendedPrice": 1849,
+            "priceDelta": 150.0,
+            "priceDeltaPercent": 9,
+            "elasticity": -0.45
+          },
+          "derivation": "4 units \u00d7 [1 + (-0.45 \u00d7 (+150 / 1699))] = 4 \u00d7 0.960 = 4 units/month",
+          "value": 4
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 2856.0,
+            "newUnitMargin": 864,
+            "breakevenUnits": 4,
+            "breakevenDeltaUnits": 0
+          },
+          "derivation": "Baseline Monthly Profit: \u20b92,856 | New Unit Gross Margin: \u20b9864 | Break-Even Volume: 4 units (+0 units vs baseline to maintain current profit).",
+          "value": 4
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 6796.0,
+            "projectedRevenue": 7396,
+            "currentProfit": 2856.0,
+            "projectedProfit": 3456,
+            "wholesaleCostPrice": 985,
+            "costFloor": 1133
+          },
+          "derivation": "Baseline Profit = 4 \u00d7 \u20b9714 = \u20b92,856 | Projected Profit = 4 \u00d7 \u20b9864 = \u20b93,456 | Monthly Gross Margin Delta: +600.0 (Revenue Delta: +600.0)",
+          "revenueDelta": 600.0,
+          "profitDelta": 600.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 4,
+            "projectedRevenue": 7396,
+            "projectedGrossProfit": 3456,
+            "revenueDelta": 600.0,
+            "profitDelta": 600.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 4,
+            "projectedRevenue": 7396,
+            "projectedGrossProfit": 3456,
+            "revenueDelta": 600.0,
+            "profitDelta": 600.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 3,
+            "projectedRevenue": 5547,
+            "projectedGrossProfit": 2592,
+            "revenueDelta": -1249.0,
+            "profitDelta": -264.0
+          },
+          "profitDeltaRange": [
+            -264.0,
+            600.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "40b1055f-f254-4c42-a632-bba4548655bd",
+      "name": "Kashmiri Pashmina Embroidered Shawl",
+      "category": "Ethnic & Festive Wear",
+      "currentPrice": 4299.0,
+      "recommendedPrice": 4749,
+      "priceDelta": 450.0,
+      "priceDeltaPercent": 10,
+      "stock": 30,
+      "rating": 4.8,
+      "velocity": 0.0,
+      "sold30d": 0,
+      "runwayDays": 999,
+      "wholesaleCost": 2493,
+      "costFloor": 2867,
+      "breakevenUnits": 1,
+      "strategy": "SURGE_PREMIUM",
+      "strategyLabel": "Premium Surge (+8% to +12%)",
+      "strategyBadge": "badge-danger",
+      "elasticity": -0.45,
+      "confidence": 94,
+      "rationale": "Artisan craft scarcity (30 units in warehouse, 4.8\u2605 rating). High willingness-to-pay shields against volume drop; a strategic surge captures pure gross margin while extending inventory runway.",
+      "projectedMonthlyUnits": 1,
+      "monthlyRevenueDelta": 450.0,
+      "monthlyProfitDelta": 450.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 1,
+          "projectedRevenue": 4749,
+          "projectedGrossProfit": 2256,
+          "revenueDelta": 450.0,
+          "profitDelta": 450.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 1,
+          "projectedRevenue": 4749,
+          "projectedGrossProfit": 2256,
+          "revenueDelta": 450.0,
+          "profitDelta": 450.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 1,
+          "projectedRevenue": 4749,
+          "projectedGrossProfit": 2256,
+          "revenueDelta": 450.0,
+          "profitDelta": 450.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Kashmiri Pashmina Embroidered Shawl",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 2493,
+          "costFloor": 2867,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b94,299 | Estimated Wholesale Cost (58%): \u20b92,493 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b92,867 | Recommended Price: \u20b94,749 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -0.45,
+            "rating": 4.8,
+            "stock": 30,
+            "velocity": 0.0,
+            "runwayDays": 999
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -0.45 based on Premium Surge (+8% to +12%). Observed catalog sales: 0 units/30d (0.00/day). Stock runway: 999 days across 30 units.",
+          "value": -0.45
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 1,
+            "currentPrice": 4299.0,
+            "recommendedPrice": 4749,
+            "priceDelta": 450.0,
+            "priceDeltaPercent": 10,
+            "elasticity": -0.45
+          },
+          "derivation": "1 units \u00d7 [1 + (-0.45 \u00d7 (+450 / 4299))] = 1 \u00d7 0.953 = 1 units/month",
+          "value": 1
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 1806.0,
+            "newUnitMargin": 2256,
+            "breakevenUnits": 1,
+            "breakevenDeltaUnits": 0
+          },
+          "derivation": "Baseline Monthly Profit: \u20b91,806 | New Unit Gross Margin: \u20b92,256 | Break-Even Volume: 1 units (+0 units vs baseline to maintain current profit).",
+          "value": 1
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 4299.0,
+            "projectedRevenue": 4749,
+            "currentProfit": 1806.0,
+            "projectedProfit": 2256,
+            "wholesaleCostPrice": 2493,
+            "costFloor": 2867
+          },
+          "derivation": "Baseline Profit = 1 \u00d7 \u20b91,806 = \u20b91,806 | Projected Profit = 1 \u00d7 \u20b92,256 = \u20b92,256 | Monthly Gross Margin Delta: +450.0 (Revenue Delta: +450.0)",
+          "revenueDelta": 450.0,
+          "profitDelta": 450.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 1,
+            "projectedRevenue": 4749,
+            "projectedGrossProfit": 2256,
+            "revenueDelta": 450.0,
+            "profitDelta": 450.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 1,
+            "projectedRevenue": 4749,
+            "projectedGrossProfit": 2256,
+            "revenueDelta": 450.0,
+            "profitDelta": 450.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 1,
+            "projectedRevenue": 4749,
+            "projectedGrossProfit": 2256,
+            "revenueDelta": 450.0,
+            "profitDelta": 450.0
+          },
+          "profitDeltaRange": [
+            450.0,
+            450.0
+          ]
+        }
+      }
+    }
+  ],
+  "markdownOpportunities": [
+    {
+      "id": "51018454-6638-412d-ae50-d1302ab87c54",
+      "name": "Chikankari Hand-Embroidered Kurta",
+      "category": "Ethnic & Festive Wear",
+      "currentPrice": 1899.0,
+      "recommendedPrice": 1649,
+      "priceDelta": -250.0,
+      "priceDeltaPercent": -13,
+      "stock": 65,
+      "rating": 4.7,
+      "velocity": 0.07,
+      "sold30d": 2,
+      "runwayDays": 975,
+      "wholesaleCost": 1101,
+      "costFloor": 1266,
+      "breakevenUnits": 3,
+      "strategy": "VELOCITY_MARKDOWN",
+      "strategyLabel": "Velocity Markdown (-10% to -12%)",
+      "strategyBadge": "badge-warning",
+      "elasticity": -1.5,
+      "confidence": 91,
+      "rationale": "Excess working capital trapped across 65 units (2 sold in 30d). A strategic markdown stimulates turnover while strictly honoring the \u20b91,266 wholesale cost floor.",
+      "projectedMonthlyUnits": 2,
+      "monthlyRevenueDelta": -500.0,
+      "monthlyProfitDelta": -500.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 2,
+          "projectedRevenue": 3298,
+          "projectedGrossProfit": 1096,
+          "revenueDelta": -500.0,
+          "profitDelta": -500.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 2,
+          "projectedRevenue": 3298,
+          "projectedGrossProfit": 1096,
+          "revenueDelta": -500.0,
+          "profitDelta": -500.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 2,
+          "projectedRevenue": 3298,
+          "projectedGrossProfit": 1096,
+          "revenueDelta": -500.0,
+          "profitDelta": -500.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Chikankari Hand-Embroidered Kurta",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 1101,
+          "costFloor": 1266,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b91,899 | Estimated Wholesale Cost (58%): \u20b91,101 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b91,266 | Recommended Price: \u20b91,649 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -1.5,
+            "rating": 4.7,
+            "stock": 65,
+            "velocity": 0.07,
+            "runwayDays": 975
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -1.50 based on Velocity Markdown (-10% to -12%). Observed catalog sales: 2 units/30d (0.07/day). Stock runway: 975 days across 65 units.",
+          "value": -1.5
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 2,
+            "currentPrice": 1899.0,
+            "recommendedPrice": 1649,
+            "priceDelta": -250.0,
+            "priceDeltaPercent": -13,
+            "elasticity": -1.5
+          },
+          "derivation": "2 units \u00d7 [1 + (-1.5 \u00d7 (-250 / 1899))] = 2 \u00d7 1.197 = 2 units/month",
+          "value": 2
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 1596.0,
+            "newUnitMargin": 548,
+            "breakevenUnits": 3,
+            "breakevenDeltaUnits": 1
+          },
+          "derivation": "Baseline Monthly Profit: \u20b91,596 | New Unit Gross Margin: \u20b9548 | Break-Even Volume: 3 units (+1 units vs baseline to maintain current profit).",
+          "value": 3
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 3798.0,
+            "projectedRevenue": 3298,
+            "currentProfit": 1596.0,
+            "projectedProfit": 1096,
+            "wholesaleCostPrice": 1101,
+            "costFloor": 1266
+          },
+          "derivation": "Baseline Profit = 2 \u00d7 \u20b9798 = \u20b91,596 | Projected Profit = 2 \u00d7 \u20b9548 = \u20b91,096 | Monthly Gross Margin Delta: -500.0 (Revenue Delta: -500.0)",
+          "revenueDelta": -500.0,
+          "profitDelta": -500.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 2,
+            "projectedRevenue": 3298,
+            "projectedGrossProfit": 1096,
+            "revenueDelta": -500.0,
+            "profitDelta": -500.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 2,
+            "projectedRevenue": 3298,
+            "projectedGrossProfit": 1096,
+            "revenueDelta": -500.0,
+            "profitDelta": -500.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 2,
+            "projectedRevenue": 3298,
+            "projectedGrossProfit": 1096,
+            "revenueDelta": -500.0,
+            "profitDelta": -500.0
+          },
+          "profitDeltaRange": [
+            -500.0,
+            -500.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "57c4b93a-c67a-40cd-a47a-4319ae8d9934",
+      "name": "Kashmiri Mogra Saffron (Grade A++ 1g Kesar)",
+      "category": "Spices, Teas & Gourmet",
+      "currentPrice": 999.0,
+      "recommendedPrice": 899,
+      "priceDelta": -100.0,
+      "priceDeltaPercent": -10,
+      "stock": 85,
+      "rating": 4.9,
+      "velocity": 0.03,
+      "sold30d": 1,
+      "runwayDays": 2550,
+      "wholesaleCost": 579,
+      "costFloor": 666,
+      "breakevenUnits": 2,
+      "strategy": "VELOCITY_MARKDOWN",
+      "strategyLabel": "Velocity Markdown (-10% to -12%)",
+      "strategyBadge": "badge-warning",
+      "elasticity": -1.5,
+      "confidence": 91,
+      "rationale": "Excess working capital trapped across 85 units (1 sold in 30d). A strategic markdown stimulates turnover while strictly honoring the \u20b9666 wholesale cost floor.",
+      "projectedMonthlyUnits": 1,
+      "monthlyRevenueDelta": -100.0,
+      "monthlyProfitDelta": -100.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 1,
+          "projectedRevenue": 899,
+          "projectedGrossProfit": 320,
+          "revenueDelta": -100.0,
+          "profitDelta": -100.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 1,
+          "projectedRevenue": 899,
+          "projectedGrossProfit": 320,
+          "revenueDelta": -100.0,
+          "profitDelta": -100.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 1,
+          "projectedRevenue": 899,
+          "projectedGrossProfit": 320,
+          "revenueDelta": -100.0,
+          "profitDelta": -100.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Kashmiri Mogra Saffron (Grade A++ 1g Kesar)",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 579,
+          "costFloor": 666,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b9999 | Estimated Wholesale Cost (58%): \u20b9579 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b9666 | Recommended Price: \u20b9899 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -1.5,
+            "rating": 4.9,
+            "stock": 85,
+            "velocity": 0.03,
+            "runwayDays": 2550
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -1.50 based on Velocity Markdown (-10% to -12%). Observed catalog sales: 1 units/30d (0.03/day). Stock runway: 2550 days across 85 units.",
+          "value": -1.5
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 1,
+            "currentPrice": 999.0,
+            "recommendedPrice": 899,
+            "priceDelta": -100.0,
+            "priceDeltaPercent": -10,
+            "elasticity": -1.5
+          },
+          "derivation": "1 units \u00d7 [1 + (-1.5 \u00d7 (-100 / 999))] = 1 \u00d7 1.150 = 1 units/month",
+          "value": 1
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 420.0,
+            "newUnitMargin": 320,
+            "breakevenUnits": 2,
+            "breakevenDeltaUnits": 1
+          },
+          "derivation": "Baseline Monthly Profit: \u20b9420 | New Unit Gross Margin: \u20b9320 | Break-Even Volume: 2 units (+1 units vs baseline to maintain current profit).",
+          "value": 2
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 999.0,
+            "projectedRevenue": 899,
+            "currentProfit": 420.0,
+            "projectedProfit": 320,
+            "wholesaleCostPrice": 579,
+            "costFloor": 666
+          },
+          "derivation": "Baseline Profit = 1 \u00d7 \u20b9420 = \u20b9420 | Projected Profit = 1 \u00d7 \u20b9320 = \u20b9320 | Monthly Gross Margin Delta: -100.0 (Revenue Delta: -100.0)",
+          "revenueDelta": -100.0,
+          "profitDelta": -100.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 1,
+            "projectedRevenue": 899,
+            "projectedGrossProfit": 320,
+            "revenueDelta": -100.0,
+            "profitDelta": -100.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 1,
+            "projectedRevenue": 899,
+            "projectedGrossProfit": 320,
+            "revenueDelta": -100.0,
+            "profitDelta": -100.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 1,
+            "projectedRevenue": 899,
+            "projectedGrossProfit": 320,
+            "revenueDelta": -100.0,
+            "profitDelta": -100.0
+          },
+          "profitDeltaRange": [
+            -100.0,
+            -100.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "40bbbf0d-86ce-495d-854d-b021d8520d76",
+      "name": "AuraFit Apex Smartwatch (1.96\" AMOLED)",
+      "category": "Smart Devices & Audio",
+      "currentPrice": 2699.0,
+      "recommendedPrice": 2399,
+      "priceDelta": -300.0,
+      "priceDeltaPercent": -11,
+      "stock": 110,
+      "rating": 4.5,
+      "velocity": 0.1,
+      "sold30d": 3,
+      "runwayDays": 1100,
+      "wholesaleCost": 1565,
+      "costFloor": 1800,
+      "breakevenUnits": 5,
+      "strategy": "VELOCITY_MARKDOWN",
+      "strategyLabel": "Velocity Markdown (-10% to -12%)",
+      "strategyBadge": "badge-warning",
+      "elasticity": -1.5,
+      "confidence": 91,
+      "rationale": "Excess working capital trapped across 110 units (3 sold in 30d). A strategic markdown stimulates turnover while strictly honoring the \u20b91,800 wholesale cost floor.",
+      "projectedMonthlyUnits": 4,
+      "monthlyRevenueDelta": 1499.0,
+      "monthlyProfitDelta": -66.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 3,
+          "projectedRevenue": 7197,
+          "projectedGrossProfit": 2502,
+          "revenueDelta": -900.0,
+          "profitDelta": -900.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 3,
+          "projectedRevenue": 7197,
+          "projectedGrossProfit": 2502,
+          "revenueDelta": -900.0,
+          "profitDelta": -900.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 4,
+          "projectedRevenue": 9596,
+          "projectedGrossProfit": 3336,
+          "revenueDelta": 1499.0,
+          "profitDelta": -66.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: AuraFit Apex Smartwatch (1.96\" AMOLED)",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 1565,
+          "costFloor": 1800,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b92,699 | Estimated Wholesale Cost (58%): \u20b91,565 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b91,800 | Recommended Price: \u20b92,399 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -1.5,
+            "rating": 4.5,
+            "stock": 110,
+            "velocity": 0.1,
+            "runwayDays": 1100
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -1.50 based on Velocity Markdown (-10% to -12%). Observed catalog sales: 3 units/30d (0.10/day). Stock runway: 1100 days across 110 units.",
+          "value": -1.5
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 3,
+            "currentPrice": 2699.0,
+            "recommendedPrice": 2399,
+            "priceDelta": -300.0,
+            "priceDeltaPercent": -11,
+            "elasticity": -1.5
+          },
+          "derivation": "3 units \u00d7 [1 + (-1.5 \u00d7 (-300 / 2699))] = 3 \u00d7 1.167 = 4 units/month",
+          "value": 4
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 3402.0,
+            "newUnitMargin": 834,
+            "breakevenUnits": 5,
+            "breakevenDeltaUnits": 2
+          },
+          "derivation": "Baseline Monthly Profit: \u20b93,402 | New Unit Gross Margin: \u20b9834 | Break-Even Volume: 5 units (+2 units vs baseline to maintain current profit).",
+          "value": 5
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 8097.0,
+            "projectedRevenue": 9596,
+            "currentProfit": 3402.0,
+            "projectedProfit": 3336,
+            "wholesaleCostPrice": 1565,
+            "costFloor": 1800
+          },
+          "derivation": "Baseline Profit = 3 \u00d7 \u20b91,134 = \u20b93,402 | Projected Profit = 4 \u00d7 \u20b9834 = \u20b93,336 | Monthly Gross Margin Delta: -66.0 (Revenue Delta: +1,499.0)",
+          "revenueDelta": 1499.0,
+          "profitDelta": -66.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 3,
+            "projectedRevenue": 7197,
+            "projectedGrossProfit": 2502,
+            "revenueDelta": -900.0,
+            "profitDelta": -900.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 3,
+            "projectedRevenue": 7197,
+            "projectedGrossProfit": 2502,
+            "revenueDelta": -900.0,
+            "profitDelta": -900.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 4,
+            "projectedRevenue": 9596,
+            "projectedGrossProfit": 3336,
+            "revenueDelta": 1499.0,
+            "profitDelta": -66.0
+          },
+          "profitDeltaRange": [
+            -900.0,
+            -66.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "fe168761-01b9-45be-b364-2fe3d2a6d291",
+      "name": "Hand-Embroidered Rajasthani Leather Mojris",
+      "category": "Jewelry & Footwear",
+      "currentPrice": 1299.0,
+      "recommendedPrice": 1149,
+      "priceDelta": -150.0,
+      "priceDeltaPercent": -12,
+      "stock": 70,
+      "rating": 4.5,
+      "velocity": 0.1,
+      "sold30d": 3,
+      "runwayDays": 700,
+      "wholesaleCost": 753,
+      "costFloor": 866,
+      "breakevenUnits": 5,
+      "strategy": "VELOCITY_MARKDOWN",
+      "strategyLabel": "Velocity Markdown (-10% to -12%)",
+      "strategyBadge": "badge-warning",
+      "elasticity": -1.5,
+      "confidence": 91,
+      "rationale": "Excess working capital trapped across 70 units (3 sold in 30d). A strategic markdown stimulates turnover while strictly honoring the \u20b9866 wholesale cost floor.",
+      "projectedMonthlyUnits": 4,
+      "monthlyRevenueDelta": 699.0,
+      "monthlyProfitDelta": -54.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 3,
+          "projectedRevenue": 3447,
+          "projectedGrossProfit": 1188,
+          "revenueDelta": -450.0,
+          "profitDelta": -450.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 3,
+          "projectedRevenue": 3447,
+          "projectedGrossProfit": 1188,
+          "revenueDelta": -450.0,
+          "profitDelta": -450.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 4,
+          "projectedRevenue": 4596,
+          "projectedGrossProfit": 1584,
+          "revenueDelta": 699.0,
+          "profitDelta": -54.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Hand-Embroidered Rajasthani Leather Mojris",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 753,
+          "costFloor": 866,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b91,299 | Estimated Wholesale Cost (58%): \u20b9753 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b9866 | Recommended Price: \u20b91,149 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -1.5,
+            "rating": 4.5,
+            "stock": 70,
+            "velocity": 0.1,
+            "runwayDays": 700
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -1.50 based on Velocity Markdown (-10% to -12%). Observed catalog sales: 3 units/30d (0.10/day). Stock runway: 700 days across 70 units.",
+          "value": -1.5
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 3,
+            "currentPrice": 1299.0,
+            "recommendedPrice": 1149,
+            "priceDelta": -150.0,
+            "priceDeltaPercent": -12,
+            "elasticity": -1.5
+          },
+          "derivation": "3 units \u00d7 [1 + (-1.5 \u00d7 (-150 / 1299))] = 3 \u00d7 1.173 = 4 units/month",
+          "value": 4
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 1638.0,
+            "newUnitMargin": 396,
+            "breakevenUnits": 5,
+            "breakevenDeltaUnits": 2
+          },
+          "derivation": "Baseline Monthly Profit: \u20b91,638 | New Unit Gross Margin: \u20b9396 | Break-Even Volume: 5 units (+2 units vs baseline to maintain current profit).",
+          "value": 5
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 3897.0,
+            "projectedRevenue": 4596,
+            "currentProfit": 1638.0,
+            "projectedProfit": 1584,
+            "wholesaleCostPrice": 753,
+            "costFloor": 866
+          },
+          "derivation": "Baseline Profit = 3 \u00d7 \u20b9546 = \u20b91,638 | Projected Profit = 4 \u00d7 \u20b9396 = \u20b91,584 | Monthly Gross Margin Delta: -54.0 (Revenue Delta: +699.0)",
+          "revenueDelta": 699.0,
+          "profitDelta": -54.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 3,
+            "projectedRevenue": 3447,
+            "projectedGrossProfit": 1188,
+            "revenueDelta": -450.0,
+            "profitDelta": -450.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 3,
+            "projectedRevenue": 3447,
+            "projectedGrossProfit": 1188,
+            "revenueDelta": -450.0,
+            "profitDelta": -450.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 4,
+            "projectedRevenue": 4596,
+            "projectedGrossProfit": 1584,
+            "revenueDelta": 699.0,
+            "profitDelta": -54.0
+          },
+          "profitDeltaRange": [
+            -450.0,
+            -54.0
+          ]
+        }
+      }
+    },
+    {
+      "id": "26a16580-1b0b-40e9-808d-3ed267893fe2",
+      "name": "Darjeeling First Flush Muscatel Black Tea (150g)",
+      "category": "Spices, Teas & Gourmet",
+      "currentPrice": 899.0,
+      "recommendedPrice": 799,
+      "priceDelta": -100.0,
+      "priceDeltaPercent": -11,
+      "stock": 90,
+      "rating": 4.7,
+      "velocity": 0.1,
+      "sold30d": 3,
+      "runwayDays": 900,
+      "wholesaleCost": 521,
+      "costFloor": 599,
+      "breakevenUnits": 5,
+      "strategy": "VELOCITY_MARKDOWN",
+      "strategyLabel": "Velocity Markdown (-10% to -12%)",
+      "strategyBadge": "badge-warning",
+      "elasticity": -1.5,
+      "confidence": 91,
+      "rationale": "Excess working capital trapped across 90 units (3 sold in 30d). A strategic markdown stimulates turnover while strictly honoring the \u20b9599 wholesale cost floor.",
+      "projectedMonthlyUnits": 4,
+      "monthlyRevenueDelta": 499.0,
+      "monthlyProfitDelta": -22.0,
+      "scenarios": {
+        "inelastic": {
+          "elasticity": -0.5,
+          "projectedUnits": 3,
+          "projectedRevenue": 2397,
+          "projectedGrossProfit": 834,
+          "revenueDelta": -300.0,
+          "profitDelta": -300.0
+        },
+        "unit_elastic": {
+          "elasticity": -1.0,
+          "projectedUnits": 3,
+          "projectedRevenue": 2397,
+          "projectedGrossProfit": 834,
+          "revenueDelta": -300.0,
+          "profitDelta": -300.0
+        },
+        "elastic": {
+          "elasticity": -1.5,
+          "projectedUnits": 4,
+          "projectedRevenue": 3196,
+          "projectedGrossProfit": 1112,
+          "revenueDelta": 499.0,
+          "profitDelta": -22.0
+        }
+      },
+      "calculation": {
+        "title": "Pricing Scenario & Sensitivity Derivation: Darjeeling First Flush Muscatel Black Tea (150g)",
+        "agent": "Smart Pricing Agent",
+        "methodology": "Deterministic Microeconomic Isoelastic Sensitivity & Cost Floor Engine",
+        "costFloorGuard": {
+          "wholesaleCost": 521,
+          "costFloor": 599,
+          "minGrossMarginPct": 15.0,
+          "status": "PASSED",
+          "derivation": "Catalog MRP: \u20b9899 | Estimated Wholesale Cost (58%): \u20b9521 | Guaranteed Cost Floor (Cost \u00d7 1.15): \u20b9599 | Recommended Price: \u20b9799 (Floor Preserved)."
+        },
+        "elasticityModel": {
+          "formula": "PED \u03b5 = (% \u0394 Quantity Demanded) / (% \u0394 Price) [Isoelastic Sensitivity]",
+          "inputs": {
+            "elasticity": -1.5,
+            "rating": 4.7,
+            "stock": 90,
+            "velocity": 0.1,
+            "runwayDays": 900
+          },
+          "derivation": "Primary scenario elasticity \u03b5 = -1.50 based on Velocity Markdown (-10% to -12%). Observed catalog sales: 3 units/30d (0.10/day). Stock runway: 900 days across 90 units.",
+          "value": -1.5
+        },
+        "projectedVolume": {
+          "formula": "Q_proj = Q_base \u00d7 [1 + (\u03b5 \u00d7 ((P_rec - P_curr) / P_curr))]",
+          "inputs": {
+            "currentMonthlyUnits": 3,
+            "currentPrice": 899.0,
+            "recommendedPrice": 799,
+            "priceDelta": -100.0,
+            "priceDeltaPercent": -11,
+            "elasticity": -1.5
+          },
+          "derivation": "3 units \u00d7 [1 + (-1.5 \u00d7 (-100 / 899))] = 3 \u00d7 1.167 = 4 units/month",
+          "value": 4
+        },
+        "breakevenAnalysis": {
+          "formula": "Q_breakeven = Baseline Profit / (P_rec - Wholesale Cost)",
+          "inputs": {
+            "baselineProfit": 1134.0,
+            "newUnitMargin": 278,
+            "breakevenUnits": 5,
+            "breakevenDeltaUnits": 2
+          },
+          "derivation": "Baseline Monthly Profit: \u20b91,134 | New Unit Gross Margin: \u20b9278 | Break-Even Volume: 5 units (+2 units vs baseline to maintain current profit).",
+          "value": 5
+        },
+        "revenueAndMarginDelta": {
+          "formula": "Net Profit Delta = (Q_proj \u00d7 Margin_new) - (Q_base \u00d7 Margin_curr)",
+          "inputs": {
+            "currentRevenue": 2697.0,
+            "projectedRevenue": 3196,
+            "currentProfit": 1134.0,
+            "projectedProfit": 1112,
+            "wholesaleCostPrice": 521,
+            "costFloor": 599
+          },
+          "derivation": "Baseline Profit = 3 \u00d7 \u20b9378 = \u20b91,134 | Projected Profit = 4 \u00d7 \u20b9278 = \u20b91,112 | Monthly Gross Margin Delta: -22.0 (Revenue Delta: +499.0)",
+          "revenueDelta": 499.0,
+          "profitDelta": -22.0
+        },
+        "sensitivityBounds": {
+          "inelastic_p05": {
+            "elasticity": -0.5,
+            "projectedUnits": 3,
+            "projectedRevenue": 2397,
+            "projectedGrossProfit": 834,
+            "revenueDelta": -300.0,
+            "profitDelta": -300.0
+          },
+          "unit_p10": {
+            "elasticity": -1.0,
+            "projectedUnits": 3,
+            "projectedRevenue": 2397,
+            "projectedGrossProfit": 834,
+            "revenueDelta": -300.0,
+            "profitDelta": -300.0
+          },
+          "elastic_p15": {
+            "elasticity": -1.5,
+            "projectedUnits": 4,
+            "projectedRevenue": 3196,
+            "projectedGrossProfit": 1112,
+            "revenueDelta": 499.0,
+            "profitDelta": -22.0
+          },
+          "profitDeltaRange": [
+            -300.0,
+            -22.0
+          ]
+        }
+      }
+    }
+  ]
+}

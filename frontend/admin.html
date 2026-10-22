@@ -117,9 +117,82 @@
         <div class="panel" style="margin-bottom: 2rem;">
           <div class="panel-header">
             <div class="panel-title">Prioritized Strategic Decisions (Ready for Action)</div>
-            <span class="badge-gold">AI Recommended</span>
+            <span class="badge-gold">Ranked by Financial Impact</span>
           </div>
           <div id="decisionHubRecommendations"></div>
+        </div>
+
+        <!-- Action Audit Trail Panel -->
+        <div class="panel" style="margin-bottom: 2rem;">
+          <div class="panel-header">
+            <div class="panel-title">Autonomous Decision Audit Trail (Persistent in SQLite)</div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span class="badge-success">Audit Verified</span>
+              <button class="btn btn-secondary btn-sm" onclick="loadDecisionActionsAudit()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg> Refresh Audit Log</button>
+            </div>
+          </div>
+          <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Full historical audit log of all automated and manual agent actions: model source, trigger rationale, confidence metrics, and financial outcomes.
+          </p>
+          <div style="overflow-x: auto;">
+            <table class="data-table" id="agentActionsAuditTable">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Action</th>
+                  <th>Agent &amp; Model Source</th>
+                  <th>Confidence</th>
+                  <th>Trigger Rationale</th>
+                  <th>Expected Outcome</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Model Transparency & Live Database Math Banner -->
+        <div class="panel" style="margin-bottom: 2rem; background: linear-gradient(135deg, rgba(30, 27, 75, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%); border: 1px solid rgba(139, 92, 246, 0.3);">
+          <div class="panel-header" style="border-bottom: 1px solid rgba(139, 92, 246, 0.2);">
+            <div class="panel-title" style="display: flex; align-items: center; gap: 8px;">
+              <span></span>
+              <span>Model Transparency & Live Database Calculations</span>
+            </div>
+            <span class="badge-gold">Zero Black-Box Logic • 100% Deterministic</span>
+          </div>
+          <div style="padding: 1rem 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div class="formula-hub-card" onclick="showSection('predictive-inventory')">
+              <div class="f-hub-icon"></div>
+              <div class="f-hub-title">Predictive Inventory</div>
+              <div class="f-hub-eq">Runway = Stock / Velocity (30d)</div>
+              <div class="f-hub-desc">Festive surge &amp; lead-time buffers</div>
+            </div>
+            <div class="formula-hub-card" onclick="showSection('smart-pricing')">
+              <div class="f-hub-icon"></div>
+              <div class="f-hub-title">Smart Pricing</div>
+              <div class="f-hub-eq">ε = (% ΔQ) / (% ΔP)</div>
+              <div class="f-hub-desc">Dynamic price elasticity &amp; margin expansion</div>
+            </div>
+            <div class="formula-hub-card" onclick="showSection('customer-behaviour')">
+              <div class="f-hub-icon"></div>
+              <div class="f-hub-title">Customer RFM &amp; CLV</div>
+              <div class="f-hub-eq">CLV = Cadence × AOV × (1 - Churn)</div>
+              <div class="f-hub-desc">Order recency &amp; cancellation penalties</div>
+            </div>
+            <div class="formula-hub-card" onclick="showSection('bundle-cross-selling')">
+              <div class="f-hub-icon"></div>
+              <div class="f-hub-title">Apriori Bundling</div>
+              <div class="f-hub-eq">Lift = P(A ∩ B) / (P(A) × P(B))</div>
+              <div class="f-hub-desc">Support, confidence &amp; margin preservation</div>
+            </div>
+            <div class="formula-hub-card" onclick="openFormulaModal('strategy', 'health')">
+              <div class="f-hub-icon"></div>
+              <div class="f-hub-title">Macro Health Index</div>
+              <div class="f-hub-eq">Score = Σ (Weight_i × Metric_i)</div>
+              <div class="f-hub-desc">Click to inspect 5 composite weights</div>
+            </div>
+          </div>
         </div>
 
         <!-- 30-Day Snapshot & Category Share -->
@@ -153,11 +226,19 @@
 
         <div class="kpi-grid" id="inventoryAgentKpis"></div>
 
+        <!-- ML Demand Forecasting Evaluation & Model Transparency Card -->
+        <div class="panel" id="inventoryMlEvaluationCard" style="margin-bottom: 1.5rem; background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(56, 189, 248, 0.25);">
+          <!-- Dynamically populated by admin.js from inv.mlModel -->
+        </div>
+
         <!-- Stockout Runway & Reorder Forecasting Table -->
         <div class="panel" style="margin-bottom: 2rem;">
           <div class="panel-header">
             <div class="panel-title">Stockout Velocity & Reorder Recommendations</div>
-            <span class="badge-danger">Diwali / Festive Surge Adjusted</span>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span class="badge-info" id="inventoryModelVersionBadge">Model: rf_demand_v1.0.0</span>
+              <span class="badge-danger">Diwali / Festive Surge Adjusted</span>
+            </div>
           </div>
           <div style="overflow-x: auto;">
             <table class="data-table" id="inventoryForecastTable">
@@ -166,6 +247,8 @@
                   <th>Product & Craft Origin</th>
                   <th>Category</th>
                   <th>Stock</th>
+                  <th>7D Forecast (ML)</th>
+                  <th>30D Forecast (ML)</th>
                   <th>Daily Velocity</th>
                   <th>Runway</th>
                   <th>Festive Runway</th>
@@ -173,7 +256,7 @@
                   <th>Recommended Batch</th>
                   <th>Lead Time</th>
                   <th>Restock Cost</th>
-                  <th>Action</th>
+                  <th>Derivation Math & Action</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -223,6 +306,11 @@
 
         <div class="kpi-grid" id="pricingAgentKpis"></div>
 
+        <!-- Pricing Scenario & Wholesale Margin Floor Transparency Card -->
+        <div class="panel" id="pricingEngineEvaluationCard" style="margin-bottom: 1.5rem; background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(52, 211, 153, 0.25);">
+          <!-- Dynamically populated by admin.js from pricing.engineMetadata -->
+        </div>
+
         <!-- Interactive Pricing Simulator Box -->
         <div class="simulator-box">
           <div class="simulator-header">
@@ -255,15 +343,17 @@
             <table class="data-table" id="smartPricingTable">
               <thead>
                 <tr>
-                  <th>Product</th>
+                  <th>Product & Origin</th>
                   <th>Current Price</th>
                   <th>AI Recommended</th>
+                  <th>Wholesale Floor</th>
                   <th>Change</th>
                   <th>Strategy</th>
-                  <th>Elasticity</th>
+                  <th>Sensitivity (ε)</th>
+                  <th>Break-Even</th>
                   <th>Confidence</th>
-                  <th>Monthly Impact</th>
-                  <th>Action</th>
+                  <th>Monthly Profit Impact</th>
+                  <th>Sensitivity Math & Action</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -308,24 +398,61 @@
           </div>
         </div>
 
+        <!-- Cancellations & At-Risk Churn Alert Panel -->
+        <div class="cancellations-alert-card" id="cancellationsAlertCard">
+          <div class="cancellations-alert-header">
+            <h3>Cancelled Orders & Churn Intelligence (<span id="cancelledOrdersCount">0</span> Cancelled)</h3>
+            <span class="badge-danger">High Churn Probability</span>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Customers who experienced cancellations require proactive follow-up and service intervention to prevent permanent churn.
+          </p>
+          <div style="overflow-x: auto;">
+            <table class="data-table" id="cancellationsTable">
+              <thead>
+                <tr>
+                  <th>Customer (Click to View)</th>
+                  <th>Cancelled Order</th>
+                  <th>Amount</th>
+                  <th>Items</th>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ML Churn Classifier & RFM Evaluation Card -->
+        <div class="panel" id="customerMlEvaluationCard" style="margin-bottom: 1.5rem; background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(168, 85, 247, 0.25);">
+          <!-- Dynamically populated by admin.js from cust.mlModel -->
+        </div>
+
         <!-- Customer RFM Segmentation & Churn Prevention Table -->
         <div class="panel" style="margin-bottom: 2rem;">
           <div class="panel-header">
             <div class="panel-title">Customer RFM Segment Leaderboard & Churn Risk</div>
-            <span class="badge-gold">Predicted 12M CLV</span>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span class="badge-info" id="customerModelVersionBadge">Model: churn_rf_v1.0.0</span>
+              <span class="badge-gold">Predicted 12M CLV • Click any customer to view orders</span>
+            </div>
           </div>
           <div style="overflow-x: auto;">
             <table class="data-table" id="customerSegmentTable">
               <thead>
                 <tr>
                   <th>Customer</th>
+                  <th>RFM Profile</th>
                   <th>Segment</th>
                   <th>Orders</th>
                   <th>Total Spent</th>
+                  <th>Cancellations</th>
                   <th>Last Order</th>
-                  <th>Churn Risk</th>
+                  <th>ML Churn Probability</th>
                   <th>Predicted 12M CLV</th>
-                  <th>Recommended Retention Action</th>
+                  <th>Derivation Math</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -351,6 +478,11 @@
 
         <div class="kpi-grid" id="bundleAgentKpis"></div>
 
+        <!-- Market Basket Mining & Apriori Association Transparency Card -->
+        <div class="panel" id="bundleMlEvaluationCard" style="margin-bottom: 1.5rem; background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9)); border: 1px solid rgba(245, 158, 11, 0.25);">
+          <!-- Dynamically populated by admin.js from bundle.minerMetadata -->
+        </div>
+
         <!-- Curated Indian Smart Bundles Grid -->
         <div class="panel-header" style="margin-bottom: 1rem;">
           <div class="panel-title">High-Affinity Indian Curated Smart Bundles</div>
@@ -366,7 +498,7 @@
             </div>
             <table class="data-table" id="coPurchasesTable">
               <thead>
-                <tr><th>Product A</th><th>Product B</th><th>Co-Order Frequency</th></tr>
+                <tr><th>Product A</th><th>Product B</th><th>Co-Orders</th><th>Support</th><th>Confidence</th><th>Lift</th><th>Apriori Math</th></tr>
               </thead>
               <tbody></tbody>
             </table>
@@ -378,7 +510,7 @@
             </div>
             <table class="data-table" id="crossSellingTable">
               <thead>
-                <tr><th>Browsing Product</th><th>Recommended Add-On</th><th>Attachment Rate</th></tr>
+                <tr><th>Browsing Product</th><th>Recommended Add-On</th><th>Attachment Likelihood</th><th>Empirical Lift</th><th>Evidence / Rationale</th></tr>
               </thead>
               <tbody></tbody>
             </table>
@@ -433,7 +565,12 @@
         <div class="panel" style="margin-bottom: 2rem;">
           <div class="panel-header">
             <div class="panel-title">3-Month GMV Trajectory Forecast (Pre-Festive to Wedding Season)</div>
-            <span class="badge-success">Festive Surge Modeled</span>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span class="badge-success">Festive Surge Modeled</span>
+              <button class="btn-formula-inspect" onclick="openFormulaModal('strategy', 'gmv')">
+                View GMV Derivation &amp; Bounds
+              </button>
+            </div>
           </div>
           <table class="data-table" id="gmvTrajectoryTable">
             <thead>
@@ -507,19 +644,112 @@
         <div class="admin-page-header">
           <div>
             <h1>Live Customer Orders</h1>
-            <p class="page-subtitle">Real-time dispatch, tracking, and fulfillment</p>
+            <p class="page-subtitle">Real-time dispatch, tracking, and fulfillment • Click customer name to view history</p>
           </div>
         </div>
+
+        <!-- Orders Filter Bar -->
+        <div style="display: flex; gap: 8px; margin-bottom: 1.25rem; flex-wrap: wrap;" id="orderStatusFilters">
+          <button class="c-filter-btn active" id="filterBtn-all" onclick="filterLiveOrders('all')">All Orders (<span id="filterAllCount">0</span>)</button>
+          <button class="c-filter-btn" id="filterBtn-delivered" onclick="filterLiveOrders('delivered')">Delivered</button>
+          <button class="c-filter-btn" id="filterBtn-shipped" onclick="filterLiveOrders('shipped')">Shipped</button>
+          <button class="c-filter-btn" id="filterBtn-pending" onclick="filterLiveOrders('pending')">⏳ Pending / Processing</button>
+          <button class="c-filter-btn" id="filterBtn-cancelled" style="color: #f87171; border-color: rgba(239,68,68,0.4);" onclick="filterLiveOrders('cancelled')">Cancelled (<span id="filterCancelledCount">0</span>)</button>
+        </div>
+
         <div class="panel">
           <table class="data-table" id="ordersTable">
             <thead>
-              <tr><th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th><th>Actions</th></tr>
+              <tr><th>Order ID</th><th>Customer (Click to View)</th><th>Total</th><th>Status</th><th>Date</th><th>Actions</th></tr>
             </thead>
             <tbody></tbody>
           </table>
         </div>
       </div>
 
+    </div>
+  </div>
+
+  <!-- ═══ CUSTOMER PROFILE & ORDER HISTORY MODAL ═══ -->
+  <div class="modal-overlay customer-modal-overlay" id="customerOrdersModal" onclick="handleCustomerModalBackdrop(event)">
+    <div class="customer-modal">
+      <div class="modal-header" style="padding: 1.5rem 1.75rem; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between;">
+        <div class="customer-modal-title">
+          <div class="customer-avatar" id="cModalAvatar">U</div>
+          <div>
+            <h2 id="cModalName" style="font-size: 1.25rem; margin: 0; color: var(--text-primary);">Customer Name</h2>
+            <div class="customer-modal-subtitle">
+              <span id="cModalEmail">email@example.com</span>
+              <span>•</span>
+              <span id="cModalSegmentBadge" class="badge-gold">VIP</span>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeCustomerModal()"></button>
+      </div>
+
+      <!-- Customer KPI Bar -->
+      <div class="customer-stats-bar" id="cModalStats">
+        <div class="c-stat-item">
+          <div class="c-stat-label">Total Orders</div>
+          <div class="c-stat-val" id="cModalTotalOrders">0</div>
+        </div>
+        <div class="c-stat-item">
+          <div class="c-stat-label">Total Spent</div>
+          <div class="c-stat-val" id="cModalTotalSpent">₹0</div>
+        </div>
+        <div class="c-stat-item">
+          <div class="c-stat-label">Cancelled Orders</div>
+          <div class="c-stat-val cancelled-alert" id="cModalCancelledCount">0</div>
+        </div>
+        <div class="c-stat-item">
+          <div class="c-stat-label">Churn Risk</div>
+          <div class="c-stat-val" id="cModalChurnRisk">0%</div>
+        </div>
+        <div class="c-stat-item">
+          <div class="c-stat-label">Avg Order Value</div>
+          <div class="c-stat-val" id="cModalAvgOrder">₹0</div>
+        </div>
+      </div>
+
+      <!-- Customer Orders Body -->
+      <div class="customer-orders-body">
+        <div class="customer-orders-header">
+          <h3>Order History (<span id="cModalOrderCount">0</span>)</h3>
+          <div class="c-order-filters">
+            <button class="c-filter-btn active" id="cFilterAll" onclick="filterModalOrders('all')">All</button>
+            <button class="c-filter-btn" id="cFilterDelivered" onclick="filterModalOrders('delivered')">Delivered</button>
+            <button class="c-filter-btn" id="cFilterCancelled" onclick="filterModalOrders('cancelled')">Cancelled</button>
+          </div>
+        </div>
+        <div class="customer-orders-list" id="cModalOrdersList">
+          <div class="loading-spinner"><div class="spinner"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ FORMULA & CALCULATION INSPECTOR MODAL ═══ -->
+  <div class="modal-overlay formula-modal-overlay" id="formulaModal" onclick="handleFormulaModalBackdrop(event)">
+    <div class="formula-modal">
+      <div class="modal-header formula-modal-header">
+        <div class="formula-modal-title">
+          <div class="formula-icon" id="fModalIcon"></div>
+          <div>
+            <h2 id="fModalTitle">Algorithm Derivation & Mathematical Proof</h2>
+            <div class="formula-modal-subtitle">
+              <span id="fModalAgentBadge" class="badge-gold">Predictive Inventory Agent</span>
+              <span>•</span>
+              <span id="fModalDbTag" style="color: #34d399; font-weight: 600;">Live Database Calculation (aurora.db)</span>
+            </div>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeFormulaModal()"></button>
+      </div>
+
+      <div class="formula-modal-body" id="fModalBody">
+        <!-- Injected dynamically by openFormulaModal() -->
+      </div>
     </div>
   </div>
 

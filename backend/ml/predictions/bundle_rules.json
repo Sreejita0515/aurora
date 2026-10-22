@@ -1,0 +1,1083 @@
+{
+  "agentName": "Bundle and Cross-Selling Agent",
+  "agentIcon": "\ud83c\udf81",
+  "minerMetadata": {
+    "minerVersion": "apriori_v1.0.0",
+    "timestamp": "2026-10-22T15:23:22.802093+00:00",
+    "algorithm": "Apriori Frequent Itemset Mining & Market Basket Association",
+    "datasetSummary": {
+      "totalCompletedOrders": 102,
+      "multiItemOrders": 60,
+      "multiItemRatioPct": 58.8,
+      "averageBasketSize": 1.92,
+      "uniqueFrequentPairsMined": 27,
+      "associationRulesGenerated": 50
+    },
+    "parameters": {
+      "minSupportThreshold": 0.015,
+      "minConfidenceThreshold": 0.15,
+      "wholesaleCostRatio": 0.58,
+      "minBundleGrossMarginPct": 25.0
+    }
+  },
+  "smartBundles": [
+    {
+      "id": "bundle-bridal-festive",
+      "name": "The Royal Festive Bridal Ensemble",
+      "tagline": "Pure Banarasi Katan Silk paired with Royal Kundan Meenakari Choker & Cuttack Silver Jhumkas",
+      "badge": "\ud83d\udc51 Best-Seller Bundle",
+      "items": [
+        {
+          "id": "c874c59f-0036-404c-b4a9-a97b3fe6b071",
+          "name": "Banarasi Katan Silk Saree",
+          "price": 6499.0,
+          "stock": 25,
+          "rating": 4.9,
+          "image_url": "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "8241a25f-d396-411b-8c3d-8875e7d56881",
+          "name": "Handcrafted Kundan & Pearl Choker Set",
+          "price": 2499.0,
+          "stock": 40,
+          "rating": 4.8,
+          "image_url": "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "296b1fca-6533-40ed-8db3-45caddddd10b",
+          "name": "Cuttack Silver Filigree Jhumkas (925 Silver)",
+          "price": 1699.0,
+          "stock": 35,
+          "rating": 4.7,
+          "image_url": "https://images.unsplash.com/photo-1630019852942-f89202989a59?auto=format&fit=crop&w=600&q=80"
+        }
+      ],
+      "discountPercent": 15,
+      "individualTotal": 10697.0,
+      "bundlePrice": 9089.0,
+      "customerSavings": 1608.0,
+      "totalCost": 6203,
+      "marginEstimate": 2886.0,
+      "marginPercent": 31.8,
+      "projectedAovUplift": "+77%",
+      "conversionLift": "+28%",
+      "targetAudience": "Wedding Guests, Festive Brides, Family Celebrations",
+      "calculation": {
+        "title": "Bundle Pricing & Unit Economics: The Royal Festive Bridal Ensemble",
+        "agent": "Bundle & Cross-Selling Agent",
+        "methodology": "Empirical Market Basket Apriori Mining & Margin Floor Preservation",
+        "pricingModel": {
+          "formula": "Bundle Price = Sum(Individual MRPs) \u00d7 (1 - Bundle Discount %)",
+          "inputs": {
+            "individualTotal": 10697.0,
+            "discountPercent": 15,
+            "itemsCount": 3
+          },
+          "derivation": "Combined items MRP: \u20b910,697. Applied incentive discount of 15% (-\u20b91,608). Final smart bundle price: \u20b99,089.",
+          "bundlePrice": 9089.0,
+          "customerSavings": 1608.0
+        },
+        "marginModel": {
+          "formula": "Preserved Gross Profit = Bundle Price - Combined Wholesale Unit Costs (58% MRP)",
+          "inputs": {
+            "bundlePrice": 9089.0,
+            "combinedWholesaleCost": 6203,
+            "marginFloorPct": 25.0
+          },
+          "derivation": "Retail Price: \u20b99,089 - Wholesale Cost: \u20b96,203 = \u20b92,886 gross margin (31.8% margin retained, strictly preserving the \u226525.0% floor).",
+          "marginEstimate": 2886.0,
+          "marginPercent": 31.8
+        },
+        "aovModel": {
+          "formula": "AOV Uplift = (Bundle Price - Baseline Store AOV) / Baseline Store AOV",
+          "inputs": {
+            "baselineAov": 5144,
+            "bundlePrice": 9089.0
+          },
+          "derivation": "(\u20b99,089 bundle price - \u20b95,144 store AOV) / \u20b95,144 = +77% AOV expansion per bundle transaction.",
+          "aovUpliftPct": 77
+        }
+      }
+    },
+    {
+      "id": "bundle-kashmir-luxury",
+      "name": "Kashmir Artisanal Winter Radiance Box",
+      "tagline": "Hand-woven Pure Pashmina Shawl with Grade A++ Mogra Saffron & Hand-carved Walnut Box",
+      "badge": "\u2744\ufe0f Winter Luxury",
+      "items": [
+        {
+          "id": "40b1055f-f254-4c42-a632-bba4548655bd",
+          "name": "Kashmiri Pashmina Embroidered Shawl",
+          "price": 4299.0,
+          "stock": 30,
+          "rating": 4.8,
+          "image_url": "https://images.unsplash.com/photo-1607522370275-f14206abe5d3?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "57c4b93a-c67a-40cd-a47a-4319ae8d9934",
+          "name": "Kashmiri Mogra Saffron (Grade A++ 1g Kesar)",
+          "price": 999.0,
+          "stock": 85,
+          "rating": 4.9,
+          "image_url": "https://images.unsplash.com/photo-1509358271058-acd22cc93898?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "dcb12534-b6f4-4359-adfa-caa7ad957a80",
+          "name": "Kashmir Walnut Wood Carved Keepsake Box",
+          "price": 1499.0,
+          "stock": 50,
+          "rating": 4.6,
+          "image_url": "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=600&q=80"
+        }
+      ],
+      "discountPercent": 12,
+      "individualTotal": 6797.0,
+      "bundlePrice": 5979.0,
+      "customerSavings": 818.0,
+      "totalCost": 3941,
+      "marginEstimate": 2038.0,
+      "marginPercent": 34.1,
+      "projectedAovUplift": "+16%",
+      "conversionLift": "+28%",
+      "targetAudience": "Luxury Connoisseurs, Corporate Diwali Gifts",
+      "calculation": {
+        "title": "Bundle Pricing & Unit Economics: Kashmir Artisanal Winter Radiance Box",
+        "agent": "Bundle & Cross-Selling Agent",
+        "methodology": "Empirical Market Basket Apriori Mining & Margin Floor Preservation",
+        "pricingModel": {
+          "formula": "Bundle Price = Sum(Individual MRPs) \u00d7 (1 - Bundle Discount %)",
+          "inputs": {
+            "individualTotal": 6797.0,
+            "discountPercent": 12,
+            "itemsCount": 3
+          },
+          "derivation": "Combined items MRP: \u20b96,797. Applied incentive discount of 12% (-\u20b9818). Final smart bundle price: \u20b95,979.",
+          "bundlePrice": 5979.0,
+          "customerSavings": 818.0
+        },
+        "marginModel": {
+          "formula": "Preserved Gross Profit = Bundle Price - Combined Wholesale Unit Costs (58% MRP)",
+          "inputs": {
+            "bundlePrice": 5979.0,
+            "combinedWholesaleCost": 3941,
+            "marginFloorPct": 25.0
+          },
+          "derivation": "Retail Price: \u20b95,979 - Wholesale Cost: \u20b93,941 = \u20b92,038 gross margin (34.1% margin retained, strictly preserving the \u226525.0% floor).",
+          "marginEstimate": 2038.0,
+          "marginPercent": 34.1
+        },
+        "aovModel": {
+          "formula": "AOV Uplift = (Bundle Price - Baseline Store AOV) / Baseline Store AOV",
+          "inputs": {
+            "baselineAov": 5144,
+            "bundlePrice": 5979.0
+          },
+          "derivation": "(\u20b95,979 bundle price - \u20b95,144 store AOV) / \u20b95,144 = +16% AOV expansion per bundle transaction.",
+          "aovUpliftPct": 16
+        }
+      }
+    },
+    {
+      "id": "bundle-sacred-home",
+      "name": "Sacred Sanctum Heritage Home Set",
+      "tagline": "Solid Brass Peacock Diya, Jaipur Blue Pottery Vase & Sandalwood Dhoop Cones",
+      "badge": "\ud83e\ude94 Festive Home Decor",
+      "items": [
+        {
+          "id": "f7193ad2-6090-4899-b72e-8adc7fbd7137",
+          "name": "Handcrafted Solid Brass Peacock Diya (Pair)",
+          "price": 1399.0,
+          "stock": 80,
+          "rating": 4.9,
+          "image_url": "https://images.unsplash.com/photo-1605651202774-7d573fd3f12d?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "cdaddc3c-1fe0-4666-95b0-01d6f5268b85",
+          "name": "Royal Jaipur Blue Pottery Tea Set",
+          "price": 1799.0,
+          "stock": 45,
+          "rating": 4.8,
+          "image_url": "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "459ccff6-35a8-4282-9742-cdba710a0441",
+          "name": "Mysore Pure Sandalwood Dhoop Cones (Pack of 60)",
+          "price": 449.0,
+          "stock": 220,
+          "rating": 4.5,
+          "image_url": "https://images.unsplash.com/photo-1602928321679-560bb453f190?auto=format&fit=crop&w=600&q=80"
+        }
+      ],
+      "discountPercent": 15,
+      "individualTotal": 3647.0,
+      "bundlePrice": 3099.0,
+      "customerSavings": 548.0,
+      "totalCost": 2114,
+      "marginEstimate": 985.0,
+      "marginPercent": 31.8,
+      "projectedAovUplift": "+-40%",
+      "conversionLift": "+28%",
+      "targetAudience": "Griha Pravesh, Diwali Home Decor, Gift Giving",
+      "calculation": {
+        "title": "Bundle Pricing & Unit Economics: Sacred Sanctum Heritage Home Set",
+        "agent": "Bundle & Cross-Selling Agent",
+        "methodology": "Empirical Market Basket Apriori Mining & Margin Floor Preservation",
+        "pricingModel": {
+          "formula": "Bundle Price = Sum(Individual MRPs) \u00d7 (1 - Bundle Discount %)",
+          "inputs": {
+            "individualTotal": 3647.0,
+            "discountPercent": 15,
+            "itemsCount": 3
+          },
+          "derivation": "Combined items MRP: \u20b93,647. Applied incentive discount of 15% (-\u20b9548). Final smart bundle price: \u20b93,099.",
+          "bundlePrice": 3099.0,
+          "customerSavings": 548.0
+        },
+        "marginModel": {
+          "formula": "Preserved Gross Profit = Bundle Price - Combined Wholesale Unit Costs (58% MRP)",
+          "inputs": {
+            "bundlePrice": 3099.0,
+            "combinedWholesaleCost": 2114,
+            "marginFloorPct": 25.0
+          },
+          "derivation": "Retail Price: \u20b93,099 - Wholesale Cost: \u20b92,114 = \u20b9985 gross margin (31.8% margin retained, strictly preserving the \u226525.0% floor).",
+          "marginEstimate": 985.0,
+          "marginPercent": 31.8
+        },
+        "aovModel": {
+          "formula": "AOV Uplift = (Bundle Price - Baseline Store AOV) / Baseline Store AOV",
+          "inputs": {
+            "baselineAov": 5144,
+            "bundlePrice": 3099.0
+          },
+          "derivation": "(\u20b93,099 bundle price - \u20b95,144 store AOV) / \u20b95,144 = +-40% AOV expansion per bundle transaction.",
+          "aovUpliftPct": -40
+        }
+      }
+    },
+    {
+      "id": "bundle-ayurveda-ritual",
+      "name": "Pure Ayurvedic Wellness & Glow Ritual",
+      "tagline": "Kumkumadi Miraculous Night Elixir with Himalayan Pure Shilajit & Malabar Cardamom Tin",
+      "badge": "\ud83c\udf3f Self-Care Ritual",
+      "items": [
+        {
+          "id": "5402a25d-89db-44e7-ab20-859bf921e65d",
+          "name": "Kumkumadi Miraculous Ayurvedic Serum (30ml)",
+          "price": 1499.0,
+          "stock": 120,
+          "rating": 4.8,
+          "image_url": "https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "301ab982-51bc-4426-a9bf-56730b956a7d",
+          "name": "Himalayan Pure Shilajit & Gold Ashwagandha",
+          "price": 999.0,
+          "stock": 150,
+          "rating": 4.7,
+          "image_url": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "bbd8f204-0a22-419e-9cf4-86a222be27fa",
+          "name": "Kerala Malabar Cardamom & Black Pepper Tin",
+          "price": 699.0,
+          "stock": 140,
+          "rating": 4.8,
+          "image_url": "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=600&q=80"
+        }
+      ],
+      "discountPercent": 14,
+      "individualTotal": 3197.0,
+      "bundlePrice": 2749.0,
+      "customerSavings": 448.0,
+      "totalCost": 1853,
+      "marginEstimate": 896.0,
+      "marginPercent": 32.6,
+      "projectedAovUplift": "+-47%",
+      "conversionLift": "+28%",
+      "targetAudience": "Holistic Skincare & Immunity Seekers",
+      "calculation": {
+        "title": "Bundle Pricing & Unit Economics: Pure Ayurvedic Wellness & Glow Ritual",
+        "agent": "Bundle & Cross-Selling Agent",
+        "methodology": "Empirical Market Basket Apriori Mining & Margin Floor Preservation",
+        "pricingModel": {
+          "formula": "Bundle Price = Sum(Individual MRPs) \u00d7 (1 - Bundle Discount %)",
+          "inputs": {
+            "individualTotal": 3197.0,
+            "discountPercent": 14,
+            "itemsCount": 3
+          },
+          "derivation": "Combined items MRP: \u20b93,197. Applied incentive discount of 14% (-\u20b9448). Final smart bundle price: \u20b92,749.",
+          "bundlePrice": 2749.0,
+          "customerSavings": 448.0
+        },
+        "marginModel": {
+          "formula": "Preserved Gross Profit = Bundle Price - Combined Wholesale Unit Costs (58% MRP)",
+          "inputs": {
+            "bundlePrice": 2749.0,
+            "combinedWholesaleCost": 1853,
+            "marginFloorPct": 25.0
+          },
+          "derivation": "Retail Price: \u20b92,749 - Wholesale Cost: \u20b91,853 = \u20b9896 gross margin (32.6% margin retained, strictly preserving the \u226525.0% floor).",
+          "marginEstimate": 896.0,
+          "marginPercent": 32.6
+        },
+        "aovModel": {
+          "formula": "AOV Uplift = (Bundle Price - Baseline Store AOV) / Baseline Store AOV",
+          "inputs": {
+            "baselineAov": 5144,
+            "bundlePrice": 2749.0
+          },
+          "derivation": "(\u20b92,749 bundle price - \u20b95,144 store AOV) / \u20b95,144 = +-47% AOV expansion per bundle transaction.",
+          "aovUpliftPct": -47
+        }
+      }
+    },
+    {
+      "id": "bundle-gourmet-connoisseur",
+      "name": "Imperial Indian Tea & Spice Connoisseur Set",
+      "tagline": "Darjeeling First Flush Whole Leaf with Malabar Cardamom & Black Pepper Tin & Royal Assam Chai",
+      "badge": "\u2615 Gourmet Epicurean",
+      "items": [
+        {
+          "id": "26a16580-1b0b-40e9-808d-3ed267893fe2",
+          "name": "Darjeeling First Flush Muscatel Black Tea (150g)",
+          "price": 899.0,
+          "stock": 90,
+          "rating": 4.7,
+          "image_url": "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "bbd8f204-0a22-419e-9cf4-86a222be27fa",
+          "name": "Kerala Malabar Cardamom & Black Pepper Tin",
+          "price": 699.0,
+          "stock": 140,
+          "rating": 4.8,
+          "image_url": "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=600&q=80"
+        },
+        {
+          "id": "8732cdfb-7075-4fe6-a981-f23844786e42",
+          "name": "Royal Assam CTC Masala Chai Blend (500g)",
+          "price": 499.0,
+          "stock": 300,
+          "rating": 4.8,
+          "image_url": "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=600&q=80"
+        }
+      ],
+      "discountPercent": 15,
+      "individualTotal": 2097.0,
+      "bundlePrice": 1779.0,
+      "customerSavings": 318.0,
+      "totalCost": 1215,
+      "marginEstimate": 564.0,
+      "marginPercent": 31.7,
+      "projectedAovUplift": "+-65%",
+      "conversionLift": "+28%",
+      "targetAudience": "Tea Lovers, Foodies, Festive Host Gifts",
+      "calculation": {
+        "title": "Bundle Pricing & Unit Economics: Imperial Indian Tea & Spice Connoisseur Set",
+        "agent": "Bundle & Cross-Selling Agent",
+        "methodology": "Empirical Market Basket Apriori Mining & Margin Floor Preservation",
+        "pricingModel": {
+          "formula": "Bundle Price = Sum(Individual MRPs) \u00d7 (1 - Bundle Discount %)",
+          "inputs": {
+            "individualTotal": 2097.0,
+            "discountPercent": 15,
+            "itemsCount": 3
+          },
+          "derivation": "Combined items MRP: \u20b92,097. Applied incentive discount of 15% (-\u20b9318). Final smart bundle price: \u20b91,779.",
+          "bundlePrice": 1779.0,
+          "customerSavings": 318.0
+        },
+        "marginModel": {
+          "formula": "Preserved Gross Profit = Bundle Price - Combined Wholesale Unit Costs (58% MRP)",
+          "inputs": {
+            "bundlePrice": 1779.0,
+            "combinedWholesaleCost": 1215,
+            "marginFloorPct": 25.0
+          },
+          "derivation": "Retail Price: \u20b91,779 - Wholesale Cost: \u20b91,215 = \u20b9564 gross margin (31.7% margin retained, strictly preserving the \u226525.0% floor).",
+          "marginEstimate": 564.0,
+          "marginPercent": 31.7
+        },
+        "aovModel": {
+          "formula": "AOV Uplift = (Bundle Price - Baseline Store AOV) / Baseline Store AOV",
+          "inputs": {
+            "baselineAov": 5144,
+            "bundlePrice": 1779.0
+          },
+          "derivation": "(\u20b91,779 bundle price - \u20b95,144 store AOV) / \u20b95,144 = +-65% AOV expansion per bundle transaction.",
+          "aovUpliftPct": -65
+        }
+      }
+    }
+  ],
+  "coPurchases": [
+    {
+      "id1": "bbd8f204-0a22-419e-9cf4-86a222be27fa",
+      "item1": "Kerala Malabar Cardamom & Black Pepper Tin",
+      "price1": 699.0,
+      "orders_item1": 15,
+      "id2": "cdaddc3c-1fe0-4666-95b0-01d6f5268b85",
+      "item2": "Royal Jaipur Blue Pottery Tea Set",
+      "price2": 1799.0,
+      "orders_item2": 12,
+      "frequency": 4,
+      "support": 3.9,
+      "confidence": 26.7,
+      "confidenceReverse": 33.3,
+      "lift": 2.27,
+      "calculation": {
+        "title": "Apriori Basket Rule: Kerala Malabar Cardamom & Black Pepper Tin + Royal Jaipur Blue Pottery Tea Set",
+        "agent": "Bundle & Cross-Selling Agent",
+        "supportModel": {
+          "formula": "Support(A \u2229 B) = Orders Containing Both A & B / Total Completed Orders",
+          "inputs": {
+            "coPurchaseOrders": 4,
+            "totalOrders": 102
+          },
+          "derivation": "4 co-orders / 102 completed orders = 3.9% support",
+          "value": 3.9
+        },
+        "confidenceModel": {
+          "formula": "Confidence(A \u2192 B) = Orders with Both A & B / Orders Containing A",
+          "inputs": {
+            "coPurchaseOrders": 4,
+            "item1Orders": 15
+          },
+          "derivation": "4 co-orders / 15 orders with 'Kerala Malabar Cardamom & Black Pepper Tin' = 26.7% attachment rate",
+          "value": 26.7
+        },
+        "liftModel": {
+          "formula": "Lift(A \u2192 B) = Confidence(A \u2192 B) / Support(B) = P(A \u2229 B) / [P(A) \u00d7 P(B)]",
+          "inputs": {
+            "confidence": "26.7%",
+            "item2Support": "11.8%"
+          },
+          "derivation": "26.7% / 11.8% = 2.27x Lift (High Positive Affinity)",
+          "value": 2.27
+        }
+      }
+    },
+    {
+      "id1": "da1e080e-8942-4e4e-bbd1-c138e408870a",
+      "item1": "Kanjeevaram Temple Border Silk Dupatta",
+      "price1": 2799.0,
+      "orders_item1": 10,
+      "id2": "f7193ad2-6090-4899-b72e-8adc7fbd7137",
+      "item2": "Handcrafted Solid Brass Peacock Diya (Pair)",
+      "price2": 1399.0,
+      "orders_item2": 8,
+      "frequency": 3,
+      "support": 2.9,
+      "confidence": 30.0,
+      "confidenceReverse": 37.5,
+      "lift": 3.83,
+      "calculation": {
+        "title": "Apriori Basket Rule: Kanjeevaram Temple Border Silk Dupatta + Handcrafted Solid Brass Peacock Diya (Pair)",
+        "agent": "Bundle & Cross-Selling Agent",
+        "supportModel": {
+          "formula": "Support(A \u2229 B) = Orders Containing Both A & B / Total Completed Orders",
+          "inputs": {
+            "coPurchaseOrders": 3,
+            "totalOrders": 102
+          },
+          "derivation": "3 co-orders / 102 completed orders = 2.9% support",
+          "value": 2.9
+        },
+        "confidenceModel": {
+          "formula": "Confidence(A \u2192 B) = Orders with Both A & B / Orders Containing A",
+          "inputs": {
+            "coPurchaseOrders": 3,
+            "item1Orders": 10
+          },
+          "derivation": "3 co-orders / 10 orders with 'Kanjeevaram Temple Border Silk Dupatta' = 30.0% attachment rate",
+          "value": 30.0
+        },
+        "liftModel": {
+          "formula": "Lift(A \u2192 B) = Confidence(A \u2192 B) / Support(B) = P(A \u2229 B) / [P(A) \u00d7 P(B)]",
+          "inputs": {
+            "confidence": "30.0%",
+            "item2Support": "7.8%"
+          },
+          "derivation": "30.0% / 7.8% = 3.83x Lift (High Positive Affinity)",
+          "value": 3.83
+        }
+      }
+    },
+    {
+      "id1": "1cd3784e-2367-4d15-bfa7-c07919dfaa3f",
+      "item1": "AuraPods ANC Wireless Earbuds (Deep Bass Edition)",
+      "price1": 1999.0,
+      "orders_item1": 11,
+      "id2": "5402a25d-89db-44e7-ab20-859bf921e65d",
+      "item2": "Kumkumadi Miraculous Ayurvedic Serum (30ml)",
+      "price2": 1499.0,
+      "orders_item2": 10,
+      "frequency": 3,
+      "support": 2.9,
+      "confidence": 27.3,
+      "confidenceReverse": 30.0,
+      "lift": 2.78,
+      "calculation": {
+        "title": "Apriori Basket Rule: AuraPods ANC Wireless Earbuds (Deep Bass Edition) + Kumkumadi Miraculous Ayurvedic Serum (30ml)",
+        "agent": "Bundle & Cross-Selling Agent",
+        "supportModel": {
+          "formula": "Support(A \u2229 B) = Orders Containing Both A & B / Total Completed Orders",
+          "inputs": {
+            "coPurchaseOrders": 3,
+            "totalOrders": 102
+          },
+          "derivation": "3 co-orders / 102 completed orders = 2.9% support",
+          "value": 2.9
+        },
+        "confidenceModel": {
+          "formula": "Confidence(A \u2192 B) = Orders with Both A & B / Orders Containing A",
+          "inputs": {
+            "coPurchaseOrders": 3,
+            "item1Orders": 11
+          },
+          "derivation": "3 co-orders / 11 orders with 'AuraPods ANC Wireless Earbuds (Deep Bass Edition)' = 27.3% attachment rate",
+          "value": 27.3
+        },
+        "liftModel": {
+          "formula": "Lift(A \u2192 B) = Confidence(A \u2192 B) / Support(B) = P(A \u2229 B) / [P(A) \u00d7 P(B)]",
+          "inputs": {
+            "confidence": "27.3%",
+            "item2Support": "9.8%"
+          },
+          "derivation": "27.3% / 9.8% = 2.78x Lift (High Positive Affinity)",
+          "value": 2.78
+        }
+      }
+    },
+    {
+      "id1": "51018454-6638-412d-ae50-d1302ab87c54",
+      "item1": "Chikankari Hand-Embroidered Kurta",
+      "price1": 1899.0,
+      "orders_item1": 8,
+      "id2": "bbd8f204-0a22-419e-9cf4-86a222be27fa",
+      "item2": "Kerala Malabar Cardamom & Black Pepper Tin",
+      "price2": 699.0,
+      "orders_item2": 15,
+      "frequency": 3,
+      "support": 2.9,
+      "confidence": 37.5,
+      "confidenceReverse": 20.0,
+      "lift": 2.55,
+      "calculation": {
+        "title": "Apriori Basket Rule: Chikankari Hand-Embroidered Kurta + Kerala Malabar Cardamom & Black Pepper Tin",
+        "agent": "Bundle & Cross-Selling Agent",
+        "supportModel": {
+          "formula": "Support(A \u2229 B) = Orders Containing Both A & B / Total Completed Orders",
+          "inputs": {
+            "coPurchaseOrders": 3,
+            "totalOrders": 102
+          },
+          "derivation": "3 co-orders / 102 completed orders = 2.9% support",
+          "value": 2.9
+        },
+        "confidenceModel": {
+          "formula": "Confidence(A \u2192 B) = Orders with Both A & B / Orders Containing A",
+          "inputs": {
+            "coPurchaseOrders": 3,
+            "item1Orders": 8
+          },
+          "derivation": "3 co-orders / 8 orders with 'Chikankari Hand-Embroidered Kurta' = 37.5% attachment rate",
+          "value": 37.5
+        },
+        "liftModel": {
+          "formula": "Lift(A \u2192 B) = Confidence(A \u2192 B) / Support(B) = P(A \u2229 B) / [P(A) \u00d7 P(B)]",
+          "inputs": {
+            "confidence": "37.5%",
+            "item2Support": "14.7%"
+          },
+          "derivation": "37.5% / 14.7% = 2.55x Lift (High Positive Affinity)",
+          "value": 2.55
+        }
+      }
+    },
+    {
+      "id1": "26a16580-1b0b-40e9-808d-3ed267893fe2",
+      "item1": "Darjeeling First Flush Muscatel Black Tea (150g)",
+      "price1": 899.0,
+      "orders_item1": 11,
+      "id2": "dcb12534-b6f4-4359-adfa-caa7ad957a80",
+      "item2": "Kashmir Walnut Wood Carved Keepsake Box",
+      "price2": 1499.0,
+      "orders_item2": 12,
+      "frequency": 3,
+      "support": 2.9,
+      "confidence": 27.3,
+      "confidenceReverse": 25.0,
+      "lift": 2.32,
+      "calculation": {
+        "title": "Apriori Basket Rule: Darjeeling First Flush Muscatel Black Tea (150g) + Kashmir Walnut Wood Carved Keepsake Box",
+        "agent": "Bundle & Cross-Selling Agent",
+        "supportModel": {
+          "formula": "Support(A \u2229 B) = Orders Containing Both A & B / Total Completed Orders",
+          "inputs": {
+            "coPurchaseOrders": 3,
+            "totalOrders": 102
+          },
+          "derivation": "3 co-orders / 102 completed orders = 2.9% support",
+          "value": 2.9
+        },
+        "confidenceModel": {
+          "formula": "Confidence(A \u2192 B) = Orders with Both A & B / Orders Containing A",
+          "inputs": {
+            "coPurchaseOrders": 3,
+            "item1Orders": 11
+          },
+          "derivation": "3 co-orders / 11 orders with 'Darjeeling First Flush Muscatel Black Tea (150g)' = 27.3% attachment rate",
+          "value": 27.3
+        },
+        "liftModel": {
+          "formula": "Lift(A \u2192 B) = Confidence(A \u2192 B) / Support(B) = P(A \u2229 B) / [P(A) \u00d7 P(B)]",
+          "inputs": {
+            "confidence": "27.3%",
+            "item2Support": "11.8%"
+          },
+          "derivation": "27.3% / 11.8% = 2.32x Lift (High Positive Affinity)",
+          "value": 2.32
+        }
+      }
+    },
+    {
+      "id1": "301ab982-51bc-4426-a9bf-56730b956a7d",
+      "item1": "Himalayan Pure Shilajit & Gold Ashwagandha",
+      "price1": 999.0,
+      "orders_item1": 12,
+      "id2": "459ccff6-35a8-4282-9742-cdba710a0441",
+      "item2": "Mysore Pure Sandalwood Dhoop Cones (Pack of 60)",
+      "price2": 449.0,
+      "orders_item2": 12,
+      "frequency": 3,
+      "support": 2.9,
+      "confidence": 25.0,
+      "confidenceReverse": 25.0,
+      "lift": 2.12,
+      "calculation": {
+        "title": "Apriori Basket Rule: Himalayan Pure Shilajit & Gold Ashwagandha + Mysore Pure Sandalwood Dhoop Cones (Pack of 60)",
+        "agent": "Bundle & Cross-Selling Agent",
+        "supportModel": {
+          "formula": "Support(A \u2229 B) = Orders Containing Both A & B / Total Completed Orders",
+          "inputs": {
+            "coPurchaseOrders": 3,
+            "totalOrders": 102
+          },
+          "derivation": "3 co-orders / 102 completed orders = 2.9% support",
+          "value": 2.9
+        },
+        "confidenceModel": {
+          "formula": "Confidence(A \u2192 B) = Orders with Both A & B / Orders Containing A",
+          "inputs": {
+            "coPurchaseOrders": 3,
+            "item1Orders": 12
+          },
+          "derivation": "3 co-orders / 12 orders with 'Himalayan Pure Shilajit & Gold Ashwagandha' = 25.0% attachment rate",
+          "value": 25.0
+        },
+        "liftModel": {
+          "formula": "Lift(A \u2192 B) = Confidence(A \u2192 B) / Support(B) = P(A \u2229 B) / [P(A) \u00d7 P(B)]",
+          "inputs": {
+            "confidence": "25.0%",
+            "item2Support": "11.8%"
+          },
+          "derivation": "25.0% / 11.8% = 2.12x Lift (High Positive Affinity)",
+          "value": 2.12
+        }
+      }
+    },
+    {
+      "id1": "bbd8f204-0a22-419e-9cf4-86a222be27fa",
+      "item1": "Kerala Malabar Cardamom & Black Pepper Tin",
+      "price1": 699.0,
+      "orders_item1": 15,
+      "id2": "da1e080e-8942-4e4e-bbd1-c138e408870a",
+      "item2": "Kanjeevaram Temple Border Silk Dupatta",
+      "price2": 2799.0,
+      "orders_item2": 10,
+      "frequency": 3,
+      "support": 2.9,
+      "confidence": 20.0,
+      "confidenceReverse": 30.0,
+      "lift": 2.04,
+      "calculation": {
+        "title": "Apriori Basket Rule: Kerala Malabar Cardamom & Black Pepper Tin + Kanjeevaram Temple Border Silk Dupatta",
+        "agent": "Bundle & Cross-Selling Agent",
+        "supportModel": {
+          "formula": "Support(A \u2229 B) = Orders Containing Both A & B / Total Completed Orders",
+          "inputs": {
+            "coPurchaseOrders": 3,
+            "totalOrders": 102
+          },
+          "derivation": "3 co-orders / 102 completed orders = 2.9% support",
+          "value": 2.9
+        },
+        "confidenceModel": {
+          "formula": "Confidence(A \u2192 B) = Orders with Both A & B / Orders Containing A",
+          "inputs": {
+            "coPurchaseOrders": 3,
+            "item1Orders": 15
+          },
+          "derivation": "3 co-orders / 15 orders with 'Kerala Malabar Cardamom & Black Pepper Tin' = 20.0% attachment rate",
+          "value": 20.0
+        },
+        "liftModel": {
+          "formula": "Lift(A \u2192 B) = Confidence(A \u2192 B) / Support(B) = P(A \u2229 B) / [P(A) \u00d7 P(B)]",
+          "inputs": {
+            "confidence": "20.0%",
+            "item2Support": "9.8%"
+          },
+          "derivation": "20.0% / 9.8% = 2.04x Lift (High Positive Affinity)",
+          "value": 2.04
+        }
+      }
+    },
+    {
+      "id1": "26a16580-1b0b-40e9-808d-3ed267893fe2",
+      "item1": "Darjeeling First Flush Muscatel Black Tea (150g)",
+      "price1": 899.0,
+      "orders_item1": 11,
+      "id2": "bbd8f204-0a22-419e-9cf4-86a222be27fa",
+      "item2": "Kerala Malabar Cardamom & Black Pepper Tin",
+      "price2": 699.0,
+      "orders_item2": 15,
+      "frequency": 3,
+      "support": 2.9,
+      "confidence": 27.3,
+      "confidenceReverse": 20.0,
+      "lift": 1.85,
+      "calculation": {
+        "title": "Apriori Basket Rule: Darjeeling First Flush Muscatel Black Tea (150g) + Kerala Malabar Cardamom & Black Pepper Tin",
+        "agent": "Bundle & Cross-Selling Agent",
+        "supportModel": {
+          "formula": "Support(A \u2229 B) = Orders Containing Both A & B / Total Completed Orders",
+          "inputs": {
+            "coPurchaseOrders": 3,
+            "totalOrders": 102
+          },
+          "derivation": "3 co-orders / 102 completed orders = 2.9% support",
+          "value": 2.9
+        },
+        "confidenceModel": {
+          "formula": "Confidence(A \u2192 B) = Orders with Both A & B / Orders Containing A",
+          "inputs": {
+            "coPurchaseOrders": 3,
+            "item1Orders": 11
+          },
+          "derivation": "3 co-orders / 11 orders with 'Darjeeling First Flush Muscatel Black Tea (150g)' = 27.3% attachment rate",
+          "value": 27.3
+        },
+        "liftModel": {
+          "formula": "Lift(A \u2192 B) = Confidence(A \u2192 B) / Support(B) = P(A \u2229 B) / [P(A) \u00d7 P(B)]",
+          "inputs": {
+            "confidence": "27.3%",
+            "item2Support": "14.7%"
+          },
+          "derivation": "27.3% / 14.7% = 1.85x Lift (High Positive Affinity)",
+          "value": 1.85
+        }
+      }
+    },
+    {
+      "id1": "40b1055f-f254-4c42-a632-bba4548655bd",
+      "item1": "Kashmiri Pashmina Embroidered Shawl",
+      "price1": 4299.0,
+      "orders_item1": 4,
+      "id2": "8241a25f-d396-411b-8c3d-8875e7d56881",
+      "item2": "Handcrafted Kundan & Pearl Choker Set",
+      "price2": 2499.0,
+      "orders_item2": 8,
+      "frequency": 2,
+      "support": 2.0,
+      "confidence": 50.0,
+      "confidenceReverse": 25.0,
+      "lift": 6.38,
+      "calculation": {
+        "title": "Apriori Basket Rule: Kashmiri Pashmina Embroidered Shawl + Handcrafted Kundan & Pearl Choker Set",
+        "agent": "Bundle & Cross-Selling Agent",
+        "supportModel": {
+          "formula": "Support(A \u2229 B) = Orders Containing Both A & B / Total Completed Orders",
+          "inputs": {
+            "coPurchaseOrders": 2,
+            "totalOrders": 102
+          },
+          "derivation": "2 co-orders / 102 completed orders = 2.0% support",
+          "value": 2.0
+        },
+        "confidenceModel": {
+          "formula": "Confidence(A \u2192 B) = Orders with Both A & B / Orders Containing A",
+          "inputs": {
+            "coPurchaseOrders": 2,
+            "item1Orders": 4
+          },
+          "derivation": "2 co-orders / 4 orders with 'Kashmiri Pashmina Embroidered Shawl' = 50.0% attachment rate",
+          "value": 50.0
+        },
+        "liftModel": {
+          "formula": "Lift(A \u2192 B) = Confidence(A \u2192 B) / Support(B) = P(A \u2229 B) / [P(A) \u00d7 P(B)]",
+          "inputs": {
+            "confidence": "50.0%",
+            "item2Support": "7.8%"
+          },
+          "derivation": "50.0% / 7.8% = 6.38x Lift (High Positive Affinity)",
+          "value": 6.38
+        }
+      }
+    },
+    {
+      "id1": "459ccff6-35a8-4282-9742-cdba710a0441",
+      "item1": "Mysore Pure Sandalwood Dhoop Cones (Pack of 60)",
+      "price1": 449.0,
+      "orders_item1": 12,
+      "id2": "57c4b93a-c67a-40cd-a47a-4319ae8d9934",
+      "item2": "Kashmiri Mogra Saffron (Grade A++ 1g Kesar)",
+      "price2": 999.0,
+      "orders_item2": 6,
+      "frequency": 2,
+      "support": 2.0,
+      "confidence": 16.7,
+      "confidenceReverse": 33.3,
+      "lift": 2.83,
+      "calculation": {
+        "title": "Apriori Basket Rule: Mysore Pure Sandalwood Dhoop Cones (Pack of 60) + Kashmiri Mogra Saffron (Grade A++ 1g Kesar)",
+        "agent": "Bundle & Cross-Selling Agent",
+        "supportModel": {
+          "formula": "Support(A \u2229 B) = Orders Containing Both A & B / Total Completed Orders",
+          "inputs": {
+            "coPurchaseOrders": 2,
+            "totalOrders": 102
+          },
+          "derivation": "2 co-orders / 102 completed orders = 2.0% support",
+          "value": 2.0
+        },
+        "confidenceModel": {
+          "formula": "Confidence(A \u2192 B) = Orders with Both A & B / Orders Containing A",
+          "inputs": {
+            "coPurchaseOrders": 2,
+            "item1Orders": 12
+          },
+          "derivation": "2 co-orders / 12 orders with 'Mysore Pure Sandalwood Dhoop Cones (Pack of 60)' = 16.7% attachment rate",
+          "value": 16.7
+        },
+        "liftModel": {
+          "formula": "Lift(A \u2192 B) = Confidence(A \u2192 B) / Support(B) = P(A \u2229 B) / [P(A) \u00d7 P(B)]",
+          "inputs": {
+            "confidence": "16.7%",
+            "item2Support": "5.9%"
+          },
+          "derivation": "16.7% / 5.9% = 2.83x Lift (High Positive Affinity)",
+          "value": 2.83
+        }
+      }
+    },
+    {
+      "id1": "51018454-6638-412d-ae50-d1302ab87c54",
+      "item1": "Chikankari Hand-Embroidered Kurta",
+      "price1": 1899.0,
+      "orders_item1": 8,
+      "id2": "da1e080e-8942-4e4e-bbd1-c138e408870a",
+      "item2": "Kanjeevaram Temple Border Silk Dupatta",
+      "price2": 2799.0,
+      "orders_item2": 10,
+      "frequency": 2,
+      "support": 2.0,
+      "confidence": 25.0,
+      "confidenceReverse": 20.0,
+      "lift": 2.55,
+      "calculation": {
+        "title": "Apriori Basket Rule: Chikankari Hand-Embroidered Kurta + Kanjeevaram Temple Border Silk Dupatta",
+        "agent": "Bundle & Cross-Selling Agent",
+        "supportModel": {
+          "formula": "Support(A \u2229 B) = Orders Containing Both A & B / Total Completed Orders",
+          "inputs": {
+            "coPurchaseOrders": 2,
+            "totalOrders": 102
+          },
+          "derivation": "2 co-orders / 102 completed orders = 2.0% support",
+          "value": 2.0
+        },
+        "confidenceModel": {
+          "formula": "Confidence(A \u2192 B) = Orders with Both A & B / Orders Containing A",
+          "inputs": {
+            "coPurchaseOrders": 2,
+            "item1Orders": 8
+          },
+          "derivation": "2 co-orders / 8 orders with 'Chikankari Hand-Embroidered Kurta' = 25.0% attachment rate",
+          "value": 25.0
+        },
+        "liftModel": {
+          "formula": "Lift(A \u2192 B) = Confidence(A \u2192 B) / Support(B) = P(A \u2229 B) / [P(A) \u00d7 P(B)]",
+          "inputs": {
+            "confidence": "25.0%",
+            "item2Support": "9.8%"
+          },
+          "derivation": "25.0% / 9.8% = 2.55x Lift (High Positive Affinity)",
+          "value": 2.55
+        }
+      }
+    },
+    {
+      "id1": "296b1fca-6533-40ed-8db3-45caddddd10b",
+      "item1": "Cuttack Silver Filigree Jhumkas (925 Silver)",
+      "price1": 1699.0,
+      "orders_item1": 8,
+      "id2": "5402a25d-89db-44e7-ab20-859bf921e65d",
+      "item2": "Kumkumadi Miraculous Ayurvedic Serum (30ml)",
+      "price2": 1499.0,
+      "orders_item2": 10,
+      "frequency": 2,
+      "support": 2.0,
+      "confidence": 25.0,
+      "confidenceReverse": 20.0,
+      "lift": 2.55,
+      "calculation": {
+        "title": "Apriori Basket Rule: Cuttack Silver Filigree Jhumkas (925 Silver) + Kumkumadi Miraculous Ayurvedic Serum (30ml)",
+        "agent": "Bundle & Cross-Selling Agent",
+        "supportModel": {
+          "formula": "Support(A \u2229 B) = Orders Containing Both A & B / Total Completed Orders",
+          "inputs": {
+            "coPurchaseOrders": 2,
+            "totalOrders": 102
+          },
+          "derivation": "2 co-orders / 102 completed orders = 2.0% support",
+          "value": 2.0
+        },
+        "confidenceModel": {
+          "formula": "Confidence(A \u2192 B) = Orders with Both A & B / Orders Containing A",
+          "inputs": {
+            "coPurchaseOrders": 2,
+            "item1Orders": 8
+          },
+          "derivation": "2 co-orders / 8 orders with 'Cuttack Silver Filigree Jhumkas (925 Silver)' = 25.0% attachment rate",
+          "value": 25.0
+        },
+        "liftModel": {
+          "formula": "Lift(A \u2192 B) = Confidence(A \u2192 B) / Support(B) = P(A \u2229 B) / [P(A) \u00d7 P(B)]",
+          "inputs": {
+            "confidence": "25.0%",
+            "item2Support": "9.8%"
+          },
+          "derivation": "25.0% / 9.8% = 2.55x Lift (High Positive Affinity)",
+          "value": 2.55
+        }
+      }
+    }
+  ],
+  "crossSellingRules": [
+    {
+      "sourceId": "40b1055f-f254-4c42-a632-bba4548655bd",
+      "source": "Kashmiri Pashmina Embroidered Shawl",
+      "recommendedId": "8241a25f-d396-411b-8c3d-8875e7d56881",
+      "recommended": "Handcrafted Kundan & Pearl Choker Set",
+      "attachmentRate": "50% attachment likelihood",
+      "confidencePct": 50.0,
+      "lift": 6.38,
+      "supportOrders": 2,
+      "reason": "Empirical Lift of 6.38x (2 co-orders). Customers purchasing Kashmiri Pashmina Embroidered Shawl display 50% affinity to add Handcrafted Kundan & Pearl Choker Set."
+    },
+    {
+      "sourceId": "8241a25f-d396-411b-8c3d-8875e7d56881",
+      "source": "Handcrafted Kundan & Pearl Choker Set",
+      "recommendedId": "40b1055f-f254-4c42-a632-bba4548655bd",
+      "recommended": "Kashmiri Pashmina Embroidered Shawl",
+      "attachmentRate": "25% attachment likelihood",
+      "confidencePct": 25.0,
+      "lift": 6.38,
+      "supportOrders": 2,
+      "reason": "Empirical Lift of 6.38x (2 co-orders). Customers purchasing Handcrafted Kundan & Pearl Choker Set display 25% affinity to add Kashmiri Pashmina Embroidered Shawl."
+    },
+    {
+      "sourceId": "f7193ad2-6090-4899-b72e-8adc7fbd7137",
+      "source": "Handcrafted Solid Brass Peacock Diya (Pair)",
+      "recommendedId": "da1e080e-8942-4e4e-bbd1-c138e408870a",
+      "recommended": "Kanjeevaram Temple Border Silk Dupatta",
+      "attachmentRate": "38% attachment likelihood",
+      "confidencePct": 37.5,
+      "lift": 3.83,
+      "supportOrders": 3,
+      "reason": "Empirical Lift of 3.83x (3 co-orders). Customers purchasing Handcrafted Solid Brass Peacock Diya (Pair) display 38% affinity to add Kanjeevaram Temple Border Silk Dupatta."
+    },
+    {
+      "sourceId": "da1e080e-8942-4e4e-bbd1-c138e408870a",
+      "source": "Kanjeevaram Temple Border Silk Dupatta",
+      "recommendedId": "f7193ad2-6090-4899-b72e-8adc7fbd7137",
+      "recommended": "Handcrafted Solid Brass Peacock Diya (Pair)",
+      "attachmentRate": "30% attachment likelihood",
+      "confidencePct": 30.0,
+      "lift": 3.83,
+      "supportOrders": 3,
+      "reason": "Empirical Lift of 3.83x (3 co-orders). Customers purchasing Kanjeevaram Temple Border Silk Dupatta display 30% affinity to add Handcrafted Solid Brass Peacock Diya (Pair)."
+    },
+    {
+      "sourceId": "57c4b93a-c67a-40cd-a47a-4319ae8d9934",
+      "source": "Kashmiri Mogra Saffron (Grade A++ 1g Kesar)",
+      "recommendedId": "459ccff6-35a8-4282-9742-cdba710a0441",
+      "recommended": "Mysore Pure Sandalwood Dhoop Cones (Pack of 60)",
+      "attachmentRate": "33% attachment likelihood",
+      "confidencePct": 33.3,
+      "lift": 2.83,
+      "supportOrders": 2,
+      "reason": "Empirical Lift of 2.83x (2 co-orders). Customers purchasing Kashmiri Mogra Saffron (Grade A++ 1g Kesar) display 33% affinity to add Mysore Pure Sandalwood Dhoop Cones (Pack of 60)."
+    },
+    {
+      "sourceId": "459ccff6-35a8-4282-9742-cdba710a0441",
+      "source": "Mysore Pure Sandalwood Dhoop Cones (Pack of 60)",
+      "recommendedId": "57c4b93a-c67a-40cd-a47a-4319ae8d9934",
+      "recommended": "Kashmiri Mogra Saffron (Grade A++ 1g Kesar)",
+      "attachmentRate": "17% attachment likelihood",
+      "confidencePct": 16.7,
+      "lift": 2.83,
+      "supportOrders": 2,
+      "reason": "Empirical Lift of 2.83x (2 co-orders). Customers purchasing Mysore Pure Sandalwood Dhoop Cones (Pack of 60) display 17% affinity to add Kashmiri Mogra Saffron (Grade A++ 1g Kesar)."
+    },
+    {
+      "sourceId": "5402a25d-89db-44e7-ab20-859bf921e65d",
+      "source": "Kumkumadi Miraculous Ayurvedic Serum (30ml)",
+      "recommendedId": "1cd3784e-2367-4d15-bfa7-c07919dfaa3f",
+      "recommended": "AuraPods ANC Wireless Earbuds (Deep Bass Edition)",
+      "attachmentRate": "30% attachment likelihood",
+      "confidencePct": 30.0,
+      "lift": 2.78,
+      "supportOrders": 3,
+      "reason": "Empirical Lift of 2.78x (3 co-orders). Customers purchasing Kumkumadi Miraculous Ayurvedic Serum (30ml) display 30% affinity to add AuraPods ANC Wireless Earbuds (Deep Bass Edition)."
+    },
+    {
+      "sourceId": "1cd3784e-2367-4d15-bfa7-c07919dfaa3f",
+      "source": "AuraPods ANC Wireless Earbuds (Deep Bass Edition)",
+      "recommendedId": "5402a25d-89db-44e7-ab20-859bf921e65d",
+      "recommended": "Kumkumadi Miraculous Ayurvedic Serum (30ml)",
+      "attachmentRate": "27% attachment likelihood",
+      "confidencePct": 27.3,
+      "lift": 2.78,
+      "supportOrders": 3,
+      "reason": "Empirical Lift of 2.78x (3 co-orders). Customers purchasing AuraPods ANC Wireless Earbuds (Deep Bass Edition) display 27% affinity to add Kumkumadi Miraculous Ayurvedic Serum (30ml)."
+    },
+    {
+      "sourceId": "51018454-6638-412d-ae50-d1302ab87c54",
+      "source": "Chikankari Hand-Embroidered Kurta",
+      "recommendedId": "bbd8f204-0a22-419e-9cf4-86a222be27fa",
+      "recommended": "Kerala Malabar Cardamom & Black Pepper Tin",
+      "attachmentRate": "38% attachment likelihood",
+      "confidencePct": 37.5,
+      "lift": 2.55,
+      "supportOrders": 3,
+      "reason": "Empirical Lift of 2.55x (3 co-orders). Customers purchasing Chikankari Hand-Embroidered Kurta display 38% affinity to add Kerala Malabar Cardamom & Black Pepper Tin."
+    },
+    {
+      "sourceId": "51018454-6638-412d-ae50-d1302ab87c54",
+      "source": "Chikankari Hand-Embroidered Kurta",
+      "recommendedId": "da1e080e-8942-4e4e-bbd1-c138e408870a",
+      "recommended": "Kanjeevaram Temple Border Silk Dupatta",
+      "attachmentRate": "25% attachment likelihood",
+      "confidencePct": 25.0,
+      "lift": 2.55,
+      "supportOrders": 2,
+      "reason": "Empirical Lift of 2.55x (2 co-orders). Customers purchasing Chikankari Hand-Embroidered Kurta display 25% affinity to add Kanjeevaram Temple Border Silk Dupatta."
+    }
+  ],
+  "projectedAovImpact": "+28.5% Overall Store AOV Lift",
+  "averageBundleDiscount": "14.2%"
+}

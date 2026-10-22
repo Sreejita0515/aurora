@@ -1,0 +1,463 @@
+{
+  "metadata": {
+    "algorithm": "RandomForestClassifier (scikit-learn)",
+    "version": "churn_rf_v1.0.0",
+    "trained_at": "2026-10-22T11:54:24.121413+00:00",
+    "sample_size": {
+      "total_observations": 54,
+      "unique_active_customers": 9,
+      "total_registered_customers": 11,
+      "churned_instances": 9,
+      "retained_instances": 45,
+      "churn_rate": 0.1667,
+      "disclosure": "Model trained on longitudinal customer-period panel data (90-day SQLite history). Small cohort size (11 registered customer accounts) is explicitly documented."
+    },
+    "metrics": {
+      "baseline_accuracy": 0.8333,
+      "cv_accuracy_mean": 0.6691,
+      "cv_precision_mean": 0.2533,
+      "cv_recall_mean": 0.6,
+      "cv_f1_mean": 0.3514,
+      "cv_roc_auc_mean": 0.7667,
+      "cv_folds": 5
+    },
+    "top_features": [
+      {
+        "feature": "total_spend",
+        "importance": 0.3381
+      },
+      {
+        "feature": "aov",
+        "importance": 0.1663
+      },
+      {
+        "feature": "recency_days",
+        "importance": 0.1305
+      },
+      {
+        "feature": "avg_days_between_orders",
+        "importance": 0.1255
+      },
+      {
+        "feature": "spend_momentum_30d",
+        "importance": 0.1238
+      },
+      {
+        "feature": "days_as_customer",
+        "importance": 0.0621
+      },
+      {
+        "feature": "order_count",
+        "importance": 0.0537
+      },
+      {
+        "feature": "cancellations_count",
+        "importance": 0.0
+      },
+      {
+        "feature": "cancellation_rate",
+        "importance": 0.0
+      }
+    ]
+  },
+  "predictions": {
+    "8bcbe73c-169c-4b80-a6e0-30531727c17b": {
+      "id": "8bcbe73c-169c-4b80-a6e0-30531727c17b",
+      "name": "Sarah Johnson",
+      "email": "sarah@example.com",
+      "total_orders": 7,
+      "total_spent": 37079,
+      "avg_order": 5297,
+      "cancelled_count": 0,
+      "cancelled_amount": 0,
+      "has_cancellations": false,
+      "days_since_last_order": 0,
+      "last_order_formatted": "22 Oct",
+      "churn_probability": 0.3762,
+      "churn_risk_percent": 38,
+      "segment": "LOYALIST",
+      "segment_label": "\ud83d\udc8e Loyal Regular",
+      "segment_badge": "badge-success",
+      "predicted_12m_clv": 106866,
+      "retention_action": "Reward with \u20b9500 store credit on their next handcrafted purchase.",
+      "is_fallback": false,
+      "fallback_reason": null,
+      "rfm": {
+        "r_score": 5,
+        "f_score": 3,
+        "m_score": 5,
+        "rfm_composite": "535"
+      },
+      "features": {
+        "recency_days": 0,
+        "frequency": 7,
+        "monetary": 37079.0,
+        "aov": 5297.0,
+        "cancellations": 0,
+        "days_as_customer": 79.0,
+        "avg_days_between_orders": 13.2,
+        "spend_momentum_30d": 0.2371
+      }
+    },
+    "69f5351b-7062-4649-989c-6528c9a0a175": {
+      "id": "69f5351b-7062-4649-989c-6528c9a0a175",
+      "name": "Mike Chen",
+      "email": "mike@example.com",
+      "total_orders": 24,
+      "total_spent": 125283,
+      "avg_order": 5447,
+      "cancelled_count": 1,
+      "cancelled_amount": 11497,
+      "has_cancellations": true,
+      "days_since_last_order": 0,
+      "last_order_formatted": "22 Oct",
+      "churn_probability": 0.0602,
+      "churn_risk_percent": 6,
+      "segment": "CHAMPION_VIP",
+      "segment_label": "\ud83d\udc51 Royal Champion (VIP)",
+      "segment_badge": "badge-gold",
+      "predicted_12m_clv": 553642,
+      "retention_action": "\u26a0\ufe0f Cancelled 1 order(s) (\u20b911,497). Priority: Dispatch customer care check-in & replacement offer.",
+      "is_fallback": false,
+      "fallback_reason": null,
+      "rfm": {
+        "r_score": 5,
+        "f_score": 5,
+        "m_score": 5,
+        "rfm_composite": "555"
+      },
+      "features": {
+        "recency_days": 0,
+        "frequency": 24,
+        "monetary": 125283.0,
+        "aov": 5447.09,
+        "cancellations": 1,
+        "days_as_customer": 81.0,
+        "avg_days_between_orders": 3.5,
+        "spend_momentum_30d": 0.3678
+      }
+    },
+    "4b3c2517-2795-4ab7-a478-1a3edd0219b5": {
+      "id": "4b3c2517-2795-4ab7-a478-1a3edd0219b5",
+      "name": "Emily Davis",
+      "email": "emily@example.com",
+      "total_orders": 10,
+      "total_spent": 35777,
+      "avg_order": 3578,
+      "cancelled_count": 0,
+      "cancelled_amount": 0,
+      "has_cancellations": false,
+      "days_since_last_order": 17,
+      "last_order_formatted": "05 Oct",
+      "churn_probability": 0.6903,
+      "churn_risk_percent": 69,
+      "segment": "LOYALIST",
+      "segment_label": "\ud83d\udc8e Loyal Regular",
+      "segment_badge": "badge-success",
+      "predicted_12m_clv": 47024,
+      "retention_action": "Reward with \u20b9500 store credit on their next handcrafted purchase.",
+      "is_fallback": false,
+      "fallback_reason": null,
+      "rfm": {
+        "r_score": 3,
+        "f_score": 4,
+        "m_score": 5,
+        "rfm_composite": "345"
+      },
+      "features": {
+        "recency_days": 17.0,
+        "frequency": 10,
+        "monetary": 35777.0,
+        "aov": 3577.7,
+        "cancellations": 0,
+        "days_as_customer": 86.0,
+        "avg_days_between_orders": 9.6,
+        "spend_momentum_30d": 0.3184
+      }
+    },
+    "fb5c2cec-dd0c-4e69-bfeb-19d9a57ec814": {
+      "id": "fb5c2cec-dd0c-4e69-bfeb-19d9a57ec814",
+      "name": "James Wilson",
+      "email": "james@example.com",
+      "total_orders": 13,
+      "total_spent": 56317,
+      "avg_order": 4332,
+      "cancelled_count": 0,
+      "cancelled_amount": 0,
+      "has_cancellations": false,
+      "days_since_last_order": 9,
+      "last_order_formatted": "13 Oct",
+      "churn_probability": 0.1345,
+      "churn_risk_percent": 13,
+      "segment": "CHAMPION_VIP",
+      "segment_label": "\ud83d\udc51 Royal Champion (VIP)",
+      "segment_badge": "badge-gold",
+      "predicted_12m_clv": 214343,
+      "retention_action": "Provide concierge Diwali gifting preview & bespoke WhatsApp relationship manager.",
+      "is_fallback": false,
+      "fallback_reason": null,
+      "rfm": {
+        "r_score": 4,
+        "f_score": 4,
+        "m_score": 5,
+        "rfm_composite": "445"
+      },
+      "features": {
+        "recency_days": 9.0,
+        "frequency": 13,
+        "monetary": 56317.0,
+        "aov": 4332.08,
+        "cancellations": 0,
+        "days_as_customer": 83.0,
+        "avg_days_between_orders": 6.9,
+        "spend_momentum_30d": 0.1259
+      }
+    },
+    "fc4a473c-126b-44ca-9d6f-69208324008d": {
+      "id": "fc4a473c-126b-44ca-9d6f-69208324008d",
+      "name": "Priya Patel",
+      "email": "priya@example.com",
+      "total_orders": 4,
+      "total_spent": 15189,
+      "avg_order": 5063,
+      "cancelled_count": 1,
+      "cancelled_amount": 3598,
+      "has_cancellations": true,
+      "days_since_last_order": 1,
+      "last_order_formatted": "21 Oct",
+      "churn_probability": 0.4977,
+      "churn_risk_percent": 50,
+      "segment": "HIBERNATING",
+      "segment_label": "\ud83d\udca4 Hibernating / Inactive",
+      "segment_badge": "badge-neutral",
+      "predicted_12m_clv": 53810,
+      "retention_action": "\u26a0\ufe0f Cancelled 1 order(s) (\u20b93,598). Priority: Dispatch customer care check-in & replacement offer.",
+      "is_fallback": false,
+      "fallback_reason": null,
+      "rfm": {
+        "r_score": 5,
+        "f_score": 2,
+        "m_score": 4,
+        "rfm_composite": "524"
+      },
+      "features": {
+        "recency_days": 1.0,
+        "frequency": 4,
+        "monetary": 15189.0,
+        "aov": 5063.0,
+        "cancellations": 1,
+        "days_as_customer": 69.0,
+        "avg_days_between_orders": 23.0,
+        "spend_momentum_30d": 0.3617
+      }
+    },
+    "059f9f33-a5cb-4f23-a5e4-fe1169314327": {
+      "id": "059f9f33-a5cb-4f23-a5e4-fe1169314327",
+      "name": "Alex Turner",
+      "email": "alex@example.com",
+      "total_orders": 12,
+      "total_spent": 42770,
+      "avg_order": 3564,
+      "cancelled_count": 0,
+      "cancelled_amount": 0,
+      "has_cancellations": false,
+      "days_since_last_order": 4,
+      "last_order_formatted": "18 Oct",
+      "churn_probability": 0.2923,
+      "churn_risk_percent": 29,
+      "segment": "CHAMPION_VIP",
+      "segment_label": "\ud83d\udc51 Royal Champion (VIP)",
+      "segment_badge": "badge-gold",
+      "predicted_12m_clv": 133116,
+      "retention_action": "Provide concierge Diwali gifting preview & bespoke WhatsApp relationship manager.",
+      "is_fallback": false,
+      "fallback_reason": null,
+      "rfm": {
+        "r_score": 5,
+        "f_score": 4,
+        "m_score": 5,
+        "rfm_composite": "545"
+      },
+      "features": {
+        "recency_days": 4.0,
+        "frequency": 12,
+        "monetary": 42770.0,
+        "aov": 3564.17,
+        "cancellations": 0,
+        "days_as_customer": 83.0,
+        "avg_days_between_orders": 7.5,
+        "spend_momentum_30d": 0.3902
+      }
+    },
+    "586a33f2-0de3-4e7f-93d6-89eb4e5910e5": {
+      "id": "586a33f2-0de3-4e7f-93d6-89eb4e5910e5",
+      "name": "Lisa Wang",
+      "email": "lisa@example.com",
+      "total_orders": 9,
+      "total_spent": 60224,
+      "avg_order": 7528,
+      "cancelled_count": 1,
+      "cancelled_amount": 2998,
+      "has_cancellations": true,
+      "days_since_last_order": 12,
+      "last_order_formatted": "10 Oct",
+      "churn_probability": 0.1081,
+      "churn_risk_percent": 11,
+      "segment": "LOYALIST",
+      "segment_label": "\ud83d\udc8e Loyal Regular",
+      "segment_badge": "badge-success",
+      "predicted_12m_clv": 250649,
+      "retention_action": "\u26a0\ufe0f Cancelled 1 order(s) (\u20b92,998). Priority: Dispatch customer care check-in & replacement offer.",
+      "is_fallback": false,
+      "fallback_reason": null,
+      "rfm": {
+        "r_score": 4,
+        "f_score": 3,
+        "m_score": 5,
+        "rfm_composite": "435"
+      },
+      "features": {
+        "recency_days": 12.0,
+        "frequency": 9,
+        "monetary": 60224.0,
+        "aov": 7528.0,
+        "cancellations": 1,
+        "days_as_customer": 88.0,
+        "avg_days_between_orders": 11.0,
+        "spend_momentum_30d": 0.078
+      }
+    },
+    "7561e57f-2d98-4839-81b7-c33c37c5855f": {
+      "id": "7561e57f-2d98-4839-81b7-c33c37c5855f",
+      "name": "customer",
+      "email": "customer@aurora.com",
+      "total_orders": 16,
+      "total_spent": 101298,
+      "avg_order": 6331,
+      "cancelled_count": 0,
+      "cancelled_amount": 0,
+      "has_cancellations": false,
+      "days_since_last_order": 4,
+      "last_order_formatted": "18 Oct",
+      "churn_probability": 0.0727,
+      "churn_risk_percent": 7,
+      "segment": "CHAMPION_VIP",
+      "segment_label": "\ud83d\udc51 Royal Champion (VIP)",
+      "segment_badge": "badge-gold",
+      "predicted_12m_clv": 385242,
+      "retention_action": "Provide concierge Diwali gifting preview & bespoke WhatsApp relationship manager.",
+      "is_fallback": false,
+      "fallback_reason": null,
+      "rfm": {
+        "r_score": 5,
+        "f_score": 5,
+        "m_score": 5,
+        "rfm_composite": "555"
+      },
+      "features": {
+        "recency_days": 4.0,
+        "frequency": 16,
+        "monetary": 101298.0,
+        "aov": 6331.12,
+        "cancellations": 0,
+        "days_as_customer": 89.0,
+        "avg_days_between_orders": 5.9,
+        "spend_momentum_30d": 0.2846
+      }
+    },
+    "62a522b0-9c93-4f75-a9a1-be0fb8a1bffd": {
+      "id": "62a522b0-9c93-4f75-a9a1-be0fb8a1bffd",
+      "name": "Test Admin",
+      "email": "testadmin@example.com",
+      "total_orders": 10,
+      "total_spent": 50771,
+      "avg_order": 5077,
+      "cancelled_count": 0,
+      "cancelled_amount": 0,
+      "has_cancellations": false,
+      "days_since_last_order": 1,
+      "last_order_formatted": "21 Oct",
+      "churn_probability": 0.1232,
+      "churn_risk_percent": 12,
+      "segment": "CHAMPION_VIP",
+      "segment_label": "\ud83d\udc51 Royal Champion (VIP)",
+      "segment_badge": "badge-gold",
+      "predicted_12m_clv": 208302,
+      "retention_action": "Provide concierge Diwali gifting preview & bespoke WhatsApp relationship manager.",
+      "is_fallback": false,
+      "fallback_reason": null,
+      "rfm": {
+        "r_score": 5,
+        "f_score": 4,
+        "m_score": 5,
+        "rfm_composite": "545"
+      },
+      "features": {
+        "recency_days": 1.0,
+        "frequency": 10,
+        "monetary": 50771.0,
+        "aov": 5077.1,
+        "cancellations": 0,
+        "days_as_customer": 78.0,
+        "avg_days_between_orders": 8.7,
+        "spend_momentum_30d": 0.1181
+      }
+    },
+    "2812618b-513a-465f-b078-99da5f945fe3": {
+      "id": "2812618b-513a-465f-b078-99da5f945fe3",
+      "name": "Debraj",
+      "email": "ddebraj496@gmail.com",
+      "total_orders": 0,
+      "total_spent": 0,
+      "avg_order": 0,
+      "cancelled_count": 0,
+      "cancelled_amount": 0,
+      "has_cancellations": false,
+      "days_since_last_order": 999,
+      "last_order_formatted": "Never",
+      "churn_probability": 0.5,
+      "churn_risk_percent": 50,
+      "segment": "NEW_POTENTIAL",
+      "segment_label": "\ud83c\udfaf New Prospect (Zero Orders)",
+      "segment_badge": "badge-neutral",
+      "predicted_12m_clv": 2500,
+      "retention_action": "Send first-purchase welcome incentive (\u20b9250 off on handcrafted collection).",
+      "is_fallback": true,
+      "fallback_reason": "No historical transactions found for this user account.",
+      "rfm": {
+        "r_score": 1,
+        "f_score": 1,
+        "m_score": 1,
+        "rfm_composite": "111"
+      }
+    },
+    "1156b7e5-ce29-4b19-a04c-bfeb546ecb5d": {
+      "id": "1156b7e5-ce29-4b19-a04c-bfeb546ecb5d",
+      "name": "Shopper Test",
+      "email": "shopper_test_2026@aurora.com",
+      "total_orders": 0,
+      "total_spent": 0,
+      "avg_order": 0,
+      "cancelled_count": 0,
+      "cancelled_amount": 0,
+      "has_cancellations": false,
+      "days_since_last_order": 999,
+      "last_order_formatted": "Never",
+      "churn_probability": 0.5,
+      "churn_risk_percent": 50,
+      "segment": "NEW_POTENTIAL",
+      "segment_label": "\ud83c\udfaf New Prospect (Zero Orders)",
+      "segment_badge": "badge-neutral",
+      "predicted_12m_clv": 2500,
+      "retention_action": "Send first-purchase welcome incentive (\u20b9250 off on handcrafted collection).",
+      "is_fallback": true,
+      "fallback_reason": "No historical transactions found for this user account.",
+      "rfm": {
+        "r_score": 1,
+        "f_score": 1,
+        "m_score": 1,
+        "rfm_composite": "111"
+      }
+    }
+  }
+}
