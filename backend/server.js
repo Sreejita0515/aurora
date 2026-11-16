@@ -51,7 +51,11 @@ app.use(express.json());
 app.use(verifyFirebaseToken);
 app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
-(async () => {
+// The API routes below are registered only after the database has loaded.
+// Hold requests until then: on Vercel a request arrives right as the function cold-starts.
+app.use((req, res, next) => { ready.then(() => next(), next); });
+
+const ready = (async () => {
   await initializeDatabase();
   const db = await getDb();
 
@@ -842,17 +846,23 @@ app.use(express.static(path.join(__dirname, '..', 'frontend')));
   app.get('/login', (req, res) => res.sendFile(path.join(__dirname, '..', 'frontend', 'login.html')));
   app.get('/admin', (req, res) => res.sendFile(path.join(__dirname, '..', 'frontend', 'admin.html')));
 
-  app.listen(PORT, () => {
-    console.log('\n   ╔══════════════════════════════════════════════════╗');
-    console.log('   ║           🌌 Aurora Shopping Platform            ║');
-    console.log('   ║──────────────────────────────────────────────────║');
-    console.log(`   ║  Server running on http://localhost:${PORT}         ║`);
-    console.log(`   ║  Shop:  http://localhost:${PORT}/                   ║`);
-    console.log(`   ║  Login: http://localhost:${PORT}/login               ║`);
-    console.log(`   ║  Admin: http://localhost:${PORT}/admin               ║`);
-    console.log('   ║──────────────────────────────────────────────────║');
-    console.log('   ║  🔥 Firebase Authentication: ENABLED            ║');
-    console.log('   ║  Project: aurora-ee3eb                           ║');
-    console.log('   ╚══════════════════════════════════════════════════╝');
-  });
+  // Start a server only when run directly (`node server.js`).
+  // On Vercel, api/index.js imports the app instead.
+  if (require.main === module) {
+    app.listen(PORT, () => {
+      console.log('\n   ╔══════════════════════════════════════════════════╗');
+      console.log('   ║           🌌 Aurora Shopping Platform            ║');
+      console.log('   ║──────────────────────────────────────────────────║');
+      console.log(`   ║  Server running on http://localhost:${PORT}         ║`);
+      console.log(`   ║  Shop:  http://localhost:${PORT}/                   ║`);
+      console.log(`   ║  Login: http://localhost:${PORT}/login               ║`);
+      console.log(`   ║  Admin: http://localhost:${PORT}/admin               ║`);
+      console.log('   ║──────────────────────────────────────────────────║');
+      console.log('   ║  🔥 Firebase Authentication: ENABLED            ║');
+      console.log('   ║  Project: aurora-ee3eb                           ║');
+      console.log('   ╚══════════════════════════════════════════════════╝');
+    });
+  }
 })();
+
+module.exports = app;

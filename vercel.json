@@ -1,0 +1,15 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": null,
+  "installCommand": "cd backend && npm install",
+  "outputDirectory": "frontend",
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api" }
+  ],
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "backend/{ml/predictions/*.json,node_modules/sql.js/dist/sql-wasm.wasm}"
+    }
+  }
+}

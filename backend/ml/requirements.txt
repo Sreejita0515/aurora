@@ -1,0 +1,7 @@
+# Python packages for training the ML models (versions used for the committed predictions).
+# Install:  pip install -r backend/ml/requirements.txt
+# Retrain:  cd backend/ml && python train_demand.py && python train_churn.py && python run_pricing.py && python run_apriori.py
+numpy==2.3.1
+pandas==3.1.1
+scikit-learn==1.9.1
+joblib==1.6.0
