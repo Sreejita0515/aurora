@@ -20,6 +20,12 @@ admin.initializeApp({
 // Secret code required to register as an admin (keep this private!)
 const ADMIN_SECRET_CODE = 'AURORA-ADMIN-2026';
 
+// Emails that are always admins, from the ADMIN_EMAILS environment variable (comma-separated).
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '')
+  .split(',')
+  .map(e => e.trim().toLowerCase())
+  .filter(Boolean);
+
 // Cryptographic HMAC token generator for stateless, cold-start-proof admin verification
 function generateAdminToken(uid, email) {
   const safeEmail = (email || '').toLowerCase().trim();
@@ -91,7 +97,8 @@ const ready = (async () => {
     const { uid, email = '' } = firebaseUser;
     const name = firebaseUser.name || firebaseUser.display_name || (email ? email.split('@')[0] : 'User');
     const safeEmail = email || `${uid}@aurora.user`;
-    const isAdminEmail = safeEmail.toLowerCase() === 'admin@aurora.com'
+    const isAdminEmail = ADMIN_EMAILS.includes(safeEmail.toLowerCase())
+      || safeEmail.toLowerCase() === 'admin@aurora.com'
       || safeEmail.toLowerCase() === 'masteradmin@aurora.com'
       || safeEmail.toLowerCase() === 'sreejitag04@gmail.com'
       || safeEmail.toLowerCase().includes('admin');
