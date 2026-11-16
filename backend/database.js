@@ -246,8 +246,8 @@ function seedAgentActions() {
       details: JSON.stringify({ algorithm: 'RandomForestRegressor', panelSize: '1,800 observations', testSplit: 'Chronological held-out' }),
       trigger_reason: 'Balanced 90-day daily panel historical demand ingestion',
       model_source: 'rf_demand_v1.0.0',
-      confidence: 'RMSE: 2.76 units (31% gain vs baseline)',
-      expected_impact: 'Eliminates festive stockouts across 4 critical artisan lines',
+      confidence: '30-day RMSE: 3.48 units (40% gain vs baseline)',
+      expected_impact: '7- and 30-day demand forecasts with reorder points for all 20 SKUs',
       status: 'ACTIVE'
     },
     {
@@ -255,13 +255,13 @@ function seedAgentActions() {
       action_type: 'CLASSIFIER_TRAINING',
       agent_name: 'Customer Behaviour Agent',
       entity_id: 'cust-rfm-cohort',
-      entity_name: '54 Customer-Period Cohorts',
+      entity_name: '42 Customer-Period Cohorts',
       action_title: 'Trained Customer Churn Classifier with Stratified CV',
-      details: JSON.stringify({ algorithm: 'RandomForestClassifier', cvFolds: 5, roc_auc: 0.767, recall: 0.60 }),
+      details: JSON.stringify({ algorithm: 'RandomForestClassifier', cvFolds: 3, roc_auc: 0.526, recall: 0.333 }),
       trigger_reason: 'Automated bi-weekly RFM migration and churn risk detection',
       model_source: 'churn_rf_v1.0.0',
-      confidence: 'ROC-AUC: 0.77 (Precision: 25.3%, Recall: 60.0%)',
-      expected_impact: 'Protects ₹3,70,000 in 12-Month predicted CLV',
+      confidence: 'ROC-AUC: 0.53 (Precision: 11.1%, Recall: 33.3%)',
+      expected_impact: 'Scores 7 customers covering ₹25,75,318 in 12-Month predicted CLV',
       status: 'ACTIVE'
     },
     {
@@ -275,7 +275,7 @@ function seedAgentActions() {
       trigger_reason: 'Audit revealed 0.0% historical price variance across 105 orders',
       model_source: 'pricing_engine_v1.0.0',
       confidence: '100% Margin Floor Guaranteed',
-      expected_impact: '+₹48,000 / month gross margin from scarcity surge pricing',
+      expected_impact: '+₹14,850 / month projected profit from 4 surge and 3 markdown recommendations',
       status: 'ACTIVE'
     },
     {
@@ -283,12 +283,12 @@ function seedAgentActions() {
       action_type: 'APRIORI_MINING',
       agent_name: 'Bundle & Cross-Selling Agent',
       entity_id: 'apriori-rules',
-      entity_name: '102 Completed Orders (60 Multi-Item Baskets)',
-      action_title: 'Mined 27 Frequent Itemsets & 50 Cross-Selling Rules',
+      entity_name: '110 Completed Orders (72 Multi-Item Baskets)',
+      action_title: 'Mined 30 Frequent Pairs & 51 Cross-Selling Rules',
       details: JSON.stringify({ minSupport: '1.5%', minConfidence: '15%', minBundleMargin: '25.0%' }),
       trigger_reason: 'Market basket association analysis on real multi-item transactions',
       model_source: 'apriori_v1.0.0',
-      confidence: 'Lift: up to 6.38x (Confidence: up to 50%)',
+      confidence: 'Lift: up to 3.75x (Confidence: up to 40%)',
       expected_impact: '+28.5% Projected Store AOV Lift via 5 curated bundles',
       status: 'ACTIVE'
     }
@@ -309,8 +309,24 @@ function seedAgentActions() {
   }
 }
 
+// Repeatable random numbers (mulberry32). Every fresh database gets the same sample
+// orders, so the ML predictions in ml/predictions/ match it (on Vercel and on every machine).
+function createSeededRandom(seed) {
+  let a = seed >>> 0;
+  return function random() {
+    a = (a + 0x6D2B79F5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// Products and seed users have fixed IDs (not random UUIDs) because the ML prediction
+// files are keyed by these IDs. If you change an ID, retrain the models (see backend/ml).
 function seedDatabase() {
   const now = new Date();
+  const random = createSeededRandom(123); // chosen for a realistic mix of order statuses
 
   // Clear existing catalog data for clean Indian store seeding
   dbRun('DELETE FROM reviews');
@@ -326,14 +342,14 @@ function seedDatabase() {
   const userHash = bcrypt.hashSync('user123', 10);
 
   let users = [
-    { id: uuidv4(), name: 'Admin', email: 'admin@aurora.com', password_hash: adminHash, role: 'admin' },
-    { id: uuidv4(), name: 'Priya Patel', email: 'priya@example.com', password_hash: userHash, role: 'customer' },
-    { id: uuidv4(), name: 'Rohan Mukherjee', email: 'rohan@example.com', password_hash: userHash, role: 'customer' },
-    { id: uuidv4(), name: 'Ananya Iyer', email: 'ananya@example.com', password_hash: userHash, role: 'customer' },
-    { id: uuidv4(), name: 'Aarav Sharma', email: 'aarav@example.com', password_hash: userHash, role: 'customer' },
-    { id: uuidv4(), name: 'Sneha Nair', email: 'sneha@example.com', password_hash: userHash, role: 'customer' },
-    { id: uuidv4(), name: 'Vikram Malhotra', email: 'vikram@example.com', password_hash: userHash, role: 'customer' },
-    { id: uuidv4(), name: 'Arjun Mehta', email: 'arjun@example.com', password_hash: userHash, role: 'customer' },
+    { id: 'user-admin', name: 'Admin', email: 'admin@aurora.com', password_hash: adminHash, role: 'admin' },
+    { id: 'user-priya', name: 'Priya Patel', email: 'priya@example.com', password_hash: userHash, role: 'customer' },
+    { id: 'user-rohan', name: 'Rohan Mukherjee', email: 'rohan@example.com', password_hash: userHash, role: 'customer' },
+    { id: 'user-ananya', name: 'Ananya Iyer', email: 'ananya@example.com', password_hash: userHash, role: 'customer' },
+    { id: 'user-aarav', name: 'Aarav Sharma', email: 'aarav@example.com', password_hash: userHash, role: 'customer' },
+    { id: 'user-sneha', name: 'Sneha Nair', email: 'sneha@example.com', password_hash: userHash, role: 'customer' },
+    { id: 'user-vikram', name: 'Vikram Malhotra', email: 'vikram@example.com', password_hash: userHash, role: 'customer' },
+    { id: 'user-arjun', name: 'Arjun Mehta', email: 'arjun@example.com', password_hash: userHash, role: 'customer' },
   ];
 
   if (!existingUsers || existingUsers.length === 0) {
@@ -362,7 +378,7 @@ function seedDatabase() {
   // --- Authentic Indian Products with High-Resolution Photography ---
   const products = [
     {
-      id: uuidv4(),
+      id: 'prod-banarasi-silk-saree',
       name: 'Banarasi Katan Silk Saree',
       description: 'Handwoven pure Varanasi Katan silk saree adorned with intricate golden zari floral jaal, meenakari motifs, and a regal festive pallu. Includes matching unstitched blouse piece.',
       price: 6499,
@@ -375,7 +391,7 @@ function seedDatabase() {
       is_featured: 1
     },
     {
-      id: uuidv4(),
+      id: 'prod-pashmina-shawl',
       name: 'Kashmiri Pashmina Embroidered Shawl',
       description: '100% certified pure Himalayan Cashmere wool shawl featuring delicate needle Sozni embroidery handcrafted by master artisans of Srinagar.',
       price: 4299,
@@ -388,7 +404,7 @@ function seedDatabase() {
       is_featured: 1
     },
     {
-      id: uuidv4(),
+      id: 'prod-chikankari-kurta',
       name: 'Chikankari Hand-Embroidered Kurta',
       description: 'Authentic Lucknowi Chikankari tunic crafted with delicate shadow-work floral motifs on breathable pure georgette with an inner slip.',
       price: 1899,
@@ -401,7 +417,7 @@ function seedDatabase() {
       is_featured: 1
     },
     {
-      id: uuidv4(),
+      id: 'prod-kanjeevaram-dupatta',
       name: 'Kanjeevaram Temple Border Silk Dupatta',
       description: 'Lustrous South Indian handloom silk dupatta woven with auspicious temple korvai borders and rich antique gold zari work.',
       price: 2799,
@@ -413,7 +429,7 @@ function seedDatabase() {
       reviews_count: 128
     },
     {
-      id: uuidv4(),
+      id: 'prod-blue-pottery-tea-set',
       name: 'Royal Jaipur Blue Pottery Tea Set',
       description: 'Traditional 7-piece quartz ceramic tea set (teapot + 6 cups) hand-painted with Persian-inspired floral motifs by heritage artisans of Jaipur.',
       price: 1799,
@@ -426,7 +442,7 @@ function seedDatabase() {
       is_featured: 1
     },
     {
-      id: uuidv4(),
+      id: 'prod-brass-peacock-diya',
       name: 'Handcrafted Solid Brass Peacock Diya (Pair)',
       description: 'Heavy cast pure brass oil lamps with intricately engraved peacock finials and deep oil reservoirs for Diwali, pooja rituals and home decor.',
       price: 1399,
@@ -439,7 +455,7 @@ function seedDatabase() {
       is_featured: 1
     },
     {
-      id: uuidv4(),
+      id: 'prod-brass-ganesha-idol',
       name: 'Hand-Casted Brass Ganesha Idol',
       description: 'Auspicious bronze-tone brass sculpture of Lord Ganesha in blessing mudra, meticulously detailed and polished by traditional metal smiths.',
       price: 2199,
@@ -451,7 +467,7 @@ function seedDatabase() {
       reviews_count: 512
     },
     {
-      id: uuidv4(),
+      id: 'prod-walnut-keepsake-box',
       name: 'Kashmir Walnut Wood Carved Keepsake Box',
       description: 'Single-block walnut wood box featuring deep relief hand-carving of Kashmiri chinar leaves with soft royal velvet interior lining.',
       price: 1499,
@@ -463,7 +479,7 @@ function seedDatabase() {
       reviews_count: 94
     },
     {
-      id: uuidv4(),
+      id: 'prod-kumkumadi-serum',
       name: 'Kumkumadi Miraculous Ayurvedic Serum (30ml)',
       description: 'Ancient Ayurvedic formulation infused with 26 precious herbs, Kashmiri saffron, sandalwood, and lotus extract to illuminate and nourish glowing skin.',
       price: 1499,
@@ -476,7 +492,7 @@ function seedDatabase() {
       is_featured: 1
     },
     {
-      id: uuidv4(),
+      id: 'prod-shilajit-ashwagandha',
       name: 'Himalayan Pure Shilajit & Gold Ashwagandha',
       description: 'Grade-A purified high-altitude Himalayan shilajit resin enriched with organic KSM-66 ashwagandha for holistic vitality, stamina and mental focus.',
       price: 999,
@@ -488,7 +504,7 @@ function seedDatabase() {
       reviews_count: 630
     },
     {
-      id: uuidv4(),
+      id: 'prod-sandalwood-dhoop',
       name: 'Mysore Pure Sandalwood Dhoop Cones (Pack of 60)',
       description: 'Charcoal-free natural temple dhoop crafted with authentic Mysore sandalwood paste, organic herbs, and floral extracts for peaceful meditation.',
       price: 449,
@@ -500,7 +516,7 @@ function seedDatabase() {
       reviews_count: 410
     },
     {
-      id: uuidv4(),
+      id: 'prod-cardamom-pepper-tin',
       name: 'Kerala Malabar Cardamom & Black Pepper Tin',
       description: 'Single-origin bold 8mm green cardamom pods and Tellicherry TGSEB black peppercorns harvested from high-elevation estates in Idukki, Kerala.',
       price: 699,
@@ -513,7 +529,7 @@ function seedDatabase() {
       is_featured: 1
     },
     {
-      id: uuidv4(),
+      id: 'prod-darjeeling-tea',
       name: 'Darjeeling First Flush Muscatel Black Tea (150g)',
       description: 'Celebrated spring harvest whole-leaf black tea plucked from misty 6,000 ft Himalayan slopes with delicate floral and natural muscatel grape notes.',
       price: 899,
@@ -525,7 +541,7 @@ function seedDatabase() {
       reviews_count: 295
     },
     {
-      id: uuidv4(),
+      id: 'prod-kashmiri-saffron',
       name: 'Kashmiri Mogra Saffron (Grade A++ 1g Kesar)',
       description: '100% authentic GI-tagged Pampore saffron with long dark red stigmas, intense natural aroma and high natural crocin coloring potency.',
       price: 999,
@@ -537,7 +553,7 @@ function seedDatabase() {
       reviews_count: 540
     },
     {
-      id: uuidv4(),
+      id: 'prod-masala-chai',
       name: 'Royal Assam CTC Masala Chai Blend (500g)',
       description: 'Rich malty Assam CTC granular tea hand-blended with freshly crushed green cardamom, Ceylon cinnamon, cloves, ginger and black pepper.',
       price: 499,
@@ -549,7 +565,7 @@ function seedDatabase() {
       reviews_count: 720
     },
     {
-      id: uuidv4(),
+      id: 'prod-kundan-choker-set',
       name: 'Handcrafted Kundan & Pearl Choker Set',
       description: '22K yellow gold-plated Kundan necklace with lustrous freshwater pearls and matching statement jhumki earrings. Handcrafted for festive celebrations.',
       price: 2499,
@@ -562,7 +578,7 @@ function seedDatabase() {
       is_featured: 1
     },
     {
-      id: uuidv4(),
+      id: 'prod-silver-jhumkas',
       name: 'Cuttack Silver Filigree Jhumkas (925 Silver)',
       description: 'Traditional Tarakasi pure sterling silver filigree bell earrings handcrafted by generational silversmiths of Cuttack, Odisha.',
       price: 1699,
@@ -574,7 +590,7 @@ function seedDatabase() {
       reviews_count: 165
     },
     {
-      id: uuidv4(),
+      id: 'prod-leather-mojris',
       name: 'Hand-Embroidered Rajasthani Leather Mojris',
       description: 'Comfortable handcrafted genuine leather juttis with rich resham thread embroidery, cushioned footbed, and traditional curved toe styling.',
       price: 1299,
@@ -586,7 +602,7 @@ function seedDatabase() {
       reviews_count: 210
     },
     {
-      id: uuidv4(),
+      id: 'prod-aurapods-earbuds',
       name: 'AuraPods ANC Wireless Earbuds (Deep Bass Edition)',
       description: 'Active Noise Cancellation up to 35dB, 50-hour battery life with Fast Charge, quad mic ENC, and tuned specifically for rich Indian music acoustics.',
       price: 1999,
@@ -599,7 +615,7 @@ function seedDatabase() {
       is_featured: 1
     },
     {
-      id: uuidv4(),
+      id: 'prod-aurafit-smartwatch',
       name: 'AuraFit Apex Smartwatch (1.96" AMOLED)',
       description: 'Vibrant always-on AMOLED display with Bluetooth calling, Hindi & English voice assistant, heart rate, SpO2 sensor and 100+ Indian sports modes.',
       price: 2699,
@@ -648,40 +664,40 @@ function seedDatabase() {
     'Outstanding sound clarity and deep bass on the earbuds. Works great with regional tunes!',
   ];
 
-  const orderCount = 80 + Math.floor(Math.random() * 41);
+  const orderCount = 80 + Math.floor(random() * 41);
   for (let i = 0; i < orderCount; i++) {
-    const daysAgo = Math.floor(Math.random() * 90);
+    const daysAgo = Math.floor(random() * 90);
     const orderDate = new Date(now);
     orderDate.setDate(orderDate.getDate() - daysAgo);
     const dateStr = orderDate.toISOString().replace('T', ' ').substring(0, 19);
 
-    const userId = customerIds[Math.floor(Math.random() * customerIds.length)];
-    const status = daysAgo > 14 ? 'delivered' : statuses[Math.floor(Math.random() * statuses.length)];
-    const address = indianAddresses[Math.floor(Math.random() * indianAddresses.length)];
+    const userId = customerIds[Math.floor(random() * customerIds.length)];
+    const status = daysAgo > 14 ? 'delivered' : statuses[Math.floor(random() * statuses.length)];
+    const address = indianAddresses[Math.floor(random() * indianAddresses.length)];
     const orderId = uuidv4();
 
-    const itemCount = 1 + Math.floor(Math.random() * 3);
+    const itemCount = 1 + Math.floor(random() * 3);
     let total = 0;
     const usedProducts = new Set();
 
     for (let j = 0; j < itemCount; j++) {
       let product;
       do {
-        product = productList[Math.floor(Math.random() * productList.length)];
+        product = productList[Math.floor(random() * productList.length)];
       } while (usedProducts.has(product.id));
       usedProducts.add(product.id);
 
-      const qty = 1 + Math.floor(Math.random() * 2);
+      const qty = 1 + Math.floor(random() * 2);
       const price = product.price;
       total += price * qty;
 
       dbRun('INSERT INTO order_items (id, order_id, product_id, quantity, price) VALUES (?, ?, ?, ?, ?)', [uuidv4(), orderId, product.id, qty, price]);
 
-      if (status === 'delivered' && Math.random() < 0.7) {
-        const rating = 4 + (Math.random() > 0.3 ? 1 : 0);
-        const comment = reviewComments[Math.floor(Math.random() * reviewComments.length)];
+      if (status === 'delivered' && random() < 0.7) {
+        const rating = 4 + (random() > 0.3 ? 1 : 0);
+        const comment = reviewComments[Math.floor(random() * reviewComments.length)];
         const reviewDate = new Date(orderDate);
-        reviewDate.setDate(reviewDate.getDate() + Math.floor(Math.random() * 7) + 1);
+        reviewDate.setDate(reviewDate.getDate() + Math.floor(random() * 7) + 1);
         dbRun('INSERT INTO reviews (id, user_id, product_id, rating, comment, created_at) VALUES (?, ?, ?, ?, ?, ?)', [uuidv4(), userId, product.id, rating, comment, reviewDate.toISOString().replace('T', ' ').substring(0, 19)]);
       }
     }
