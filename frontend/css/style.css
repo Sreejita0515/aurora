@@ -247,7 +247,7 @@ svg { display: block; }
   background: var(--bg-input);
   border: 1px solid var(--border-color);
   color: var(--text-primary);
-  padding: 9px 16px 9px 38px;
+  padding: 9px 36px 9px 38px;
   border-radius: var(--radius-sm);
   font-size: 0.85rem;
   width: 250px;
@@ -266,6 +266,24 @@ svg { display: block; }
   left: 13px;
   color: var(--text-muted);
   display: flex;
+}
+.search-clear-btn {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 2px 6px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition-fast);
+}
+.search-clear-btn:hover {
+  color: var(--text-primary);
 }
 
 .theme-toggle {
@@ -474,6 +492,7 @@ svg { display: block; }
   overflow-x: auto;
   justify-content: center;
   flex-wrap: wrap;
+  scroll-margin-top: calc(var(--header-height) + 16px);
 }
 .category-chip {
   display: flex;
@@ -519,6 +538,7 @@ svg { display: block; }
   padding: 1rem 0;
   border-bottom: 1px solid var(--border-color);
   margin-bottom: 2rem;
+  scroll-margin-top: calc(var(--header-height) + 16px);
 }
 .sort-bar .result-count {
   color: var(--text-secondary);
@@ -553,6 +573,12 @@ svg { display: block; }
   grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
   gap: 1.5rem;
   padding-bottom: 4rem;
+  min-height: 400px;
+  transition: opacity var(--transition-fast);
+}
+.products-grid.loading-fade {
+  opacity: 0.55;
+  pointer-events: none;
 }
 
 .product-card {

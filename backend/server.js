@@ -210,8 +210,15 @@ app.use(express.static(path.join(__dirname, '..', 'frontend')));
         JOIN categories c ON p.category_id = c.id
         WHERE 1=1`;
       const params = [];
-      if (category && category !== 'all') { sql += ' AND p.category_id = ?'; params.push(category); }
-      if (search) { sql += ' AND (p.name LIKE ? OR p.description LIKE ?)'; params.push(`%${search}%`, `%${search}%`); }
+      if (category && category !== 'all') {
+        const cleanCat = category.replace(/^cat-/, '').replace(/-/g, ' ').toLowerCase();
+        sql += ' AND (p.category_id = ? OR c.id = ? OR LOWER(c.name) LIKE ?)';
+        params.push(category, category, `%${cleanCat}%`);
+      }
+      if (search) {
+        sql += ' AND (p.name LIKE ? OR p.description LIKE ? OR c.name LIKE ?)';
+        params.push(`%${search}%`, `%${search}%`, `%${search}%`);
+      }
       if (featured === 'true') sql += ' AND p.is_featured = 1';
       switch (sort) {
         case 'price-low': sql += ' ORDER BY p.price ASC'; break;

@@ -444,48 +444,91 @@ async function loadCategories() {
   }
 }
 
-function filterCategory(categoryId, element) {
-  currentCategory = categoryId;
+function filterCategory(categoryId, element, clearSearch = true) {
+  // Always ensure Shop tab is active if clicked from footer or another tab
+  switchTab('shop', false);
 
-  // Update active state
-  document.querySelectorAll('.category-chip').forEach(chip => chip.classList.remove('active'));
+  currentCategory = categoryId || 'all';
+
+  // If selecting a category, clear search input so the user sees all items in this category
+  if (clearSearch) {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) searchInput.value = '';
+    const searchClearBtn = document.getElementById('searchClearBtn');
+    if (searchClearBtn) searchClearBtn.style.display = 'none';
+  }
+
+  // Update active state across all category chips
+  document.querySelectorAll('.category-chip').forEach(chip => {
+    chip.classList.toggle('active', chip.dataset.category === currentCategory);
+  });
   if (element) {
     element.classList.add('active');
-  } else {
-    const chip = document.querySelector(`.category-chip[data-category="${categoryId}"]`);
-    if (chip) chip.classList.add('active');
   }
 
   loadProducts();
-  // Scroll to products
-  document.querySelector('.sort-bar').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  // If clicked from footer or far down the page, scroll smoothly to the categories bar
+  const bar = document.getElementById('categoriesBar');
+  if (bar) {
+    const rect = bar.getBoundingClientRect();
+    if (rect.top < 60 || rect.top > window.innerHeight) {
+      bar.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
 }
 
 // ═══ PRODUCTS ═══
 async function loadProducts() {
   const grid = document.getElementById('productsGrid');
-  grid.innerHTML = '<div class="loading-spinner"><div class="spinner"></div></div>';
+  if (!grid) return;
+
+  // Don't wipe the grid immediately if we already have items to prevent jarring content vanish
+  const hasExistingProducts = grid.querySelectorAll('.product-card').length > 0;
+  if (!hasExistingProducts) {
+    grid.innerHTML = '<div class="loading-spinner"><div class="spinner"></div></div>';
+  } else {
+    grid.classList.add('loading-fade');
+  }
 
   try {
     const params = new URLSearchParams();
-    if (currentCategory !== 'all') params.append('category', currentCategory);
-    const sort = document.getElementById('sortSelect').value;
+    if (currentCategory && currentCategory !== 'all') params.append('category', currentCategory);
+    const sortEl = document.getElementById('sortSelect');
+    const sort = sortEl ? sortEl.value : 'default';
     if (sort !== 'default') params.append('sort', sort);
-    const search = document.getElementById('searchInput').value;
+    const searchEl = document.getElementById('searchInput');
+    const search = searchEl ? searchEl.value.trim() : '';
     if (search) params.append('search', search);
 
     const res = await fetch(`${API}/products?${params}`);
+    if (!res.ok) throw new Error(`HTTP error ${res.status}`);
     const data = await res.json();
-    allProducts = data.products;
+    allProducts = data.products || [];
 
-    document.getElementById('resultCount').innerHTML = `Showing <strong>${allProducts.length}</strong> products`;
+    grid.classList.remove('loading-fade');
+
+    const resultCount = document.getElementById('resultCount');
+    if (resultCount) {
+      let countText = `Showing <strong>${allProducts.length}</strong> products`;
+      if (currentCategory !== 'all') {
+        const activeChip = document.querySelector(`.category-chip[data-category="${currentCategory}"]`);
+        const catName = activeChip ? activeChip.textContent.trim().replace(/\d+$/, '').trim() : '';
+        if (catName) countText += ` in <span style="color: var(--accent-primary); font-weight: 700;">${catName}</span>`;
+      }
+      if (search) {
+        countText += ` matching "<strong>${escapeHtml(search)}</strong>"`;
+      }
+      resultCount.innerHTML = countText;
+    }
 
     if (allProducts.length === 0) {
       grid.innerHTML = `
         <div class="empty-state" style="grid-column: 1 / -1;">
           <div class="empty-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
           <h3>No products found</h3>
-          <p>Try adjusting your search or filters</p>
+          <p>No items matched your current filter or search criteria.</p>
+          <button class="btn btn-secondary btn-sm" style="margin-top: 1rem;" onclick="resetFilters()">View All Products</button>
         </div>
       `;
       return;
@@ -493,9 +536,47 @@ async function loadProducts() {
 
     grid.innerHTML = allProducts.map(product => createProductCard(product)).join('');
   } catch (err) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column: 1/-1;"><div class="empty-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><h3>Failed to load products</h3><p>Make sure the backend server is running on port 3000</p></div>`;
+    grid.classList.remove('loading-fade');
+    grid.innerHTML = `<div class="empty-state" style="grid-column: 1/-1;"><div class="empty-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><h3>Failed to load products</h3><p>Make sure the backend server is running on port 3000</p><button class="btn btn-secondary btn-sm" style="margin-top: 1rem;" onclick="loadProducts()">Try Again</button></div>`;
     console.error('Failed to load products:', err);
   }
+}
+
+function resetFilters() {
+  currentCategory = 'all';
+  const searchInput = document.getElementById('searchInput');
+  if (searchInput) searchInput.value = '';
+  const searchClearBtn = document.getElementById('searchClearBtn');
+  if (searchClearBtn) searchClearBtn.style.display = 'none';
+  const sortSelect = document.getElementById('sortSelect');
+  if (sortSelect) sortSelect.value = 'default';
+
+  document.querySelectorAll('.category-chip').forEach(chip => {
+    chip.classList.toggle('active', chip.dataset.category === 'all');
+  });
+
+  loadProducts();
+}
+
+function escapeHtml(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function handleSearchInput() {
+  const input = document.getElementById('searchInput');
+  const clearBtn = document.getElementById('searchClearBtn');
+  if (input && clearBtn) {
+    clearBtn.style.display = input.value.trim() ? 'flex' : 'none';
+  }
+  debounceSearch();
+}
+
+function clearSearch() {
+  const input = document.getElementById('searchInput');
+  if (input) input.value = '';
+  const clearBtn = document.getElementById('searchClearBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
+  loadProducts();
 }
 
 function createProductCard(product) {
@@ -837,7 +918,7 @@ async function loadOrders() {
 }
 
 // ═══ TAB NAVIGATION ═══
-function switchTab(tabName) {
+function switchTab(tabName, shouldScroll = true) {
   // Update nav
   document.querySelectorAll('.nav-link').forEach(link => {
     link.classList.toggle('active', link.dataset.tab === tabName);
@@ -850,12 +931,21 @@ function switchTab(tabName) {
 
   // Load data for specific tabs
   if (tabName === 'orders') loadOrders();
+  if (tabName === 'shop') {
+    // If shop tab was previously inactive and products grid is empty, reload products
+    const grid = document.getElementById('productsGrid');
+    if (grid && grid.querySelectorAll('.product-card').length === 0) {
+      loadProducts();
+    }
+  }
 
   // Show/hide footer on shop tab
   const footer = document.getElementById('main-footer');
-  footer.style.display = tabName === 'shop' ? 'block' : 'block';
+  if (footer) footer.style.display = 'block';
 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  if (shouldScroll) {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 }
 
 // ═══ TOAST NOTIFICATIONS ═══

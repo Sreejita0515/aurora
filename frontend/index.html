@@ -30,7 +30,8 @@
     <div class="navbar-actions">
       <div class="search-bar">
         <span class="search-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-        <input type="text" id="searchInput" placeholder="Search products..." oninput="debounceSearch()">
+        <input type="text" id="searchInput" placeholder="Search products..." oninput="handleSearchInput()">
+        <button id="searchClearBtn" class="search-clear-btn" onclick="clearSearch()" style="display:none;" title="Clear search" aria-label="Clear search">✕</button>
       </div>
       <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode" title="Toggle dark mode">
         <span class="theme-toggle-icon"></span>
@@ -162,7 +163,7 @@
   </div>
 
   <!-- ═══ AUTH MODAL ═══ -->
-  <div class="modal-overlay" id="authModal">
+  <div class="modal-overlay" id="authModal" onclick="if(event.target===this) closeAuthModal()">
     <div class="modal">
       <div class="modal-header">
         <h2 id="authTitle">Sign In</h2>
@@ -288,7 +289,7 @@
   </div>
 
   <!-- ═══ PRODUCT DETAIL MODAL ═══ -->
-  <div class="modal-overlay product-detail-modal" id="productDetailModal">
+  <div class="modal-overlay product-detail-modal" id="productDetailModal" onclick="if(event.target===this) closeProductDetail()">
     <div class="modal" style="max-width: 700px;">
       <div class="modal-header">
         <h2>Product Details</h2>
@@ -313,12 +314,12 @@
         </div>
         <div class="footer-col">
           <h4>Shop By Category</h4>
-          <a href="#" onclick="filterCategory('cat-ethnic')">Ethnic & Festive Wear</a>
-          <a href="#" onclick="filterCategory('cat-handicrafts')">Handicrafts & Decor</a>
-          <a href="#" onclick="filterCategory('cat-ayurveda')">Ayurveda & Herbal Care</a>
-          <a href="#" onclick="filterCategory('cat-gourmet')">Spices, Teas & Saffron</a>
-          <a href="#" onclick="filterCategory('cat-jewelry')">Jewelry & Footwear</a>
-          <a href="#" onclick="filterCategory('cat-gadgets')">Smart Devices & Audio</a>
+          <a href="javascript:void(0)" onclick="filterCategory('cat-ethnic', null, true); return false;">Ethnic & Festive Wear</a>
+          <a href="javascript:void(0)" onclick="filterCategory('cat-handicrafts', null, true); return false;">Handicrafts & Home Decor</a>
+          <a href="javascript:void(0)" onclick="filterCategory('cat-ayurveda', null, true); return false;">Ayurveda & Herbal Care</a>
+          <a href="javascript:void(0)" onclick="filterCategory('cat-gourmet', null, true); return false;">Spices, Teas & Saffron</a>
+          <a href="javascript:void(0)" onclick="filterCategory('cat-jewelry', null, true); return false;">Jewelry & Footwear</a>
+          <a href="javascript:void(0)" onclick="filterCategory('cat-gadgets', null, true); return false;">Smart Devices & Audio</a>
         </div>
         <div class="footer-col">
           <h4>Support</h4>
