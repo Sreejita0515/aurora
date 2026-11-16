@@ -113,7 +113,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   loadCategories();
   loadProducts();
+  loadActiveBundles();
   initScrollEffects();
+
+  // Auto-refresh bundles if tab comes into view (e.g. returning from Admin tab)
+  window.addEventListener('focus', () => {
+    loadActiveBundles();
+  });
 });
 
 // ═══ SCROLL EFFECTS ═══
@@ -467,6 +473,7 @@ function filterCategory(categoryId, element, clearSearch = true) {
   }
 
   loadProducts();
+  renderBundlesForCurrentView();
 
   // If clicked from footer or far down the page, scroll smoothly to the categories bar
   const bar = document.getElementById('categoriesBar');
@@ -535,6 +542,7 @@ async function loadProducts() {
     }
 
     grid.innerHTML = allProducts.map(product => createProductCard(product)).join('');
+    renderBundlesForCurrentView();
   } catch (err) {
     grid.classList.remove('loading-fade');
     grid.innerHTML = `<div class="empty-state" style="grid-column: 1/-1;"><div class="empty-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><h3>Failed to load products</h3><p>Make sure the backend server is running on port 3000</p><button class="btn btn-secondary btn-sm" style="margin-top: 1rem;" onclick="loadProducts()">Try Again</button></div>`;
@@ -556,6 +564,7 @@ function resetFilters() {
   });
 
   loadProducts();
+  renderBundlesForCurrentView();
 }
 
 function escapeHtml(str) {
@@ -577,6 +586,7 @@ function clearSearch() {
   const clearBtn = document.getElementById('searchClearBtn');
   if (clearBtn) clearBtn.style.display = 'none';
   loadProducts();
+  renderBundlesForCurrentView();
 }
 
 function createProductCard(product) {
@@ -717,6 +727,152 @@ async function loadCart() {
     updateCartUI();
   } catch (err) {
     console.error('Failed to load cart:', err);
+  }
+}
+
+// ═══════════════════════════════════════════════════
+// SMART BUNDLES & CROSS-SELLING (STOREFRONT)
+// ═══════════════════════════════════════════════════
+let activeBundles = [];
+
+async function loadActiveBundles() {
+  const section = document.getElementById('smartBundlesSection');
+  if (!section) return;
+
+  try {
+    const res = await fetch(`${API}/bundles`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    activeBundles = data.bundles || [];
+    renderBundlesForCurrentView();
+  } catch (err) {
+    console.warn('Failed to load active bundles:', err);
+    section.style.display = 'none';
+  }
+}
+
+function renderBundlesForCurrentView() {
+  const section = document.getElementById('smartBundlesSection');
+  const grid = document.getElementById('storeBundlesGrid');
+  if (!section || !grid) return;
+
+  if (!activeBundles || activeBundles.length === 0) {
+    section.style.display = 'none';
+    return;
+  }
+
+  // Filter based on search query if present
+  const searchEl = document.getElementById('searchInput');
+  const query = searchEl ? searchEl.value.trim().toLowerCase() : '';
+
+  let filtered = activeBundles;
+
+  if (query) {
+    filtered = filtered.filter(b => {
+      const matchName = (b.name || '').toLowerCase().includes(query);
+      const matchTag = (b.tagline || '').toLowerCase().includes(query);
+      const matchItem = (b.items || []).some(it => (it.name || '').toLowerCase().includes(query));
+      return matchName || matchTag || matchItem;
+    });
+  } else if (currentCategory && currentCategory !== 'all') {
+    const cleanCat = currentCategory.replace(/^cat-/, '').toLowerCase();
+    filtered = filtered.filter(b => {
+      if (cleanCat.includes('ethnic') && (b.id.includes('bridal') || b.id.includes('kashmir'))) return true;
+      if (cleanCat.includes('handicraft') && b.id.includes('sacred')) return true;
+      if (cleanCat.includes('ayurveda') && b.id.includes('ayurveda')) return true;
+      if (cleanCat.includes('gourmet') && b.id.includes('gourmet')) return true;
+      return (b.items || []).some(it => (it.category_id || '').toLowerCase().includes(cleanCat));
+    });
+  }
+
+  if (filtered.length === 0) {
+    section.style.display = 'none';
+  } else {
+    section.style.display = 'block';
+    grid.innerHTML = filtered.map(b => renderStoreBundleCard(b)).join('');
+  }
+}
+
+function renderStoreBundleCard(b) {
+  const items = b.items || [];
+  return `
+    <div class="store-bundle-card">
+      <div class="bundle-card-top">
+        <span class="store-bundle-badge">${b.badge || '👑 Curated Bundle'}</span>
+        <span class="store-bundle-discount">Save ${b.discountPercent}%</span>
+      </div>
+      <h3 class="store-bundle-name">${escapeHtml(b.name)}</h3>
+      <p class="store-bundle-tagline">${escapeHtml(b.tagline || '')}</p>
+
+      <div class="store-bundle-items">
+        <div class="bundle-items-header">Complete ${items.length}-Piece Coordinated Set:</div>
+        <div class="bundle-items-flow">
+          ${items.map((item, idx) => `
+            <div class="bundle-item-mini" title="${escapeHtml(item.name)}">
+              <div class="bundle-item-thumb">
+                <img src="${item.image_url}" alt="${escapeHtml(item.name)}" loading="lazy" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect fill=%22%23F1EDE4%22 width=%22100%22 height=%22100%22/><text x=%2250%22 y=%2255%22 font-size=%2224%22 text-anchor=%22middle%22 fill=%22%239D9A94%22>🎁</text></svg>'">
+              </div>
+              <div class="bundle-item-info">
+                <span class="bundle-item-title">${escapeHtml(item.name)}</span>
+                <span class="bundle-item-price">${formatPrice(item.price)}</span>
+              </div>
+            </div>
+            ${idx < items.length - 1 ? '<div class="bundle-item-plus">+</div>' : ''}
+          `).join('')}
+        </div>
+      </div>
+
+      <div class="store-bundle-footer">
+        <div class="store-bundle-pricing">
+          <div class="store-bundle-mrp">Total MRP: <span>${formatPrice(b.individualTotal)}</span></div>
+          <div class="store-bundle-price-row">
+            <span class="store-bundle-price">${formatPrice(b.bundlePrice)}</span>
+            <span class="store-bundle-savings">Save ${formatPrice(b.customerSavings)}</span>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-bundle-buy" id="btn-add-bundle-${b.id}" onclick="addBundleToCart('${b.id}', '${escapeHtml(b.name)}')">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          Add Set to Cart
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+async function addBundleToCart(bundleId, bundleName = 'Bundle') {
+  if (!currentUser) {
+    toggleAuthModal();
+    showToast('Please sign in to add bundles to cart', 'info');
+    return;
+  }
+
+  const btn = document.getElementById(`btn-add-bundle-${bundleId}`);
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = 'Adding to Cart...';
+  }
+
+  try {
+    const headers = await authHeaders();
+    const res = await fetch(`${API}/cart`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ userId: currentUser.id, productId: bundleId, quantity: 1 }),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error || 'Failed to add bundle to cart');
+    }
+    cart = await res.json();
+    updateCartUI();
+    showToast(`🎁 ${bundleName} added to cart with bundle savings!`, 'success');
+  } catch (err) {
+    showToast(`Error adding bundle: ${err.message}`, 'error');
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg> Add Set to Cart`;
+    }
   }
 }
 

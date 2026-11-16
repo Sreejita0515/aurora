@@ -171,6 +171,7 @@ function showSection(sectionId) {
     case 'bundle-cross-selling': renderBundleCrossSelling(); break;
     case 'business-strategy': renderBusinessStrategy(); break;
     case 'overview': renderOverview(); break;
+    case 'inventory-products': renderInventoryProducts(); break;
     case 'sales': renderSales(); break;
     case 'orders': loadRecentOrders(); break;
   }
@@ -567,10 +568,14 @@ function renderPredictiveInventory() {
               View Math
             </button>
             ${p.recommendedReorderQty > 0 ? `
-              <button class="btn-action-restock" onclick="quickRestockProduct('${p.id}', ${p.recommendedReorderQty})">
-                + Restock ${p.recommendedReorderQty}
+              <button class="btn-action-restock" onclick="openRestockModal('${p.id}', '${escapeHtml(p.name)}', ${p.stock}, ${p.recommendedReorderQty})">
+                ⚡ Restock +${p.recommendedReorderQty}
               </button>
-            ` : '<span style="color: #10b981; font-size: 0.75rem;">Healthy Stock</span>'}
+            ` : `
+              <button class="btn-action-restock" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border-color: rgba(16, 185, 129, 0.3);" onclick="openRestockModal('${p.id}', '${escapeHtml(p.name)}', ${p.stock}, 25)">
+                + Restock
+              </button>
+            `}
           </div>
         </td>
       </tr>
@@ -605,13 +610,77 @@ function renderPredictiveInventory() {
   `).join('');
 }
 
-async function quickRestockProduct(productId, qty) {
-  const enteredQty = prompt(`Enter restock batch size for this product:`, qty);
-  if (!enteredQty) return;
-  const quantity = parseInt(enteredQty, 10);
-  if (isNaN(quantity) || quantity <= 0) {
-    showToast('Please enter a valid positive quantity', 'warning');
+let currentRestockBaseStock = 0;
+
+function openRestockModal(productId, productName, currentStock, defaultQty = 25) {
+  const modal = document.getElementById('restockModal');
+  const title = document.getElementById('restockModalTitle');
+  const subtitle = document.getElementById('restockModalSubtitle');
+  const currentStockEl = document.getElementById('restockCurrentStock');
+  const idInput = document.getElementById('restockProductId');
+  const qtyInput = document.getElementById('restockQtyInput');
+
+  if (!modal) return;
+
+  currentRestockBaseStock = parseInt(currentStock, 10) || 0;
+  if (idInput) idInput.value = productId;
+  if (title) title.textContent = `Restock: ${productName}`;
+  if (subtitle) subtitle.textContent = `Product ID: ${productId}`;
+  if (currentStockEl) currentStockEl.textContent = `${currentRestockBaseStock} units`;
+  if (qtyInput) qtyInput.value = defaultQty;
+
+  updateRestockProjected();
+  modal.classList.add('open');
+  if (qtyInput) {
+    setTimeout(() => { qtyInput.focus(); qtyInput.select(); }, 60);
+  }
+}
+
+function closeRestockModal() {
+  const modal = document.getElementById('restockModal');
+  if (modal) modal.classList.remove('open');
+}
+
+function handleRestockModalBackdrop(event) {
+  if (event.target.id === 'restockModal') {
+    closeRestockModal();
+  }
+}
+
+function setRestockQty(qty) {
+  const qtyInput = document.getElementById('restockQtyInput');
+  if (qtyInput) {
+    qtyInput.value = qty;
+    updateRestockProjected();
+  }
+}
+
+function updateRestockProjected() {
+  const qtyInput = document.getElementById('restockQtyInput');
+  const projectedEl = document.getElementById('restockProjectedStock');
+  const qty = parseInt(qtyInput?.value, 10) || 0;
+  const newStock = Math.max(0, currentRestockBaseStock + qty);
+  if (projectedEl) {
+    projectedEl.textContent = `${newStock} units (+${qty})`;
+  }
+}
+
+async function submitRestockModal() {
+  const idInput = document.getElementById('restockProductId');
+  const qtyInput = document.getElementById('restockQtyInput');
+  const btn = document.getElementById('btnConfirmRestock');
+
+  const productId = idInput?.value;
+  const quantity = parseInt(qtyInput?.value, 10);
+
+  if (!productId || isNaN(quantity) || quantity <= 0) {
+    showToast('Please enter a valid positive restock quantity', 'warning');
     return;
+  }
+
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = 'Restocking...';
   }
 
   try {
@@ -624,12 +693,31 @@ async function quickRestockProduct(productId, qty) {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Restock failed');
 
-    showToast(`Successfully restocked ${quantity} units for ${data.product.name}`, 'success');
-    await loadDashboard();
-    showSection('predictive-inventory');
+    showToast(`✓ Successfully restocked +${quantity} units for ${data.product.name}! New Stock: ${data.product.stock}`, 'success');
+    closeRestockModal();
+
+    if (currentActiveSection === 'inventory-products') {
+      await renderInventoryProducts();
+    } else {
+      await loadDashboard();
+      if (currentActiveSection === 'predictive-inventory') {
+        showSection('predictive-inventory');
+      }
+    }
+
+    if (typeof loadDecisionActionsAudit === 'function') loadDecisionActionsAudit();
   } catch (err) {
     showToast(`Error restocking: ${err.message}`, 'error');
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = 'Confirm & Dispatch Restock';
+    }
   }
+}
+
+async function quickRestockProduct(productId, qty) {
+  openRestockModal(productId, 'Product', 0, qty);
 }
 
 // ═════════════════════════════════════════════════════════════════════════
@@ -1205,9 +1293,21 @@ function renderCustomerBehaviour() {
 // ═════════════════════════════════════════════════════════════════════════
 // SECTION: 4. BUNDLE & CROSS-SELLING AGENT
 // ═════════════════════════════════════════════════════════════════════════
-function renderBundleCrossSelling() {
+let deployedBundlesSet = new Set();
+
+async function renderBundleCrossSelling() {
   const bundle = dashboardData.agents?.bundleCrossSelling;
   if (!bundle) return;
+
+  try {
+    const res = await fetch(`${API}/bundles`);
+    if (res.ok) {
+      const d = await res.json();
+      deployedBundlesSet = new Set((d.bundles || []).map(x => x.id));
+    }
+  } catch (e) {
+    console.warn('Could not fetch active deployed bundles:', e);
+  }
 
   const kpis = document.getElementById('bundleAgentKpis');
   kpis.innerHTML = `
@@ -1342,7 +1442,11 @@ function renderBundleCrossSelling() {
 
   // Smart Bundles Grid
   const grid = document.getElementById('smartBundlesGrid');
-  grid.innerHTML = bundle.smartBundles.map(b => `
+  grid.innerHTML = bundle.smartBundles.map(b => {
+    const isDeployed = deployedBundlesSet.has(b.id);
+    const btnLabel = isDeployed ? '✓ Active on Storefront • Click to Remove' : 'Deploy Bundle to Storefront';
+    const btnStyle = isDeployed ? 'style="background: #10b981;"' : '';
+    return `
     <div class="bundle-card">
       <div>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
@@ -1373,12 +1477,12 @@ function renderBundleCrossSelling() {
         <button class="btn-formula-inspect" style="margin-top: 6px; width: 100%; justify-content: center;" onclick="openFormulaModal('bundle', '${b.id}')">
           View Margin &amp; Pricing Math
         </button>
-        <button class="btn-bundle-action" id="btn-deploy-${b.id}" onclick="deploySmartBundle('${b.id}', '${b.name}')">
-          Deploy Bundle to Storefront
+        <button class="btn-bundle-action" id="btn-deploy-${b.id}" ${btnStyle} onclick="deploySmartBundle('${b.id}', '${b.name}')">
+          ${btnLabel}
         </button>
       </div>
     </div>
-  `).join('');
+  `}).join('');
 
   // Co-purchases table
   const coTbody = document.querySelector('#coPurchasesTable tbody');
@@ -1413,14 +1517,20 @@ function renderBundleCrossSelling() {
 
 async function deploySmartBundle(bundleId, bundleName) {
   const btn = document.getElementById(`btn-deploy-${bundleId}`);
+  const isCurrentlyDeployed = deployedBundlesSet.has(bundleId);
+
   if (btn) {
-    btn.innerHTML = '⏳ Deploying...';
+    btn.innerHTML = isCurrentlyDeployed ? '⏳ Removing...' : '⏳ Deploying...';
   }
 
   try {
     const bundle = dashboardData.agents?.bundleCrossSelling?.smartBundles?.find(b => b.id === bundleId);
     const headers = await getAdminAuthHeaders();
-    const res = await fetch(`${API}/admin/decision-agents/bundles/deploy`, {
+    const endpoint = isCurrentlyDeployed
+      ? `${API}/admin/decision-agents/bundles/undeploy`
+      : `${API}/admin/decision-agents/bundles/deploy`;
+
+    const res = await fetch(endpoint, {
       method: 'POST',
       headers,
       body: JSON.stringify({
@@ -1431,19 +1541,34 @@ async function deploySmartBundle(bundleId, bundleName) {
       })
     });
     const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Deployment failed');
+    if (!res.ok) throw new Error(data.error || 'Action failed');
 
-    if (btn) {
-      btn.innerHTML = 'Active on Storefront';
-      btn.style.background = '#10b981';
+    if (isCurrentlyDeployed) {
+      deployedBundlesSet.delete(bundleId);
+      if (btn) {
+        btn.innerHTML = 'Deploy Bundle to Storefront';
+        btn.style.background = '';
+      }
+      showToast(`"${bundleName}" removed from storefront.`, 'info');
+    } else {
+      deployedBundlesSet.add(bundleId);
+      if (btn) {
+        btn.innerHTML = '✓ Active on Storefront • Click to Remove';
+        btn.style.background = '#10b981';
+      }
+      showToast(`"${bundleName}" deployed to storefront & live now!`, 'success');
     }
-    showToast(`"${bundleName}" deployed to storefront & logged to audit!`, 'success');
+
     if (typeof loadDecisionActionsAudit === 'function') {
       loadDecisionActionsAudit();
     }
   } catch (err) {
-    showToast(`Error deploying bundle: ${err.message}`, 'error');
-    if (btn) btn.innerHTML = 'Deploy Bundle to Storefront';
+    showToast(`Error: ${err.message}`, 'error');
+    if (btn) {
+      btn.innerHTML = isCurrentlyDeployed ? '✓ Active on Storefront • Click to Remove' : 'Deploy Bundle to Storefront';
+      if (isCurrentlyDeployed) btn.style.background = '#10b981';
+      else btn.style.background = '';
+    }
   }
 }
 

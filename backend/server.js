@@ -5,6 +5,7 @@ const { v4: uuidv4 } = require('uuid');
 const { initializeDatabase, getDb, dbRun, saveDb } = require('./database');
 const AIDecisionAgent = require('./ai-agent');
 const path = require('path');
+const fs = require('fs');
 
 // ──── Firebase Admin SDK ────
 const admin = require('firebase-admin');
@@ -267,6 +268,30 @@ app.use(express.static(path.join(__dirname, '..', 'frontend')));
   });
 
   // ═══════════════════════════════════════════════════
+  // SMART BUNDLES (PUBLIC STOREFRONT)
+  // ═══════════════════════════════════════════════════
+  app.get('/api/bundles', (req, res) => {
+    try {
+      const rows = db.prepare("SELECT * FROM deployed_bundles WHERE status = 'ACTIVE' ORDER BY deployed_at DESC").all();
+      const bundles = rows.map(r => ({
+        id: r.id,
+        name: r.name,
+        tagline: r.tagline,
+        badge: r.badge,
+        items: typeof r.items === 'string' ? JSON.parse(r.items) : (r.items || []),
+        discountPercent: r.discount_percent,
+        individualTotal: r.individual_total,
+        bundlePrice: r.bundle_price,
+        customerSavings: r.customer_savings,
+        marginPercent: r.margin_percent,
+        status: r.status,
+        deployedAt: r.deployed_at
+      }));
+      res.json({ bundles, count: bundles.length });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // ═══════════════════════════════════════════════════
   // CART
   // ═══════════════════════════════════════════════════
   app.get('/api/cart/:userId', (req, res) => {
@@ -463,11 +488,114 @@ app.use(express.static(path.join(__dirname, '..', 'frontend')));
     } catch (e) { res.status(500).json({ error: e.message }); }
   });
 
+  let bundleRulesCache = null;
+  function getBundleRules() {
+    if (!bundleRulesCache) {
+      try {
+        const p = path.join(__dirname, 'ml', 'predictions', 'bundle_rules.json');
+        if (fs.existsSync(p)) {
+          bundleRulesCache = JSON.parse(fs.readFileSync(p, 'utf8'));
+        }
+      } catch (e) {
+        console.warn('Failed to load bundle_rules.json:', e);
+      }
+    }
+    return bundleRulesCache;
+  }
+
   // POST /api/admin/decision-agents/bundles/deploy — Deploy Smart Bundle and log audit
   app.post('/api/admin/decision-agents/bundles/deploy', requireAdmin, (req, res) => {
     try {
       const { bundleId, bundleName, marginPercent, bundlePrice } = req.body;
       if (!bundleId) return res.status(400).json({ error: 'bundleId is required' });
+
+      const rules = getBundleRules();
+      const bundleData = rules?.smartBundles?.find(b => b.id === bundleId) || {};
+      const name = bundleData.name || bundleName || bundleId;
+      const tagline = bundleData.tagline || 'Curated high-affinity artisan bundle';
+      const badge = bundleData.badge || '👑 Best-Seller Bundle';
+      const items = bundleData.items || [];
+      const discountPercent = bundleData.discountPercent || 15;
+      const individualTotal = bundleData.individualTotal || (bundlePrice ? Math.round(bundlePrice / 0.85) : 0);
+      const finalPrice = bundleData.bundlePrice || bundlePrice || 0;
+      const savings = bundleData.customerSavings || (individualTotal - finalPrice);
+      const margin = bundleData.marginPercent || marginPercent || 31.8;
+
+      // 1. Insert/Update into deployed_bundles table
+      const existing = db.prepare('SELECT id FROM deployed_bundles WHERE id = ?').get(bundleId);
+      if (existing) {
+        db.prepare(`
+          UPDATE deployed_bundles
+          SET name = ?, tagline = ?, badge = ?, items = ?, discount_percent = ?,
+              individual_total = ?, bundle_price = ?, customer_savings = ?,
+              margin_percent = ?, status = 'ACTIVE', deployed_at = datetime('now')
+          WHERE id = ?
+        `).run(name, tagline, badge, JSON.stringify(items), discountPercent, individualTotal, finalPrice, savings, margin, bundleId);
+      } else {
+        db.prepare(`
+          INSERT INTO deployed_bundles (
+            id, name, tagline, badge, items, discount_percent,
+            individual_total, bundle_price, customer_savings, margin_percent,
+            status, deployed_at
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', datetime('now'))
+        `).run(bundleId, name, tagline, badge, JSON.stringify(items), discountPercent, individualTotal, finalPrice, savings, margin);
+      }
+
+      // 2. Also register in products table so cart, checkout, and inventory handle it seamlessly
+      const firstItem = items[0] || {};
+      const catId = bundleId.includes('bridal') || bundleId.includes('kashmir') ? 'cat-ethnic'
+                  : bundleId.includes('sacred') ? 'cat-handicrafts'
+                  : bundleId.includes('ayurveda') ? 'cat-ayurveda'
+                  : 'cat-gourmet';
+      const prodExisting = db.prepare('SELECT id FROM products WHERE id = ?').get(bundleId);
+      const desc = `${tagline} • Includes: ${items.map(i => i.name).join(' + ')}`;
+      const img = firstItem.image_url || 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=600&q=80';
+
+      if (prodExisting) {
+        db.prepare(`
+          UPDATE products
+          SET name = ?, description = ?, price = ?, original_price = ?,
+              category_id = ?, image_url = ?, stock = 30
+          WHERE id = ?
+        `).run(name, desc, finalPrice, individualTotal, catId, img, bundleId);
+      } else {
+        db.prepare(`
+          INSERT INTO products (
+            id, name, description, price, original_price, category_id, image_url, stock, rating, reviews_count
+          ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).run(bundleId, name, desc, finalPrice, individualTotal, catId, img, 30, 4.9, 42);
+      }
+
+      // 3. Log to agent_actions audit trail
+      const actionId = uuidv4();
+      db.prepare(`
+        INSERT INTO agent_actions (
+          id, action_type, agent_name, entity_id, entity_name,
+          action_title, details, trigger_reason, model_source,
+          confidence, expected_impact, status
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).run(
+        actionId, 'BUNDLE_DEPLOYED', 'Bundle and Cross-Selling Agent', bundleId, name,
+        `Deployed Smart Bundle: ${name}`,
+        JSON.stringify({ bundlePrice: finalPrice, marginPercent: `${margin}%`, deployedAt: new Date().toISOString() }),
+        'High co-purchase affinity & preserved gross margin floor (≥25%)',
+        'apriori_v1.0.0', 'Lift: >2.0x, Margin: ≥25%',
+        '+28.5% Projected Store AOV Lift', 'ACTIVE'
+      );
+      saveDb();
+
+      res.json({ success: true, message: `Bundle "${name}" deployed to storefront & logged to audit trail.` });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // POST /api/admin/decision-agents/bundles/undeploy — Remove bundle from storefront
+  app.post('/api/admin/decision-agents/bundles/undeploy', requireAdmin, (req, res) => {
+    try {
+      const { bundleId } = req.body;
+      if (!bundleId) return res.status(400).json({ error: 'bundleId is required' });
+
+      db.prepare("UPDATE deployed_bundles SET status = 'INACTIVE' WHERE id = ?").run(bundleId);
+      db.prepare("UPDATE products SET stock = 0 WHERE id = ?").run(bundleId);
 
       const actionId = uuidv4();
       db.prepare(`
@@ -477,16 +605,24 @@ app.use(express.static(path.join(__dirname, '..', 'frontend')));
           confidence, expected_impact, status
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `).run(
-        actionId, 'BUNDLE_DEPLOYED', 'Bundle and Cross-Selling Agent', bundleId, bundleName || bundleId,
-        `Deployed Smart Bundle: ${bundleName || bundleId}`,
-        JSON.stringify({ bundlePrice, marginPercent: `${marginPercent}%`, deployedAt: new Date().toISOString() }),
-        'High co-purchase affinity & preserved gross margin floor (≥25%)',
-        'apriori_v1.0.0', 'Lift: >2.0x, Margin: ≥25%',
-        '+28.5% Projected Store AOV Lift', 'ACTIVE'
+        actionId, 'BUNDLE_UNDEPLOYED', 'Bundle and Cross-Selling Agent', bundleId, bundleId,
+        `Undeployed Smart Bundle: ${bundleId}`,
+        JSON.stringify({ undeployedAt: new Date().toISOString() }),
+        'Admin requested bundle deactivation from storefront',
+        'admin_manual', '100%',
+        'Removed from storefront display', 'COMPLETED'
       );
       saveDb();
 
-      res.json({ success: true, message: `Bundle "${bundleName}" deployed and logged to audit trail.` });
+      res.json({ success: true, message: `Bundle "${bundleId}" removed from storefront.` });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+  });
+
+  // GET /api/admin/decision-agents/bundles/deployed — Get active bundle IDs for admin dashboard
+  app.get('/api/admin/decision-agents/bundles/deployed', requireAdmin, (req, res) => {
+    try {
+      const rows = db.prepare("SELECT id, name, status, deployed_at FROM deployed_bundles WHERE status = 'ACTIVE'").all();
+      res.json({ deployedBundles: rows });
     } catch (e) { res.status(500).json({ error: e.message }); }
   });
 

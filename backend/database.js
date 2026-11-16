@@ -216,6 +216,23 @@ async function initializeDatabase() {
     )
   `);
 
+  db.run(`
+    CREATE TABLE IF NOT EXISTS deployed_bundles (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      tagline TEXT,
+      badge TEXT,
+      items TEXT NOT NULL,
+      discount_percent REAL,
+      individual_total REAL,
+      bundle_price REAL NOT NULL,
+      customer_savings REAL,
+      margin_percent REAL,
+      status TEXT DEFAULT 'ACTIVE',
+      deployed_at DATETIME DEFAULT (datetime('now'))
+    )
+  `);
+
   // Seed data if empty or upgrade if old legacy catalog is detected
   const ethnicCat = dbGet("SELECT id FROM categories WHERE id = 'cat-ethnic'");
   const userCount = dbGet('SELECT COUNT(*) as count FROM users');
@@ -227,6 +244,39 @@ async function initializeDatabase() {
   const actionCount = dbGet('SELECT COUNT(*) as count FROM agent_actions');
   if (!actionCount || actionCount.count === 0) {
     seedAgentActions();
+  }
+
+  // Auto-sync any previously deployed bundles from agent_actions to deployed_bundles
+  const deployedCount = dbGet('SELECT COUNT(*) as count FROM deployed_bundles');
+  if (!deployedCount || deployedCount.count === 0) {
+    try {
+      const bundleRulesPath = path.join(__dirname, 'ml', 'predictions', 'bundle_rules.json');
+      if (fs.existsSync(bundleRulesPath)) {
+        const rules = JSON.parse(fs.readFileSync(bundleRulesPath, 'utf8'));
+        const actions = dbAll("SELECT entity_id FROM agent_actions WHERE action_type = 'BUNDLE_DEPLOYED' AND status = 'ACTIVE'");
+        const deployedIds = new Set(actions.map(a => a.entity_id));
+        for (const b of (rules.smartBundles || [])) {
+          if (deployedIds.has(b.id)) {
+            dbRun(`
+              INSERT OR REPLACE INTO deployed_bundles (
+                id, name, tagline, badge, items, discount_percent,
+                individual_total, bundle_price, customer_savings, margin_percent,
+                status, deployed_at
+              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE', datetime('now'))
+            `, [b.id, b.name, b.tagline, b.badge, JSON.stringify(b.items), b.discountPercent, b.individualTotal, b.bundlePrice, b.customerSavings, b.marginPercent]);
+
+            const firstImg = b.items[0]?.image_url || '';
+            dbRun(`
+              INSERT OR REPLACE INTO products (
+                id, name, description, price, original_price, category_id, image_url, stock, rating, reviews_count
+              ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `, [b.id, b.name, `${b.tagline} • Includes: ${b.items.map(i => i.name).join(' + ')}`, b.bundlePrice, b.individualTotal, 'cat-ethnic', firstImg, 30, 4.9, 42]);
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('Auto-sync deployed bundles error:', e);
+    }
   }
 
   saveDb();
