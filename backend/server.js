@@ -19,6 +19,13 @@ admin.initializeApp({
 // Secret code required to register as an admin (keep this private!)
 const ADMIN_SECRET_CODE = 'AURORA-ADMIN-2026';
 
+// Emails that are always admins, from the ADMIN_EMAILS environment variable (comma-separated).
+// Roles saved in the database don't last on Vercel (its database resets), so permanent admins go here.
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '')
+  .split(',')
+  .map(e => e.trim().toLowerCase())
+  .filter(Boolean);
+
 // Middleware: extract & verify Firebase ID token from Authorization header
 const verifyFirebaseToken = async (req, res, next) => {
   const authHeader = req.headers.authorization || '';
@@ -67,7 +74,7 @@ const ready = (async () => {
     const { uid, email = '' } = firebaseUser;
     const name = firebaseUser.name || firebaseUser.display_name || (email ? email.split('@')[0] : 'User');
     const safeEmail = email || `${uid}@aurora.user`;
-    const isAdminEmail = safeEmail.toLowerCase() === 'admin@aurora.com' || safeEmail.toLowerCase() === 'masteradmin@aurora.com' || safeEmail.toLowerCase().includes('admin');
+    const isAdminEmail = ADMIN_EMAILS.includes(safeEmail.toLowerCase()) || safeEmail.toLowerCase() === 'admin@aurora.com' || safeEmail.toLowerCase() === 'masteradmin@aurora.com' || safeEmail.toLowerCase().includes('admin');
     const shouldBeAdmin = grantAdmin || isAdminEmail;
 
     // Check if we already have this Firebase user linked
