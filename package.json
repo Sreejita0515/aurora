@@ -1,0 +1,8 @@
+{
+  "name": "aurora",
+  "private": true,
+  "description": "Root manifest for Vercel: installing here also installs the backend's dependencies (backend/package.json).",
+  "scripts": {
+    "postinstall": "cd backend && npm install"
+  }
+}
