@@ -22,15 +22,26 @@ function checkExistingAuth() {
     if (fbUser && !isSubmitting) {
       try {
         const token = await fbUser.getIdToken();
+        const adminToken = localStorage.getItem('aurora_admin_token') || '';
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        };
+        if (adminToken) headers['X-Admin-Token'] = adminToken;
         const res = await fetch(`${API}/auth/firebase`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
+          headers
         });
         const data = await res.json();
         if (data && data.user) {
+          if (data.adminToken) {
+            localStorage.setItem('aurora_admin_token', data.adminToken);
+            localStorage.setItem('aurora_admin_verified', 'true');
+          }
+          if (data.user.role === 'admin') {
+            localStorage.setItem('aurora_admin_verified', 'true');
+          }
+          localStorage.setItem('aurora_user', JSON.stringify(data.user));
           // If already logged in, redirect appropriately if redirect param is set
           const params = new URLSearchParams(window.location.search);
           const redirect = params.get('redirect');
@@ -180,18 +191,28 @@ async function handleSignIn() {
 
     // 2. Fetch fresh token & sync with backend
     const token = await fbUser.getIdToken(true);
+    const adminToken = localStorage.getItem('aurora_admin_token') || '';
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+    if (adminToken) headers['X-Admin-Token'] = adminToken;
     const syncRes = await fetch(`${API}/auth/firebase`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
+      headers
     });
 
     const syncData = await syncRes.json();
     if (!syncRes.ok) throw new Error(syncData.error || 'Server sync failed');
 
     const user = syncData.user;
+    if (syncData.adminToken) {
+      localStorage.setItem('aurora_admin_token', syncData.adminToken);
+      localStorage.setItem('aurora_admin_verified', 'true');
+    }
+    if (user.role === 'admin') {
+      localStorage.setItem('aurora_admin_verified', 'true');
+    }
     localStorage.setItem('aurora_user', JSON.stringify(user));
 
     // 3. Smart routing based on role
@@ -219,18 +240,28 @@ async function handleGoogleSignIn() {
     const fbUser = result.user;
 
     const token = await fbUser.getIdToken(true);
+    const adminToken = localStorage.getItem('aurora_admin_token') || '';
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+    if (adminToken) headers['X-Admin-Token'] = adminToken;
     const syncRes = await fetch(`${API}/auth/firebase`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
+      headers
     });
 
     const syncData = await syncRes.json();
     if (!syncRes.ok) throw new Error(syncData.error || 'Server sync failed');
 
     const user = syncData.user;
+    if (syncData.adminToken) {
+      localStorage.setItem('aurora_admin_token', syncData.adminToken);
+      localStorage.setItem('aurora_admin_verified', 'true');
+    }
+    if (user.role === 'admin') {
+      localStorage.setItem('aurora_admin_verified', 'true');
+    }
     localStorage.setItem('aurora_user', JSON.stringify(user));
 
     completeAuthNavigation(user);
@@ -285,12 +316,15 @@ async function handleRegister() {
     const token = await fbUser.getIdToken(true);
 
     // 3. Sync with backend forwarding adminCode if selected
+    const adminToken = localStorage.getItem('aurora_admin_token') || '';
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+    if (adminToken) headers['X-Admin-Token'] = adminToken;
     const syncRes = await fetch(`${API}/auth/firebase`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
+      headers,
       body: JSON.stringify({ adminCode: selectedRole === 'admin' ? adminCode : '' })
     });
 
@@ -301,6 +335,13 @@ async function handleRegister() {
     }
 
     const user = syncData.user;
+    if (syncData.adminToken) {
+      localStorage.setItem('aurora_admin_token', syncData.adminToken);
+      localStorage.setItem('aurora_admin_verified', 'true');
+    }
+    if (user.role === 'admin') {
+      localStorage.setItem('aurora_admin_verified', 'true');
+    }
     localStorage.setItem('aurora_user', JSON.stringify(user));
 
     if (user.role === 'admin') {

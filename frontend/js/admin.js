@@ -24,6 +24,8 @@ let currentActiveSection = 'decision-hub';
 // ═══ FIREBASE ADMIN AUTH ═══
 async function getAdminAuthHeaders() {
   const headers = { 'Content-Type': 'application/json' };
+  const adminToken = localStorage.getItem('aurora_admin_token') || '';
+  if (adminToken) headers['X-Admin-Token'] = adminToken;
   if (firebaseAdminUserObj) {
     try {
       const token = await firebaseAdminUserObj.getIdToken();
@@ -58,12 +60,13 @@ async function verifyAndLoadAdmin(fbUser) {
 
   try {
     const token = await fbUser.getIdToken(true);
-    const res = await fetch(`${API}/admin/verify`, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }
-    });
+    const adminToken = localStorage.getItem('aurora_admin_token') || '';
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    };
+    if (adminToken) headers['X-Admin-Token'] = adminToken;
+    const res = await fetch(`${API}/admin/verify`, { headers });
     const data = await res.json();
 
     if (!res.ok || !data.verified) {
@@ -71,6 +74,12 @@ async function verifyAndLoadAdmin(fbUser) {
     }
 
     currentAdminUser = data.user;
+    if (data.adminToken) {
+      localStorage.setItem('aurora_admin_token', data.adminToken);
+      localStorage.setItem('aurora_admin_verified', 'true');
+    }
+    localStorage.setItem('aurora_admin_verified', 'true');
+    localStorage.setItem('aurora_user', JSON.stringify(data.user));
     updateAdminNavbarUI();
     await loadDashboard();
   } catch (err) {
@@ -94,6 +103,9 @@ function updateAdminNavbarUI() {
 
 async function handleAdminSignOut() {
   try {
+    localStorage.removeItem('aurora_admin_token');
+    localStorage.removeItem('aurora_admin_verified');
+    localStorage.removeItem('aurora_user');
     await firebase.auth().signOut();
     window.location.href = '/';
   } catch (err) {

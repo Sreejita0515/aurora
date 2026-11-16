@@ -396,7 +396,9 @@ function seedDatabase() {
   const userHash = bcrypt.hashSync('user123', 10);
 
   let users = [
-    { id: 'user-admin', name: 'Admin', email: 'admin@aurora.com', password_hash: adminHash, role: 'admin' },
+    { id: 'user-admin', name: 'Admin', email: 'admin@aurora.com', password_hash: adminHash, role: 'admin', firebase_uid: '491xyHtXYjZ7CpbUOidZZq2pXF23' },
+    { id: 'user-masteradmin', name: 'Master Admin', email: 'masteradmin@aurora.com', password_hash: adminHash, role: 'admin', firebase_uid: 'UiNZky9xAqNjFrqauwanQmWHAZR2' },
+    { id: 'user-sreejita', name: 'Sreejita Ghosh', email: 'sreejitag04@gmail.com', password_hash: adminHash, role: 'admin', firebase_uid: 'omL6xrDeEMZuZrcsDO3ztAXOOnm2' },
     { id: 'user-priya', name: 'Priya Patel', email: 'priya@example.com', password_hash: userHash, role: 'customer' },
     { id: 'user-rohan', name: 'Rohan Mukherjee', email: 'rohan@example.com', password_hash: userHash, role: 'customer' },
     { id: 'user-ananya', name: 'Ananya Iyer', email: 'ananya@example.com', password_hash: userHash, role: 'customer' },
@@ -408,11 +410,12 @@ function seedDatabase() {
 
   if (!existingUsers || existingUsers.length === 0) {
     for (const u of users) {
-      dbRun('INSERT INTO users (id, name, email, password_hash, role) VALUES (?, ?, ?, ?, ?)', [u.id, u.name, u.email, u.password_hash, u.role]);
+      dbRun('INSERT INTO users (id, name, email, password_hash, role, firebase_uid) VALUES (?, ?, ?, ?, ?, ?)', [u.id, u.name, u.email, u.password_hash, u.role, u.firebase_uid || null]);
     }
   } else {
-    // Keep existing users for seamless authentication
+    // Keep existing users for seamless authentication and reinforce admin roles
     users = existingUsers;
+    dbRun("UPDATE users SET role = 'admin' WHERE LOWER(email) IN ('admin@aurora.com', 'masteradmin@aurora.com', 'sreejitag04@gmail.com')");
   }
 
   // --- Indian Store Categories ---

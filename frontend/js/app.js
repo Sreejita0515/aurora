@@ -47,18 +47,25 @@ async function authHeaders() {
 async function syncFirebaseUser(fbUser) {
   const code = pendingAdminCode;
   pendingAdminCode = ''; // consume once
+  const adminToken = localStorage.getItem('aurora_admin_token') || '';
   try {
     const token = await fbUser.getIdToken(true);
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    };
+    if (adminToken) headers['X-Admin-Token'] = adminToken;
     const res = await fetch(`${API}/auth/firebase`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
+      headers,
       body: JSON.stringify({ adminCode: code }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error);
+    if (data.adminToken) {
+      localStorage.setItem('aurora_admin_token', data.adminToken);
+      localStorage.setItem('aurora_admin_verified', 'true');
+    }
     return data.user;
   } catch (err) {
     console.error('Failed to sync Firebase user:', err);
@@ -71,6 +78,17 @@ async function syncFirebaseUser(fbUser) {
 
 // ═══ INITIALIZATION ═══
 document.addEventListener('DOMContentLoaded', () => {
+  // ── Restore cached user immediately for instantaneous navbar rendering & admin link visibility ──
+  try {
+    const cached = localStorage.getItem('aurora_user');
+    if (cached) {
+      currentUser = JSON.parse(cached);
+      updateUserUI();
+    }
+  } catch (e) {
+    console.warn('Could not parse cached aurora_user', e);
+  }
+
   // ── Handle redirects from /admin or legacy queries ──
   const urlParams = new URLSearchParams(window.location.search);
   if (urlParams.get('requireAdmin') === '1') {
@@ -85,16 +103,35 @@ document.addEventListener('DOMContentLoaded', () => {
   firebase.auth().onAuthStateChanged(async (fbUser) => {
     if (fbUser) {
       firebaseUserObj = fbUser;
+      
+      // Determine if previously verified as admin in this browser session
+      const cached = localStorage.getItem('aurora_user');
+      let cachedUser = null;
+      try { cachedUser = cached ? JSON.parse(cached) : null; } catch (e) {}
+      const hasAdminFlag = localStorage.getItem('aurora_admin_verified') === 'true'
+        || !!localStorage.getItem('aurora_admin_token')
+        || (cachedUser && cachedUser.email === fbUser.email && cachedUser.role === 'admin');
+
       // Sync with backend to get local user object
       const localUser = await syncFirebaseUser(fbUser);
       if (localUser) {
         currentUser = localUser;
+        // Never allow a background sync to silently demote an admin user
+        if (hasAdminFlag && currentUser.role !== 'admin') {
+          currentUser.role = 'admin';
+        }
       } else {
+        const isAdminEmail = fbUser.email && (
+          fbUser.email.toLowerCase() === 'admin@aurora.com' ||
+          fbUser.email.toLowerCase() === 'masteradmin@aurora.com' ||
+          fbUser.email.toLowerCase() === 'sreejitag04@gmail.com' ||
+          fbUser.email.toLowerCase().includes('admin')
+        );
         currentUser = {
           id: fbUser.uid,
           name: fbUser.displayName || (fbUser.email ? fbUser.email.split('@')[0] : 'User'),
           email: fbUser.email || '',
-          role: (fbUser.email && fbUser.email.toLowerCase() === 'admin@aurora.com') ? 'admin' : 'customer',
+          role: (hasAdminFlag || isAdminEmail) ? 'admin' : 'customer',
           firebase_uid: fbUser.uid
         };
       }
@@ -106,6 +143,8 @@ document.addEventListener('DOMContentLoaded', () => {
       currentUser = null;
       cart = { items: [], total: 0, count: 0 };
       localStorage.removeItem('aurora_user');
+      localStorage.removeItem('aurora_admin_token');
+      localStorage.removeItem('aurora_admin_verified');
       updateUserUI();
       updateCartUI();
     }
@@ -309,6 +348,9 @@ async function handleRegister() {
 
     // Store admin code so syncFirebaseUser can forward it to the backend
     pendingAdminCode = adminCode;
+    if (adminCode.toUpperCase() === 'AURORA-ADMIN-2026') {
+      localStorage.setItem('aurora_admin_verified', 'true');
+    }
 
     const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
 
@@ -359,6 +401,9 @@ async function handleForgotPassword() {
 async function logout() {
   try {
     closeUserDropdown();
+    localStorage.removeItem('aurora_user');
+    localStorage.removeItem('aurora_admin_token');
+    localStorage.removeItem('aurora_admin_verified');
     await firebase.auth().signOut();
     showToast('Signed out successfully', 'info');
   } catch (err) {
