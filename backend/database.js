@@ -93,9 +93,13 @@ function getDbSync() {
 
 function saveDb() {
   if (!db) return;
-  const data = db.export();
-  const buffer = Buffer.from(data);
-  fs.writeFileSync(DB_PATH, buffer);
+  try {
+    const data = db.export();
+    const buffer = Buffer.from(data);
+    fs.writeFileSync(DB_PATH, buffer);
+  } catch (err) {
+    console.warn('saveDb error:', err.message);
+  }
 }
 
 async function initializeDatabase() {
