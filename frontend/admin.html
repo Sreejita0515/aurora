@@ -635,6 +635,17 @@
         <!-- Inventory KPI Cards -->
         <div class="kpi-grid" id="inventoryProductsKpis"></div>
 
+        <!-- Category Filter Bar -->
+        <div style="margin-bottom: 1.25rem; background: rgba(255,255,255,0.02); padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+            <span style="font-size: 0.75rem; text-transform: uppercase; font-weight: 700; color: var(--text-muted); letter-spacing: 0.05em;">Filter by Craft &amp; Regional Category:</span>
+            <span id="categoryActiveLabel" style="font-size: 0.75rem; color: var(--accent-secondary); font-weight: 600;">Showing All Categories</span>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="inventoryCategoryFilters">
+            <button class="c-filter-btn active" onclick="filterCatalogCategory('all')">🏷️ All Categories</button>
+          </div>
+        </div>
+
         <!-- Stock Filter Bar & Search -->
         <div style="display: flex; gap: 12px; margin-bottom: 1.5rem; flex-wrap: wrap; justify-content: space-between; align-items: center;">
           <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="inventoryStockFilters">

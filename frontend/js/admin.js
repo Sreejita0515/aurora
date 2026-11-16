@@ -21,6 +21,17 @@ let currentAdminUser = null;
 let firebaseAdminUserObj = null;
 let currentActiveSection = 'decision-hub';
 
+// HTML escaping helper to prevent XSS and undefined errors
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 // ═══ FIREBASE ADMIN AUTH ═══
 async function getAdminAuthHeaders() {
   const headers = { 'Content-Type': 'application/json' };
@@ -609,12 +620,12 @@ function renderPredictiveInventory() {
   // Category breakdown table
   const catTbody = document.querySelector('#inventoryCategoryTable tbody');
   catTbody.innerHTML = inv.categoryRollup.map(c => `
-    <tr>
+    <tr style="cursor: pointer;" onclick="viewCategoryInInventory('${escapeHtml(c.categoryName)}')" title="Click to view and restock ${escapeHtml(c.categoryName)} products">
       <td>
-        <strong>${c.categoryName}</strong>
-        <div style="font-size: 0.75rem; color: var(--text-muted);">${c.craftOrigin}</div>
+        <strong style="color: var(--accent-secondary);">${c.categoryName}</strong>
+        <div style="font-size: 0.75rem; color: var(--text-muted);">${c.craftOrigin} • Click to Restock ➔</div>
       </td>
-      <td>${c.totalStock}</td>
+      <td><strong>${c.totalStock}</strong> units</td>
       <td>₹${formatNumber(c.inventoryValue)}</td>
       <td>${c.avgVelocity.toFixed(2)}/day</td>
       <td><span class="badge-gold">${c.festivalSurgeRate}</span></td>
@@ -634,9 +645,19 @@ function openRestockModal(productId, productName, currentStock, defaultQty = 25)
 
   if (!modal) return;
 
+  // Auto-resolve product details if not supplied
+  if (!productName || typeof currentStock === 'undefined') {
+    const found = (allCatalogProducts || []).find(p => p.id === productId)
+      || (dashboardData?.agents?.predictiveInventory?.products || []).find(p => p.id === productId);
+    if (found) {
+      productName = found.name;
+      currentStock = found.stock;
+    }
+  }
+
   currentRestockBaseStock = parseInt(currentStock, 10) || 0;
   if (idInput) idInput.value = productId;
-  if (title) title.textContent = `Restock: ${productName}`;
+  if (title) title.textContent = `Restock: ${productName || productId}`;
   if (subtitle) subtitle.textContent = `Product ID: ${productId}`;
   if (currentStockEl) currentStockEl.textContent = `${currentRestockBaseStock} units`;
   if (qtyInput) qtyInput.value = defaultQty;
@@ -1870,6 +1891,7 @@ async function updateOrderStatus(orderId, newStatus) {
 // ═════════════════════════════════════════════════════════════════════════
 let allCatalogProducts = [];
 let catalogStockFilter = 'all';
+let catalogCategoryFilter = 'all';
 let catalogSearchQuery = '';
 
 async function renderInventoryProducts() {
@@ -1902,6 +1924,9 @@ async function renderInventoryProducts() {
     if (elCrit) elCrit.textContent = criticalProducts.length;
     if (elLow) elLow.textContent = lowStockProducts.length;
     if (elHealth) elHealth.textContent = healthyProducts.length;
+
+    // Render category filter chips
+    renderCategoryFilterChips();
 
     if (kpisContainer) {
       kpisContainer.innerHTML = `
@@ -1940,8 +1965,59 @@ async function renderInventoryProducts() {
 
     renderCatalogStockTable();
   } catch (err) {
-    tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #f87171; padding: 2rem;">Error loading products: ${err.message}</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #f87171; padding: 2rem;">Error loading products: ${escapeHtml(err.message)}</td></tr>`;
   }
+}
+
+function renderCategoryFilterChips() {
+  const catFiltersContainer = document.getElementById('inventoryCategoryFilters');
+  if (!catFiltersContainer) return;
+
+  const categoryMap = new Map();
+  allCatalogProducts.forEach(p => {
+    const catId = p.category_id || 'general';
+    const catName = p.category_name || 'General';
+    const catIcon = p.category_icon || '📦';
+    if (!categoryMap.has(catId)) {
+      categoryMap.set(catId, { id: catId, name: catName, icon: catIcon, count: 0 });
+    }
+    categoryMap.get(catId).count++;
+  });
+
+  let html = `<button class="c-filter-btn ${catalogCategoryFilter === 'all' ? 'active' : ''}" onclick="filterCatalogCategory('all')">🏷️ All Categories (${allCatalogProducts.length})</button>`;
+  categoryMap.forEach(cat => {
+    html += `<button class="c-filter-btn ${catalogCategoryFilter === cat.id ? 'active' : ''}" onclick="filterCatalogCategory('${cat.id}')">${cat.icon} ${escapeHtml(cat.name)} (${cat.count})</button>`;
+  });
+  catFiltersContainer.innerHTML = html;
+}
+
+function viewCategoryInInventory(categoryNameOrId) {
+  showSection('inventory-products');
+  setTimeout(() => {
+    const target = allCatalogProducts.find(p =>
+      (p.category_name || '').toLowerCase() === (categoryNameOrId || '').toLowerCase() ||
+      (p.category_id || '').toLowerCase() === (categoryNameOrId || '').toLowerCase()
+    );
+    if (target) {
+      filterCatalogCategory(target.category_id);
+    } else {
+      handleInventorySearch(categoryNameOrId);
+    }
+  }, 100);
+}
+
+function filterCatalogCategory(catId) {
+  catalogCategoryFilter = catId;
+  const container = document.getElementById('inventoryCategoryFilters');
+  if (container) {
+    container.querySelectorAll('.c-filter-btn').forEach(btn => {
+      const isTarget = catId === 'all'
+        ? btn.getAttribute('onclick')?.includes("'all'")
+        : btn.getAttribute('onclick')?.includes(`'${catId}'`);
+      btn.classList.toggle('active', !!isTarget);
+    });
+  }
+  renderCatalogStockTable();
 }
 
 function renderCatalogStockTable() {
@@ -1950,6 +2026,12 @@ function renderCatalogStockTable() {
 
   let filtered = allCatalogProducts;
 
+  // Filter by category
+  if (catalogCategoryFilter !== 'all') {
+    filtered = filtered.filter(p => (p.category_id || '').toLowerCase() === catalogCategoryFilter.toLowerCase());
+  }
+
+  // Filter by stock level
   if (catalogStockFilter === 'critical') {
     filtered = filtered.filter(p => (p.stock || 0) < 15);
   } else if (catalogStockFilter === 'low') {
@@ -1958,16 +2040,35 @@ function renderCatalogStockTable() {
     filtered = filtered.filter(p => (p.stock || 0) >= 30);
   }
 
+  // Filter by search query
   if (catalogSearchQuery) {
     const q = catalogSearchQuery.toLowerCase();
     filtered = filtered.filter(p =>
       (p.name || '').toLowerCase().includes(q) ||
-      (p.category_name || '').toLowerCase().includes(q)
+      (p.category_name || '').toLowerCase().includes(q) ||
+      (p.id || '').toLowerCase().includes(q)
     );
   }
 
+  // Update category active feedback label
+  const activeLabel = document.getElementById('categoryActiveLabel');
+  if (activeLabel) {
+    if (catalogCategoryFilter === 'all') {
+      activeLabel.textContent = `Showing All Categories (${filtered.length} products)`;
+    } else {
+      const selected = allCatalogProducts.find(p => (p.category_id || '').toLowerCase() === catalogCategoryFilter.toLowerCase());
+      const catName = selected ? (selected.category_name || selected.category_id) : catalogCategoryFilter;
+      activeLabel.textContent = `Showing: ${catName} (${filtered.length} products)`;
+    }
+  }
+
   if (filtered.length === 0) {
-    tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2rem;">No products match current filter or search criteria.</td></tr>`;
+    tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">
+      <div style="font-size: 1.5rem; margin-bottom: 8px;">🔍</div>
+      <div style="font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">No products match current filter or search criteria</div>
+      <div style="font-size: 0.8rem; margin-bottom: 12px;">Try selecting another category or resetting the search filter.</div>
+      <button class="c-filter-btn" onclick="resetInventoryFilters()">Reset Filters</button>
+    </td></tr>`;
     return;
   }
 
@@ -1987,6 +2088,8 @@ function renderCatalogStockTable() {
     }
 
     const firstImg = p.image_url || '/favicon.ico';
+    const catIcon = p.category_icon || '🏷️';
+    const catName = p.category_name || p.category_id || 'General';
 
     return `
       <tr>
@@ -1999,7 +2102,12 @@ function renderCatalogStockTable() {
             </div>
           </div>
         </td>
-        <td><span class="badge-neutral">${escapeHtml(p.category_name || p.category_id || 'General')}</span></td>
+        <td>
+          <span class="badge-neutral" style="cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" onclick="filterCatalogCategory('${p.category_id}')" title="Filter by ${escapeHtml(catName)}">
+            <span>${catIcon}</span>
+            <span>${escapeHtml(catName)}</span>
+          </span>
+        </td>
         <td><strong>₹${(p.price || 0).toLocaleString('en-IN')}</strong></td>
         <td>
           <span style="font-size: 1.15rem; font-weight: 800; color: ${stockColor};">${stock}</span>
@@ -2009,19 +2117,31 @@ function renderCatalogStockTable() {
         <td><strong>${(p.total_sold || 0).toLocaleString('en-IN')}</strong> units</td>
         <td>
           <div style="display: flex; gap: 4px; align-items: center;">
-            <button class="btn-quick-restock-pill" title="Add 10 units immediately" onclick="quickRestockDirect('${p.id}', 10, '${escapeHtml(p.name)}')">+10</button>
-            <button class="btn-quick-restock-pill" title="Add 25 units immediately" onclick="quickRestockDirect('${p.id}', 25, '${escapeHtml(p.name)}')">+25</button>
-            <button class="btn-quick-restock-pill" title="Add 50 units immediately" onclick="quickRestockDirect('${p.id}', 50, '${escapeHtml(p.name)}')">+50</button>
+            <button class="btn-quick-restock-pill" title="Add 10 units immediately" onclick="quickRestockDirect('${p.id}', 10)">+10</button>
+            <button class="btn-quick-restock-pill" title="Add 25 units immediately" onclick="quickRestockDirect('${p.id}', 25)">+25</button>
+            <button class="btn-quick-restock-pill" title="Add 50 units immediately" onclick="quickRestockDirect('${p.id}', 50)">+50</button>
           </div>
         </td>
         <td>
-          <button class="btn-action-restock" onclick="openRestockModal('${p.id}', '${escapeHtml(p.name)}', ${stock}, 25)">
+          <button class="btn-action-restock" onclick="openRestockModal('${p.id}')">
             📦 Restock
           </button>
         </td>
       </tr>
     `;
   }).join('');
+}
+
+function resetInventoryFilters() {
+  catalogStockFilter = 'all';
+  catalogCategoryFilter = 'all';
+  catalogSearchQuery = '';
+  const searchInput = document.getElementById('inventorySearchInput');
+  if (searchInput) searchInput.value = '';
+  document.querySelectorAll('#inventoryStockFilters .c-filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.id === 'stockFilter-all');
+  });
+  filterCatalogCategory('all');
 }
 
 function filterCatalogStock(filterType) {
@@ -2039,6 +2159,9 @@ function handleInventorySearch(val) {
 
 async function quickRestockDirect(productId, qty, productName) {
   try {
+    const target = (allCatalogProducts || []).find(p => p.id === productId);
+    const resolvedName = productName || target?.name || productId;
+
     const headers = await getAdminAuthHeaders();
     const res = await fetch(`${API}/admin/decision-agents/inventory/restock`, {
       method: 'POST',
@@ -2048,10 +2171,9 @@ async function quickRestockDirect(productId, qty, productName) {
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Restock failed');
 
-    showToast(`✓ Added +${qty} units to "${productName || data.product.name}"! New Stock: ${data.product.stock}`, 'success');
+    showToast(`✓ Added +${qty} units to "${resolvedName}"! New Stock: ${data.product.stock}`, 'success');
 
     // Update in local state
-    const target = allCatalogProducts.find(p => p.id === productId);
     if (target) {
       target.stock = data.product.stock;
     }

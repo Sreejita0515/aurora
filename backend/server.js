@@ -760,13 +760,14 @@ const ready = (async () => {
   app.get('/api/admin/products', requireAdmin, (req, res) => {
     try {
       const products = db.prepare(`
-        SELECT p.*, c.name AS category_name,
+        SELECT p.*, COALESCE(c.name, p.category_id, 'General') AS category_name,
+          COALESCE(c.icon, '📦') AS category_icon,
           COALESCE((SELECT SUM(oi.quantity) FROM order_items oi
             JOIN orders o ON oi.order_id = o.id
             WHERE oi.product_id = p.id AND o.status != 'cancelled'), 0) AS total_sold
         FROM products p
-        JOIN categories c ON p.category_id = c.id
-        ORDER BY p.name
+        LEFT JOIN categories c ON p.category_id = c.id
+        ORDER BY c.name, p.name
       `).all();
       res.json({ products });
     } catch (e) { res.status(500).json({ error: e.message }); }
