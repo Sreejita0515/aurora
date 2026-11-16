@@ -229,10 +229,10 @@ function renderDecisionHub() {
         </div>
         <div class="playbook-title">${r.title}</div>
         <div class="playbook-desc">${r.description}</div>
-        <div style="margin-top: 6px; font-size: 0.78rem; color: #38bdf8;">
+        <div style="margin-top: 6px; font-size: 0.78rem; color: var(--accent-primary);">
           <strong>Trigger Rationale:</strong> ${r.triggerReason || 'Algorithmic optimization threshold met'}
         </div>
-        <div style="margin-top: 6px; font-size: 0.85rem; color: #a78bfa;">
+        <div style="margin-top: 6px; font-size: 0.85rem; color: var(--accent-primary);">
           <strong>Recommended Action:</strong> ${r.action}
         </div>
       </div>
@@ -294,12 +294,12 @@ async function loadDecisionActionsAudit() {
             <div style="font-size: 0.72rem; color: var(--text-muted);">${a.entity_name || ''}</div>
           </td>
           <td>
-            <div style="font-weight: 600; color: #38bdf8; font-size: 0.8rem;">${a.agent_name}</div>
+            <div style="font-weight: 600; color: var(--accent-primary); font-size: 0.8rem;">${a.agent_name}</div>
             <span class="badge-neutral" style="font-size: 0.68rem;">${a.model_source || 'deterministic'}</span>
           </td>
           <td><span class="badge-gold" style="font-size: 0.72rem;">${a.confidence || 'Audited'}</span></td>
           <td style="font-size: 0.75rem; color: var(--text-muted); max-width: 260px;">${a.trigger_reason}</td>
-          <td style="font-weight: 700; color: #34d399; font-size: 0.82rem;">${a.expected_impact}</td>
+          <td style="font-weight: 700; color: var(--success); font-size: 0.82rem;">${a.expected_impact}</td>
           <td><span class="${typeBadge}" style="font-size: 0.72rem;">${a.status || 'COMPLETED'}</span></td>
         </tr>
       `;
@@ -365,7 +365,7 @@ async function executeHubDecisionByIndex(index) {
 
     if (btn) {
       btn.innerHTML = 'Executed';
-      btn.style.background = '#10b981';
+      btn.style.background = 'var(--success)';
       btn.disabled = true;
     }
 
@@ -462,17 +462,17 @@ function renderPredictiveInventory() {
           <!-- 7-Day Horizon Evaluation -->
           <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(56, 189, 248, 0.2); border-radius: 8px; padding: 12px 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <strong style="color: #38bdf8; font-size: 0.85rem;">7-Day Forward Horizon</strong>
+              <strong style="color: var(--accent-primary); font-size: 0.85rem;">7-Day Forward Horizon</strong>
               <span class="badge-success">+${gain7}% vs Baseline</span>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.8rem;">
               <div>
                 <div style="color: var(--text-muted); font-size: 0.72rem;">Held-Out Test MAE</div>
-                <div style="font-weight: 700; color: #38bdf8;">${eval7 ? eval7.model_mae.toFixed(3) : '1.191'} <span style="font-size: 0.7rem; color: var(--text-muted);">(Base: ${eval7 ? eval7.baseline_mae.toFixed(3) : '1.419'})</span></div>
+                <div style="font-weight: 700; color: var(--accent-primary);">${eval7 ? eval7.model_mae.toFixed(3) : '1.191'} <span style="font-size: 0.7rem; color: var(--text-muted);">(Base: ${eval7 ? eval7.baseline_mae.toFixed(3) : '1.419'})</span></div>
               </div>
               <div>
                 <div style="color: var(--text-muted); font-size: 0.72rem;">Held-Out Test RMSE</div>
-                <div style="font-weight: 700; color: #38bdf8;">${eval7 ? eval7.model_rmse.toFixed(3) : '1.439'} <span style="font-size: 0.7rem; color: var(--text-muted);">(Base: ${eval7 ? eval7.baseline_rmse.toFixed(3) : '2.092'})</span></div>
+                <div style="font-weight: 700; color: var(--accent-primary);">${eval7 ? eval7.model_rmse.toFixed(3) : '1.439'} <span style="font-size: 0.7rem; color: var(--text-muted);">(Base: ${eval7 ? eval7.baseline_rmse.toFixed(3) : '2.092'})</span></div>
               </div>
             </div>
             <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 6px;">
@@ -483,17 +483,17 @@ function renderPredictiveInventory() {
           <!-- 30-Day Horizon Evaluation -->
           <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(129, 140, 248, 0.2); border-radius: 8px; padding: 12px 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <strong style="color: #818cf8; font-size: 0.85rem;">30-Day Forward Horizon</strong>
+              <strong style="color: var(--accent-primary); font-size: 0.85rem;">30-Day Forward Horizon</strong>
               <span class="badge-success">+${gain30}% vs Baseline</span>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.8rem;">
               <div>
                 <div style="color: var(--text-muted); font-size: 0.72rem;">Held-Out Test MAE</div>
-                <div style="font-weight: 700; color: #818cf8;">${eval30 ? eval30.model_mae.toFixed(3) : '2.838'} <span style="font-size: 0.7rem; color: var(--text-muted);">(Base: ${eval30 ? eval30.baseline_mae.toFixed(3) : '4.290'})</span></div>
+                <div style="font-weight: 700; color: var(--accent-primary);">${eval30 ? eval30.model_mae.toFixed(3) : '2.838'} <span style="font-size: 0.7rem; color: var(--text-muted);">(Base: ${eval30 ? eval30.baseline_mae.toFixed(3) : '4.290'})</span></div>
               </div>
               <div>
                 <div style="color: var(--text-muted); font-size: 0.72rem;">Held-Out Test RMSE</div>
-                <div style="font-weight: 700; color: #818cf8;">${eval30 ? eval30.model_rmse.toFixed(3) : '3.474'} <span style="font-size: 0.7rem; color: var(--text-muted);">(Base: ${eval30 ? eval30.baseline_rmse.toFixed(3) : '5.324'})</span></div>
+                <div style="font-weight: 700; color: var(--accent-primary);">${eval30 ? eval30.model_rmse.toFixed(3) : '3.474'} <span style="font-size: 0.7rem; color: var(--text-muted);">(Base: ${eval30 ? eval30.baseline_rmse.toFixed(3) : '5.324'})</span></div>
               </div>
             </div>
             <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 6px;">
@@ -504,7 +504,7 @@ function renderPredictiveInventory() {
           <!-- Top Feature Weights -->
           <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 8px; padding: 12px 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <strong style="color: #cbd5e1; font-size: 0.85rem;">Top Predictive Features</strong>
+              <strong style="color: var(--text-muted); font-size: 0.85rem;">Top Predictive Features</strong>
               <span class="badge-neutral">Gini Importance</span>
             </div>
             <div style="display: flex; flex-wrap: wrap; gap: 5px;">
@@ -552,11 +552,11 @@ function renderPredictiveInventory() {
         </td>
         <td><span class="badge-neutral">${p.category}</span></td>
         <td><strong>${p.stock}</strong></td>
-        <td><strong style="color: #38bdf8;">${f7} u</strong></td>
-        <td><strong style="color: #818cf8;">${f30} u</strong></td>
+        <td><strong style="color: var(--accent-primary);">${f7} u</strong></td>
+        <td><strong style="color: var(--accent-primary);">${f30} u</strong></td>
         <td>${p.dailyVelocity.toFixed(2)}/day</td>
-        <td><strong style="color: ${p.daysUntilStockout <= 7 ? '#f87171' : 'inherit'};">${p.daysUntilStockout}d</strong></td>
-        <td><strong style="color: #f59e0b;">${p.festivalStockoutDays}d</strong> <span style="font-size: 0.7rem; color: #f59e0b;">(${p.festivalSurgeMultiplier}x)</span></td>
+        <td><strong style="color: ${p.daysUntilStockout <= 7 ? 'var(--danger)' : 'inherit'};">${p.daysUntilStockout}d</strong></td>
+        <td><strong style="color: var(--warning);">${p.festivalStockoutDays}d</strong> <span style="font-size: 0.7rem; color: var(--warning);">(${p.festivalSurgeMultiplier}x)</span></td>
         <td>${p.reorderPoint} units</td>
         <td><span class="${badgeClass}">${p.recommendedReorderQty > 0 ? `+${p.recommendedReorderQty} units` : 'Adequate'}</span></td>
         <td>${p.leadTimeDays} days</td>
@@ -570,7 +570,7 @@ function renderPredictiveInventory() {
               <button class="btn-action-restock" onclick="quickRestockProduct('${p.id}', ${p.recommendedReorderQty})">
                 + Restock ${p.recommendedReorderQty}
               </button>
-            ` : '<span style="color: #10b981; font-size: 0.75rem;">Healthy Stock</span>'}
+            ` : '<span style="color: var(--success); font-size: 0.75rem;">Healthy Stock</span>'}
           </div>
         </td>
       </tr>
@@ -584,7 +584,7 @@ function renderPredictiveInventory() {
       <td><strong>${p.name}</strong></td>
       <td>${p.stock} units</td>
       <td>${p.sold30d} sold</td>
-      <td style="color: #f87171; font-weight: 700;">₹${formatNumber((p.stock - Math.ceil(p.dailyVelocity * 45)) * p.estimatedCostPrice)}</td>
+      <td style="color: var(--danger); font-weight: 700;">₹${formatNumber((p.stock - Math.ceil(p.dailyVelocity * 45)) * p.estimatedCostPrice)}</td>
       <td><span class="badge-warning">Flash Sale / Bundle (-15%)</span></td>
     </tr>
   `).join('');
@@ -644,7 +644,7 @@ function renderSmartPricing() {
     <div class="kpi-card">
       <div class="kpi-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
       <div class="kpi-label">Projected Monthly Profit Uplift</div>
-      <div class="kpi-value" style="color: #34d399;">+₹${formatNumber(pricing.totalProjectedMonthlyUplift)}</div>
+      <div class="kpi-value" style="color: var(--success);">+₹${formatNumber(pricing.totalProjectedMonthlyUplift)}</div>
       <span class="kpi-change positive">Net Bottom-Line Margin Lift</span>
     </div>
     <div class="kpi-card">
@@ -702,14 +702,14 @@ function renderSmartPricing() {
           <!-- Card 1: Data Audit Disclosure -->
           <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(52, 211, 153, 0.2); border-radius: 8px; padding: 12px 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <strong style="color: #34d399; font-size: 0.85rem;">Empirical Observational Data Audit</strong>
+              <strong style="color: var(--success); font-size: 0.85rem;">Empirical Observational Data Audit</strong>
               <span class="badge-neutral">105 Live Orders</span>
             </div>
             <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.45;">
               All historical orders transacted at catalog MRPs. Direct econometric regression is mathematically unidentifiable without price variance.
               Aurora utilizes bounded scenario sensitivity testing instead of arbitrary heuristics.
             </div>
-            <div style="font-size: 0.72rem; color: #34d399; margin-top: 8px; font-weight: 600;">
+            <div style="font-size: 0.72rem; color: var(--success); margin-top: 8px; font-weight: 600;">
               16/20 Catalog SKUs Have Actionable Margin Opportunities
             </div>
           </div>
@@ -717,17 +717,17 @@ function renderSmartPricing() {
           <!-- Card 2: Wholesale Floor & Protection Rules -->
           <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(52, 211, 153, 0.2); border-radius: 8px; padding: 12px 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <strong style="color: #38bdf8; font-size: 0.85rem;">Wholesale Cost Floor Protection</strong>
+              <strong style="color: var(--accent-primary); font-size: 0.85rem;">Wholesale Cost Floor Protection</strong>
               <span class="badge-success">Guaranteed ≥15% Profit</span>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.8rem;">
               <div>
                 <div style="color: var(--text-muted); font-size: 0.72rem;">Wholesale Cost Ratio</div>
-                <div style="font-weight: 700; color: #38bdf8;">${(params.wholesaleCostRatio * 100 || 58)}% of MRP</div>
+                <div style="font-weight: 700; color: var(--accent-primary);">${(params.wholesaleCostRatio * 100 || 58)}% of MRP</div>
               </div>
               <div>
                 <div style="color: var(--text-muted); font-size: 0.72rem;">Minimum Cost Floor</div>
-                <div style="font-weight: 700; color: #38bdf8;">Cost × ${(params.minGrossMarginMarkup || 1.15)}</div>
+                <div style="font-weight: 700; color: var(--accent-primary);">Cost × ${(params.minGrossMarginMarkup || 1.15)}</div>
               </div>
             </div>
             <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 6px;">
@@ -738,7 +738,7 @@ function renderSmartPricing() {
           <!-- Card 3: Sensitivity Scenarios -->
           <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(52, 211, 153, 0.2); border-radius: 8px; padding: 12px 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <strong style="color: #facc15; font-size: 0.85rem;">Microeconomic Sensitivity Scenarios</strong>
+              <strong style="color: var(--warning); font-size: 0.85rem;">Microeconomic Sensitivity Scenarios</strong>
               <span class="badge-gold">PED Tri-Band</span>
             </div>
             <div style="font-size: 0.78rem; color: var(--text-muted); line-height: 1.45;">
@@ -746,7 +746,7 @@ function renderSmartPricing() {
               <strong>Unit Elastic (ε = -1.00):</strong> Baseline proportional market response.<br>
               <strong>Elastic (ε = -1.50):</strong> Price-sensitive clearance markdown demand response.
             </div>
-            <div style="font-size: 0.7rem; color: #facc15; margin-top: 6px;">
+            <div style="font-size: 0.7rem; color: var(--warning); margin-top: 6px;">
               Every recommendation outputs break-even units to preserve baseline gross margin.
             </div>
           </div>
@@ -778,7 +778,7 @@ function renderSmartPricing() {
           <div style="font-size: 0.75rem; color: var(--text-muted);">${p.rationale}</div>
         </td>
         <td><strong>${formatPrice(p.currentPrice)}</strong></td>
-        <td><strong style="color: #34d399; font-size: 1.05rem;">${formatPrice(p.recommendedPrice)}</strong></td>
+        <td><strong style="color: var(--success); font-size: 1.05rem;">${formatPrice(p.recommendedPrice)}</strong></td>
         <td>
           <span class="badge-neutral" style="font-size: 0.75rem;">₹${floorPrice.toLocaleString('en-IN')}</span>
         </td>
@@ -789,11 +789,11 @@ function renderSmartPricing() {
         </td>
         <td><span class="${p.strategyBadge}">${p.strategyLabel}</span></td>
         <td>
-          <span style="font-family: monospace; color: #38bdf8; font-weight: 600;">ε = ${p.elasticity}</span>
+          <span style="font-family: monospace; color: var(--accent-primary); font-weight: 600;">ε = ${p.elasticity}</span>
         </td>
         <td><span class="badge-neutral">${beUnits}</span></td>
         <td><span class="badge-gold">${p.confidence}%</span></td>
-        <td style="font-weight: 700; color: ${profitDelta >= 0 ? '#34d399' : '#f87171'};">
+        <td style="font-weight: 700; color: ${profitDelta >= 0 ? 'var(--success)' : 'var(--danger)'};">
           ${profitDelta > 0 ? '+₹' + formatNumber(profitDelta) : '₹' + formatNumber(profitDelta)}
         </td>
         <td>
@@ -805,7 +805,7 @@ function renderSmartPricing() {
               <button class="btn-action-apply" onclick="applySmartPrice('${p.id}', ${p.recommendedPrice})">
                 Apply ₹${p.recommendedPrice.toLocaleString('en-IN')}
               </button>
-            ` : '<span style="color: #94a3b8; font-size: 0.75rem;">Optimal Price</span>'}
+            ` : '<span style="color: var(--text-muted); font-size: 0.75rem;">Optimal Price</span>'}
           </div>
         </td>
       </tr>
@@ -878,7 +878,7 @@ async function runPricingSimulation() {
         </div>
         <div class="sim-stat">
           <div class="stat-label">Break-Even Units</div>
-          <div class="stat-val" style="color: #38bdf8;">${data.breakevenUnits && data.breakevenUnits < 9000 ? data.breakevenUnits + ' u' : '—'}</div>
+          <div class="stat-val" style="color: var(--accent-primary);">${data.breakevenUnits && data.breakevenUnits < 9000 ? data.breakevenUnits + ' u' : '—'}</div>
         </div>
         <div class="sim-stat">
           <div class="stat-label">Monthly Gross Profit</div>
@@ -895,15 +895,15 @@ async function runPricingSimulation() {
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
           <div>
-            <span style="color: #38bdf8;">Inelastic (ε = -0.50):</span>
+            <span style="color: var(--accent-primary);">Inelastic (ε = -0.50):</span>
             <div style="font-weight: 700;">${inel.projectedUnits || 0} units (${(inel.profitDelta >= 0 ? '+' : '')}₹${formatNumber(inel.profitDelta || 0)})</div>
           </div>
           <div>
-            <span style="color: #facc15;">Unit Elastic (ε = -1.00):</span>
+            <span style="color: var(--warning);">Unit Elastic (ε = -1.00):</span>
             <div style="font-weight: 700;">${unit.projectedUnits || 0} units (${(unit.profitDelta >= 0 ? '+' : '')}₹${formatNumber(unit.profitDelta || 0)})</div>
           </div>
           <div>
-            <span style="color: #f87171;">Elastic (ε = -1.50):</span>
+            <span style="color: var(--danger);">Elastic (ε = -1.50):</span>
             <div style="font-weight: 700;">${elas.projectedUnits || 0} units (${(elas.profitDelta >= 0 ? '+' : '')}₹${formatNumber(elas.profitDelta || 0)})</div>
           </div>
         </div>
@@ -986,7 +986,7 @@ function renderCustomerBehaviour() {
     <tr>
       <td><strong>${r.name}</strong></td>
       <td>${r.orders} orders</td>
-      <td style="font-weight: 700; color: #34d399;">₹${formatNumber(r.revenue)}</td>
+      <td style="font-weight: 700; color: var(--success);">₹${formatNumber(r.revenue)}</td>
       <td>₹${formatNumber(r.avgBasket)}</td>
       <td><span class="badge-neutral">${r.topCategory}</span></td>
     </tr>
@@ -1011,13 +1011,13 @@ function renderCustomerBehaviour() {
             <div style="font-size: 0.75rem; color: var(--text-muted);">${c.customer_email}</div>
           </td>
           <td>
-            <span style="font-family: monospace; font-weight: 700; color: #f87171;">#${c.id.substring(0, 8)}</span>
+            <span style="font-family: monospace; font-weight: 700; color: var(--danger);">#${c.id.substring(0, 8)}</span>
           </td>
-          <td style="font-weight: 700; color: #f87171;">₹${formatNumber(c.total)}</td>
+          <td style="font-weight: 700; color: var(--danger);">₹${formatNumber(c.total)}</td>
           <td><span class="badge-neutral">${c.items_count || 1} item(s)</span></td>
           <td style="font-size: 0.85rem; color: var(--text-muted);">${new Date(c.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
           <td>
-            <button class="btn-action-apply" style="padding: 4px 10px; font-size: 0.75rem; background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4); color: #fca5a5;" onclick="openCustomerModal('${c.user_id}')">
+            <button class="btn-action-apply" style="padding: 4px 10px; font-size: 0.75rem; background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4); color: var(--danger);" onclick="openCustomerModal('${c.user_id}')">
               View Profile & Orders 
             </button>
           </td>
@@ -1059,17 +1059,17 @@ function renderCustomerBehaviour() {
           <!-- Cross-Validation Performance -->
           <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(168, 85, 247, 0.2); border-radius: 8px; padding: 12px 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <strong style="color: #c084fc; font-size: 0.85rem;">Stratified 5-Fold Cross-Validation</strong>
+              <strong style="color: var(--accent-primary); font-size: 0.85rem;">Stratified 5-Fold Cross-Validation</strong>
               <span class="badge-success">ROC-AUC: ${metrics.cv_roc_auc_mean ? metrics.cv_roc_auc_mean.toFixed(4) : '0.7667'}</span>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.8rem;">
               <div>
                 <div style="color: var(--text-muted); font-size: 0.72rem;">CV Recall (Lapse Sensitivity)</div>
-                <div style="font-weight: 700; color: #c084fc;">${metrics.cv_recall_mean ? (metrics.cv_recall_mean * 100).toFixed(1) + '%' : '60.0%'}</div>
+                <div style="font-weight: 700; color: var(--accent-primary);">${metrics.cv_recall_mean ? (metrics.cv_recall_mean * 100).toFixed(1) + '%' : '60.0%'}</div>
               </div>
               <div>
                 <div style="color: var(--text-muted); font-size: 0.72rem;">CV Precision / F1</div>
-                <div style="font-weight: 700; color: #c084fc;">${metrics.cv_precision_mean ? metrics.cv_precision_mean.toFixed(3) : '0.253'} / ${metrics.cv_f1_mean ? metrics.cv_f1_mean.toFixed(3) : '0.351'}</div>
+                <div style="font-weight: 700; color: var(--accent-primary);">${metrics.cv_precision_mean ? metrics.cv_precision_mean.toFixed(3) : '0.253'} / ${metrics.cv_f1_mean ? metrics.cv_f1_mean.toFixed(3) : '0.351'}</div>
               </div>
             </div>
             <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 6px;">
@@ -1080,7 +1080,7 @@ function renderCustomerBehaviour() {
           <!-- Sample Size & Cohort Limitations Disclosure -->
           <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 8px; padding: 12px 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <strong style="color: #fbbf24; font-size: 0.85rem;">Dataset & Sample Disclosure</strong>
+              <strong style="color: var(--warning); font-size: 0.85rem;">Dataset & Sample Disclosure</strong>
               <span class="badge-warning">Small Cohort</span>
             </div>
             <p style="font-size: 0.74rem; color: var(--text-secondary); margin: 0; line-height: 1.4;">
@@ -1094,7 +1094,7 @@ function renderCustomerBehaviour() {
           <!-- Top Predictive Features -->
           <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 8px; padding: 12px 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <strong style="color: #cbd5e1; font-size: 0.85rem;">Top Churn Drivers</strong>
+              <strong style="color: var(--text-muted); font-size: 0.85rem;">Top Churn Drivers</strong>
               <span class="badge-neutral">Gini Importance</span>
             </div>
             <div style="display: flex; flex-wrap: wrap; gap: 5px;">
@@ -1158,7 +1158,7 @@ function renderCustomerBehaviour() {
             ${probPercent}%
           </span>
         </td>
-        <td style="font-weight: 700; color: #34d399;">₹${c.predictedCLV.toLocaleString('en-IN')}</td>
+        <td style="font-weight: 700; color: var(--success);">₹${c.predictedCLV.toLocaleString('en-IN')}</td>
         <td>
           <button class="btn-formula-inspect" onclick="openFormulaModal('customer', '${c.id}')">
             View Math
@@ -1196,7 +1196,7 @@ function renderCustomerBehaviour() {
       </div>
       <div class="sim-stat">
         <div class="stat-label">Optimal Remarketing Trigger</div>
-        <div class="stat-val" style="font-size: 0.95rem; color: #facc15;">${funnel.recommendedRemarketingWindow}</div>
+        <div class="stat-val" style="font-size: 0.95rem; color: var(--warning);">${funnel.recommendedRemarketingWindow}</div>
       </div>
     </div>
   `;
@@ -1220,7 +1220,7 @@ function renderBundleCrossSelling() {
     <div class="kpi-card">
       <div class="kpi-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
       <div class="kpi-label">Projected Store AOV Lift</div>
-      <div class="kpi-value" style="color: #34d399;">${bundle.projectedAovImpact}</div>
+      <div class="kpi-value" style="color: var(--success);">${bundle.projectedAovImpact}</div>
       <span class="kpi-change positive">Basket Size Expansion</span>
     </div>
     <div class="kpi-card">
@@ -1276,17 +1276,17 @@ function renderBundleCrossSelling() {
           <!-- Card 1: Basket Distribution -->
           <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 8px; padding: 12px 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <strong style="color: #f59e0b; font-size: 0.85rem;">Transaction Basket Metrics</strong>
+              <strong style="color: var(--warning); font-size: 0.85rem;">Transaction Basket Metrics</strong>
               <span class="badge-neutral">${ds.averageBasketSize || 1.92} items/order</span>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.8rem;">
               <div>
                 <div style="color: var(--text-muted); font-size: 0.72rem;">Multi-Item Orders</div>
-                <div style="font-weight: 700; color: #34d399;">${ds.multiItemOrders || 60} orders</div>
+                <div style="font-weight: 700; color: var(--success);">${ds.multiItemOrders || 60} orders</div>
               </div>
               <div>
                 <div style="color: var(--text-muted); font-size: 0.72rem;">Multi-Item Share</div>
-                <div style="font-weight: 700; color: #38bdf8;">${ds.multiItemRatioPct || 58.8}% of store</div>
+                <div style="font-weight: 700; color: var(--accent-primary);">${ds.multiItemRatioPct || 58.8}% of store</div>
               </div>
             </div>
             <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 8px; line-height: 1.4;">
@@ -1297,17 +1297,17 @@ function renderBundleCrossSelling() {
           <!-- Card 2: Apriori Bounds & Association -->
           <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 8px; padding: 12px 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <strong style="color: #38bdf8; font-size: 0.85rem;">Association Thresholds</strong>
+              <strong style="color: var(--accent-primary); font-size: 0.85rem;">Association Thresholds</strong>
               <span class="badge-success">${ds.associationRulesGenerated || 50} Rules Mined</span>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.8rem;">
               <div>
                 <div style="color: var(--text-muted); font-size: 0.72rem;">Min Support P(A∩B)</div>
-                <div style="font-weight: 700; color: #38bdf8;">≥${(params.minSupportThreshold * 100 || 1.5).toFixed(1)}%</div>
+                <div style="font-weight: 700; color: var(--accent-primary);">≥${(params.minSupportThreshold * 100 || 1.5).toFixed(1)}%</div>
               </div>
               <div>
                 <div style="color: var(--text-muted); font-size: 0.72rem;">Min Confidence P(B|A)</div>
-                <div style="font-weight: 700; color: #34d399;">≥${(params.minConfidenceThreshold * 100 || 15).toFixed(0)}%</div>
+                <div style="font-weight: 700; color: var(--success);">≥${(params.minConfidenceThreshold * 100 || 15).toFixed(0)}%</div>
               </div>
             </div>
             <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 8px; line-height: 1.4;">
@@ -1318,17 +1318,17 @@ function renderBundleCrossSelling() {
           <!-- Card 3: Margin Floor Protection -->
           <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 8px; padding: 12px 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <strong style="color: #34d399; font-size: 0.85rem;">Bundle Margin Floor Guard</strong>
+              <strong style="color: var(--success); font-size: 0.85rem;">Bundle Margin Floor Guard</strong>
               <span class="badge-gold">≥25% Margin Preserved</span>
             </div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.8rem;">
               <div>
                 <div style="color: var(--text-muted); font-size: 0.72rem;">Wholesale Cost Ratio</div>
-                <div style="font-weight: 700; color: #38bdf8;">${(params.wholesaleCostRatio * 100 || 58)}% of MRP</div>
+                <div style="font-weight: 700; color: var(--accent-primary);">${(params.wholesaleCostRatio * 100 || 58)}% of MRP</div>
               </div>
               <div>
                 <div style="color: var(--text-muted); font-size: 0.72rem;">Guaranteed Floor</div>
-                <div style="font-weight: 700; color: #34d399;">≥${params.minBundleGrossMarginPct || 25.0}%</div>
+                <div style="font-weight: 700; color: var(--success);">≥${params.minBundleGrossMarginPct || 25.0}%</div>
               </div>
             </div>
             <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 8px; line-height: 1.4;">
@@ -1403,7 +1403,7 @@ function renderBundleCrossSelling() {
   csTbody.innerHTML = bundle.crossSellingRules.map(r => `
     <tr>
       <td><strong>${r.source}</strong></td>
-      <td style="color: #34d399; font-weight: 700;">${r.recommended}</td>
+      <td style="color: var(--success); font-weight: 700;">${r.recommended}</td>
       <td><span class="badge-success">${r.attachmentRate}</span></td>
       <td><span class="badge-gold" style="font-weight: 700;">${r.lift ? r.lift + 'x Lift' : '—'}</span></td>
       <td style="font-size: 0.78rem; color: var(--text-muted); max-width: 280px;">${r.reason || 'High empirical affinity'}</td>
@@ -1435,7 +1435,7 @@ async function deploySmartBundle(bundleId, bundleName) {
 
     if (btn) {
       btn.innerHTML = 'Active on Storefront';
-      btn.style.background = '#10b981';
+      btn.style.background = 'var(--success)';
     }
     showToast(`"${bundleName}" deployed to storefront & logged to audit!`, 'success');
     if (typeof loadDecisionActionsAudit === 'function') {
@@ -1463,7 +1463,7 @@ function renderBusinessStrategy() {
     </div>
     <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 2rem; margin-top: 1rem;">
       <div style="text-align: center; min-width: 160px;">
-        <div style="font-size: 3.5rem; font-weight: 900; color: #34d399; line-height: 1;">${strat.healthScore}</div>
+        <div style="font-size: 3.5rem; font-weight: 900; color: var(--success); line-height: 1;">${strat.healthScore}</div>
         <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 6px;">Out of 100 Index</div>
         <div style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-top: 4px;">${strat.ratingTitle}</div>
         <button class="btn-formula-inspect" style="margin-top: 10px;" onclick="openFormulaModal('strategy', 'health')">
@@ -1500,9 +1500,9 @@ function renderBusinessStrategy() {
   gmvTbody.innerHTML = strat.gmvTrajectory.map(g => `
     <tr>
       <td><strong>${g.month}</strong></td>
-      <td style="color: #94a3b8;">₹${formatNumber(g.conservative)}</td>
-      <td style="font-weight: 700; color: #34d399;">₹${formatNumber(g.expected)}</td>
-      <td style="font-weight: 800; color: #f59e0b;">₹${formatNumber(g.aggressive)}</td>
+      <td style="color: var(--text-muted);">₹${formatNumber(g.conservative)}</td>
+      <td style="font-weight: 700; color: var(--success);">₹${formatNumber(g.expected)}</td>
+      <td style="font-weight: 800; color: var(--warning);">₹${formatNumber(g.aggressive)}</td>
     </tr>
   `).join('');
 
@@ -1678,7 +1678,7 @@ function renderOrdersTable(orders) {
   tbody.innerHTML = orders.map(o => `
     <tr style="${o.status === 'cancelled' ? 'background: rgba(239, 68, 68, 0.05);' : ''}">
       <td>
-        <span style="font-family: monospace; font-size: 0.8rem; font-weight: 700; color: ${o.status === 'cancelled' ? '#f87171' : 'var(--accent-secondary)'};">
+        <span style="font-family: monospace; font-size: 0.8rem; font-weight: 700; color: ${o.status === 'cancelled' ? 'var(--danger)' : 'var(--accent-secondary)'};">
           #${o.id.substring(0, 8)}
         </span>
       </td>
@@ -1755,7 +1755,7 @@ function renderCategoryDonut(catData, containerId = 'categoryChart') {
   const container = document.getElementById(containerId);
   if (!container || !catData || catData.length === 0) return;
 
-  const colors = ['#7c3aed', '#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#6366f1'];
+  const colors = ['#1F5C53', '#B08D57', '#8B5E5E', '#5B7B8C', '#7A8450', '#9C7AA8'];
   const total = catData.reduce((s, c) => s + c.revenue, 0);
 
   container.innerHTML = `
@@ -1799,11 +1799,11 @@ function renderStatusDistribution(data) {
 
   const total = data.reduce((s, d) => s + d.count, 0);
   const statusColors = {
-    pending: '#f59e0b',
-    processing: '#3b82f6',
-    shipped: '#a855f7',
-    delivered: '#22c55e',
-    cancelled: '#ef4444',
+    pending: '#9D9A94',
+    processing: '#6FA89C',
+    shipped: '#1F5C53',
+    delivered: '#1F7A52',
+    cancelled: '#B23B30',
   };
 
   container.innerHTML = `
@@ -1938,7 +1938,7 @@ async function openCustomerModal(userId) {
   } catch (err) {
     console.error('Error opening customer modal:', err);
     if (ordersList) {
-      ordersList.innerHTML = `<div style="text-align: center; padding: 2rem; color: #f87171;">${err.message}</div>`;
+      ordersList.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--danger);">${err.message}</div>`;
     }
   }
 }
@@ -2014,7 +2014,7 @@ function renderModalOrders(orders) {
         </div>
 
         ${isCancelled ? `
-          <div style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; padding: 6px 12px; margin-bottom: 0.75rem; font-size: 0.8rem; color: #fca5a5; display: flex; align-items: center; gap: 8px;">
+          <div style="background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; padding: 6px 12px; margin-bottom: 0.75rem; font-size: 0.8rem; color: var(--danger); display: flex; align-items: center; gap: 8px;">
             <span></span>
             <span><strong>Cancelled Order:</strong> This order was cancelled by the customer. Amount of ₹${Number(order.total).toLocaleString('en-IN')} was voided/refunded.</span>
           </div>
@@ -2029,7 +2029,7 @@ function renderModalOrders(orders) {
             <span>${order.shipping_address ? (order.shipping_address.length > 35 ? order.shipping_address.substring(0, 35) + '...' : order.shipping_address) : 'No address specified'}</span>
             <span>${order.payment_method ? order.payment_method.toUpperCase() : 'PREPAID'}</span>
           </div>
-          <div style="font-size: 1.05rem; font-weight: 800; color: ${isCancelled ? '#f87171' : 'var(--accent-secondary)'};">
+          <div style="font-size: 1.05rem; font-weight: 800; color: ${isCancelled ? 'var(--danger)' : 'var(--accent-secondary)'};">
             Total: ₹${Number(order.total).toLocaleString('en-IN')}
           </div>
         </div>
@@ -2086,7 +2086,7 @@ function openFormulaModal(type, itemId) {
     const inv = agents.predictiveInventory;
     const p = inv?.forecast?.find(x => x.id === itemId) || inv?.forecast?.[0];
     if (!p || !p.calculation) {
-      body.innerHTML = '<div style="color: #f87171; padding: 2rem;">Calculation model details not found for this product.</div>';
+      body.innerHTML = '<div style="color: #C97F76; padding: 2rem;">Calculation model details not found for this product.</div>';
       return;
     }
     const c = p.calculation;
@@ -2109,21 +2109,21 @@ function openFormulaModal(type, itemId) {
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Inference Status</div>
-            <div class="db-input-value" style="font-size: 0.85rem; color: ${c.mlModel?.isFallback ? '#f59e0b' : '#34d399'};">
+            <div class="db-input-value" style="font-size: 0.85rem; color: ${c.mlModel?.isFallback ? '#C9A368' : '#7FB89E'};">
               ${c.mlModel?.isFallback ? 'Empirical Fallback' : 'Trained Supervised RF'}
             </div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Held-Out 7D RMSE</div>
-            <div class="db-input-value" style="color: #38bdf8;">${c.mlModel?.evaluation?.horizon_7d?.model_rmse?.toFixed(3) || '1.439'} <span style="font-size: 0.7rem; color: var(--text-muted);">(Base: ${c.mlModel?.evaluation?.horizon_7d?.baseline_rmse?.toFixed(3) || '2.092'})</span></div>
+            <div class="db-input-value" style="color: #6FA89C;">${c.mlModel?.evaluation?.horizon_7d?.model_rmse?.toFixed(3) || '1.439'} <span style="font-size: 0.7rem; color: var(--text-muted);">(Base: ${c.mlModel?.evaluation?.horizon_7d?.baseline_rmse?.toFixed(3) || '2.092'})</span></div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Held-Out 30D RMSE</div>
-            <div class="db-input-value" style="color: #818cf8;">${c.mlModel?.evaluation?.horizon_30d?.model_rmse?.toFixed(3) || '3.474'} <span style="font-size: 0.7rem; color: var(--text-muted);">(Base: ${c.mlModel?.evaluation?.horizon_30d?.baseline_rmse?.toFixed(3) || '5.324'})</span></div>
+            <div class="db-input-value" style="color: #6FA89C;">${c.mlModel?.evaluation?.horizon_30d?.model_rmse?.toFixed(3) || '3.474'} <span style="font-size: 0.7rem; color: var(--text-muted);">(Base: ${c.mlModel?.evaluation?.horizon_30d?.baseline_rmse?.toFixed(3) || '5.324'})</span></div>
           </div>
         </div>
         ${c.mlModel?.isFallback ? `
-          <div class="derivation-box" style="border-left: 3px solid #f59e0b; background: rgba(245, 158, 11, 0.08);">
+          <div class="derivation-box" style="border-left: 3px solid #C9A368; background: rgba(245, 158, 11, 0.08);">
             <strong>Sparse Sales Fallback Notice:</strong> ${c.mlModel?.fallbackReason || 'Item has sparse sales history; baseline moving average rate is applied.'}
           </div>
         ` : `
@@ -2143,15 +2143,15 @@ function openFormulaModal(type, itemId) {
         <div class="db-inputs-grid">
           <div class="db-input-card">
             <div class="db-input-label">Predicted 7-Day Units</div>
-            <div class="db-input-value" style="color: #38bdf8;">${c.forecast7d?.value || 0} units</div>
+            <div class="db-input-value" style="color: #6FA89C;">${c.forecast7d?.value || 0} units</div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Predicted 30-Day Units</div>
-            <div class="db-input-value" style="color: #818cf8;">${c.forecast30d?.value || 0} units</div>
+            <div class="db-input-value" style="color: #6FA89C;">${c.forecast30d?.value || 0} units</div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Derived Daily Velocity</div>
-            <div class="db-input-value" style="color: #38bdf8;">${c.dailyVelocity.value} units/day</div>
+            <div class="db-input-value" style="color: #6FA89C;">${c.dailyVelocity.value} units/day</div>
           </div>
         </div>
         <div class="derivation-box">
@@ -2178,7 +2178,7 @@ function openFormulaModal(type, itemId) {
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Days to Zero Stock</div>
-            <div class="db-input-value" style="color: ${c.stockoutDays.value <= 7 ? '#f87171' : '#34d399'};">${c.stockoutDays.value} days</div>
+            <div class="db-input-value" style="color: ${c.stockoutDays.value <= 7 ? '#C97F76' : '#7FB89E'};">${c.stockoutDays.value} days</div>
           </div>
         </div>
         <div class="derivation-box">
@@ -2200,11 +2200,11 @@ function openFormulaModal(type, itemId) {
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Historical Festive Surge</div>
-            <div class="db-input-value" style="color: #f59e0b;">${c.festiveForecast.inputs.multiplier}x Multiplier</div>
+            <div class="db-input-value" style="color: #C9A368;">${c.festiveForecast.inputs.multiplier}x Multiplier</div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Festive Runway Remaining</div>
-            <div class="db-input-value" style="color: #f59e0b;">${c.festiveForecast.value} days</div>
+            <div class="db-input-value" style="color: #C9A368;">${c.festiveForecast.value} days</div>
           </div>
         </div>
         <div class="derivation-box">
@@ -2230,7 +2230,7 @@ function openFormulaModal(type, itemId) {
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Reorder Point Threshold</div>
-            <div class="db-input-value" style="color: #f87171;">${c.reorderTrigger.value} units</div>
+            <div class="db-input-value" style="color: #C97F76;">${c.reorderTrigger.value} units</div>
           </div>
         </div>
         <div class="derivation-box">
@@ -2258,7 +2258,7 @@ function openFormulaModal(type, itemId) {
         </div>
         <div>
           <div class="verdict-label">Capital Required</div>
-          <div class="verdict-val" style="color: #38bdf8;">₹${p.reorderCost.toLocaleString('en-IN')}</div>
+          <div class="verdict-val" style="color: #6FA89C;">₹${p.reorderCost.toLocaleString('en-IN')}</div>
         </div>
       </div>
     `;
@@ -2266,7 +2266,7 @@ function openFormulaModal(type, itemId) {
     const pricing = agents.smartPricing;
     const p = pricing?.recommendations?.find(x => x.id === itemId) || pricing?.recommendations?.[0];
     if (!p || !p.calculation) {
-      body.innerHTML = '<div style="color: #f87171; padding: 2rem;">Calculation model details not found for this product.</div>';
+      body.innerHTML = '<div style="color: #C97F76; padding: 2rem;">Calculation model details not found for this product.</div>';
       return;
     }
     const c = p.calculation;
@@ -2291,15 +2291,15 @@ function openFormulaModal(type, itemId) {
         <div class="db-inputs-grid">
           <div class="db-input-card">
             <div class="db-input-label">Historical Price Variance</div>
-            <div class="db-input-value" style="color: #38bdf8;">0.0% (Audited)</div>
+            <div class="db-input-value" style="color: #6FA89C;">0.0% (Audited)</div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Assigned Strategy Elasticity</div>
-            <div class="db-input-value" style="color: #38bdf8;">ε = ${c.elasticityModel?.inputs?.elasticity || p.elasticity}</div>
+            <div class="db-input-value" style="color: #6FA89C;">ε = ${c.elasticityModel?.inputs?.elasticity || p.elasticity}</div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Customer Rating</div>
-            <div class="db-input-value" style="color: #facc15;">${p.rating} </div>
+            <div class="db-input-value" style="color: #C9A368;">${p.rating} </div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Warehouse Stock Scarcity</div>
@@ -2325,15 +2325,15 @@ function openFormulaModal(type, itemId) {
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Estimated Wholesale Cost</div>
-            <div class="db-input-value" style="color: #94a3b8;">₹${(p.wholesaleCost || Math.round(p.currentPrice * 0.58)).toLocaleString('en-IN')}</div>
+            <div class="db-input-value" style="color: #A8A49C;">₹${(p.wholesaleCost || Math.round(p.currentPrice * 0.58)).toLocaleString('en-IN')}</div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Wholesale Cost Floor</div>
-            <div class="db-input-value" style="color: #34d399;">₹${(p.costFloor || Math.round(p.currentPrice * 0.58 * 1.15)).toLocaleString('en-IN')}</div>
+            <div class="db-input-value" style="color: #7FB89E;">₹${(p.costFloor || Math.round(p.currentPrice * 0.58 * 1.15)).toLocaleString('en-IN')}</div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Cost Floor Compliance</div>
-            <div class="db-input-value" style="color: #34d399;">${c.costFloorGuard?.status || 'PASSED'}</div>
+            <div class="db-input-value" style="color: #7FB89E;">${c.costFloorGuard?.status || 'PASSED'}</div>
           </div>
         </div>
         <div class="derivation-box">
@@ -2355,7 +2355,7 @@ function openFormulaModal(type, itemId) {
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Recommended Price</div>
-            <div class="db-input-value" style="color: #34d399;">₹${p.recommendedPrice.toLocaleString('en-IN')}</div>
+            <div class="db-input-value" style="color: #7FB89E;">₹${p.recommendedPrice.toLocaleString('en-IN')}</div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Price Shift (%)</div>
@@ -2363,7 +2363,7 @@ function openFormulaModal(type, itemId) {
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Projected Monthly Units</div>
-            <div class="db-input-value" style="color: #38bdf8;">${p.projectedMonthlyUnits} units</div>
+            <div class="db-input-value" style="color: #6FA89C;">${p.projectedMonthlyUnits} units</div>
           </div>
         </div>
         <div class="derivation-box">
@@ -2385,11 +2385,11 @@ function openFormulaModal(type, itemId) {
           </div>
           <div class="db-input-card">
             <div class="db-input-label">New Unit Gross Margin</div>
-            <div class="db-input-value" style="color: #34d399;">₹${((c.breakevenAnalysis?.inputs?.newUnitMargin || 0)).toLocaleString('en-IN')}</div>
+            <div class="db-input-value" style="color: #7FB89E;">₹${((c.breakevenAnalysis?.inputs?.newUnitMargin || 0)).toLocaleString('en-IN')}</div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Break-Even Volume</div>
-            <div class="db-input-value" style="color: #38bdf8;">${c.breakevenAnalysis?.inputs?.breakevenUnits || p.breakevenUnits || '—'} units</div>
+            <div class="db-input-value" style="color: #6FA89C;">${c.breakevenAnalysis?.inputs?.breakevenUnits || p.breakevenUnits || '—'} units</div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Unit Buffer vs Baseline</div>
@@ -2421,7 +2421,7 @@ function openFormulaModal(type, itemId) {
         </div>
         <div>
           <div class="verdict-label">Projected Net Monthly Uplift</div>
-          <div class="verdict-val" style="color: #34d399;">${(p.monthlyProfitDelta || p.monthlyRevenueDelta) >= 0 ? '+' : ''}₹${formatNumber(p.monthlyProfitDelta || p.monthlyRevenueDelta)}/mo</div>
+          <div class="verdict-val" style="color: #7FB89E;">${(p.monthlyProfitDelta || p.monthlyRevenueDelta) >= 0 ? '+' : ''}₹${formatNumber(p.monthlyProfitDelta || p.monthlyRevenueDelta)}/mo</div>
         </div>
       </div>
     `;
@@ -2429,7 +2429,7 @@ function openFormulaModal(type, itemId) {
     const cust = agents.customerBehaviour;
     const c = cust?.customers?.find(x => x.id === itemId) || cust?.customers?.[0];
     if (!c || !c.calculation) {
-      body.innerHTML = '<div style="color: #f87171; padding: 2rem;">Calculation model details not found for this customer.</div>';
+      body.innerHTML = '<div style="color: #C97F76; padding: 2rem;">Calculation model details not found for this customer.</div>';
       return;
     }
     const calc = c.calculation;
@@ -2452,17 +2452,17 @@ function openFormulaModal(type, itemId) {
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Inference Status</div>
-            <div class="db-input-value" style="font-size: 0.85rem; color: ${calc.mlModel?.isFallback ? '#f59e0b' : '#34d399'};">
+            <div class="db-input-value" style="font-size: 0.85rem; color: ${calc.mlModel?.isFallback ? '#C9A368' : '#7FB89E'};">
               ${calc.mlModel?.isFallback ? 'Empirical Fallback' : 'Trained Supervised RF'}
             </div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">5-Fold CV ROC-AUC</div>
-            <div class="db-input-value" style="color: #c084fc;">${calc.mlModel?.metrics?.cv_roc_auc_mean?.toFixed(4) || '0.7667'}</div>
+            <div class="db-input-value" style="color: #6FA89C;">${calc.mlModel?.metrics?.cv_roc_auc_mean?.toFixed(4) || '0.7667'}</div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">5-Fold CV Recall (Sensitivity)</div>
-            <div class="db-input-value" style="color: #c084fc;">${calc.mlModel?.metrics?.cv_recall_mean ? (calc.mlModel.metrics.cv_recall_mean * 100).toFixed(1) + '%' : '60.0%'}</div>
+            <div class="db-input-value" style="color: #6FA89C;">${calc.mlModel?.metrics?.cv_recall_mean ? (calc.mlModel.metrics.cv_recall_mean * 100).toFixed(1) + '%' : '60.0%'}</div>
           </div>
         </div>
         <div class="derivation-box" style="font-size: 0.75rem;">
@@ -2480,15 +2480,15 @@ function openFormulaModal(type, itemId) {
         <div class="db-inputs-grid">
           <div class="db-input-card">
             <div class="db-input-label">Recency Score (R)</div>
-            <div class="db-input-value" style="color: #38bdf8;">${calc.rfmScoring?.inputs?.rScore || 3}/5 <span style="font-size: 0.7rem; color: var(--text-muted);">(${calc.rfmScoring?.inputs?.recencyDays || '0d'})</span></div>
+            <div class="db-input-value" style="color: #6FA89C;">${calc.rfmScoring?.inputs?.rScore || 3}/5 <span style="font-size: 0.7rem; color: var(--text-muted);">(${calc.rfmScoring?.inputs?.recencyDays || '0d'})</span></div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Frequency Score (F)</div>
-            <div class="db-input-value" style="color: #818cf8;">${calc.rfmScoring?.inputs?.fScore || 3}/5 <span style="font-size: 0.7rem; color: var(--text-muted);">(${calc.rfmScoring?.inputs?.totalOrders || 0} orders)</span></div>
+            <div class="db-input-value" style="color: #6FA89C;">${calc.rfmScoring?.inputs?.fScore || 3}/5 <span style="font-size: 0.7rem; color: var(--text-muted);">(${calc.rfmScoring?.inputs?.totalOrders || 0} orders)</span></div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Monetary Score (M)</div>
-            <div class="db-input-value" style="color: #34d399;">${calc.rfmScoring?.inputs?.mScore || 3}/5 <span style="font-size: 0.7rem; color: var(--text-muted);">(${calc.rfmScoring?.inputs?.totalSpent || '₹0'})</span></div>
+            <div class="db-input-value" style="color: #7FB89E;">${calc.rfmScoring?.inputs?.mScore || 3}/5 <span style="font-size: 0.7rem; color: var(--text-muted);">(${calc.rfmScoring?.inputs?.totalSpent || '₹0'})</span></div>
           </div>
         </div>
         <div class="derivation-box">
@@ -2508,7 +2508,7 @@ function openFormulaModal(type, itemId) {
         <div class="db-inputs-grid">
           <div class="db-input-card">
             <div class="db-input-label">Predicted Churn Probability</div>
-            <div class="db-input-value" style="color: ${c.churnRiskPercent < 30 ? '#34d399' : c.churnRiskPercent < 65 ? '#facc15' : '#f87171'};">
+            <div class="db-input-value" style="color: ${c.churnRiskPercent < 30 ? '#7FB89E' : c.churnRiskPercent < 65 ? '#C9A368' : '#C97F76'};">
               ${calc.churnModel?.inputs?.churnProbability || c.churnRiskPercent + '%'}
             </div>
           </div>
@@ -2518,7 +2518,7 @@ function openFormulaModal(type, itemId) {
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Cancellations Recorded</div>
-            <div class="db-input-value" style="color: ${c.cancelledCount > 0 ? '#f87171' : 'inherit'};">
+            <div class="db-input-value" style="color: ${c.cancelledCount > 0 ? '#C97F76' : 'inherit'};">
               ${calc.churnModel?.inputs?.cancelledOrdersCount || 0} orders
             </div>
           </div>
@@ -2550,7 +2550,7 @@ function openFormulaModal(type, itemId) {
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Retention Factor (1 - P_churn)</div>
-            <div class="db-input-value" style="color: #34d399;">${calc.clvModel?.inputs?.retentionMultiplier || '0.80'}</div>
+            <div class="db-input-value" style="color: #7FB89E;">${calc.clvModel?.inputs?.retentionMultiplier || '0.80'}</div>
           </div>
         </div>
         <div class="derivation-box">
@@ -2567,7 +2567,7 @@ function openFormulaModal(type, itemId) {
         </div>
         <div>
           <div class="verdict-label">Predicted 12M Lifetime Value</div>
-          <div class="verdict-val" style="color: #34d399;">₹${c.predictedCLV.toLocaleString('en-IN')}</div>
+          <div class="verdict-val" style="color: #7FB89E;">₹${c.predictedCLV.toLocaleString('en-IN')}</div>
         </div>
       </div>
     `;
@@ -2575,7 +2575,7 @@ function openFormulaModal(type, itemId) {
     const bundle = agents.bundleCrossSelling;
     const b = bundle?.smartBundles?.find(x => x.id === itemId) || bundle?.smartBundles?.[0];
     if (!b || !b.calculation) {
-      body.innerHTML = '<div style="color: #f87171; padding: 2rem;">Calculation model details not found for this bundle.</div>';
+      body.innerHTML = '<div style="color: #C97F76; padding: 2rem;">Calculation model details not found for this bundle.</div>';
       return;
     }
     const c = b.calculation;
@@ -2598,15 +2598,15 @@ function openFormulaModal(type, itemId) {
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Bundle Incentive Discount</div>
-            <div class="db-input-value" style="color: #f59e0b;">${c.pricingModel.inputs.discountPercent}% OFF</div>
+            <div class="db-input-value" style="color: #C9A368;">${c.pricingModel.inputs.discountPercent}% OFF</div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Customer Savings</div>
-            <div class="db-input-value" style="color: #34d399;">₹${c.pricingModel.customerSavings.toLocaleString('en-IN')}</div>
+            <div class="db-input-value" style="color: #7FB89E;">₹${c.pricingModel.customerSavings.toLocaleString('en-IN')}</div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Final Bundle Price</div>
-            <div class="db-input-value" style="color: #38bdf8;">₹${c.pricingModel.bundlePrice.toLocaleString('en-IN')}</div>
+            <div class="db-input-value" style="color: #6FA89C;">₹${c.pricingModel.bundlePrice.toLocaleString('en-IN')}</div>
           </div>
         </div>
         <div class="derivation-box">
@@ -2632,11 +2632,11 @@ function openFormulaModal(type, itemId) {
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Preserved Gross Profit</div>
-            <div class="db-input-value" style="color: #34d399;">₹${c.marginModel.marginEstimate.toLocaleString('en-IN')}</div>
+            <div class="db-input-value" style="color: #7FB89E;">₹${c.marginModel.marginEstimate.toLocaleString('en-IN')}</div>
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Retained Gross Margin %</div>
-            <div class="db-input-value" style="color: #34d399;">${c.marginModel.marginPercent}%</div>
+            <div class="db-input-value" style="color: #7FB89E;">${c.marginModel.marginPercent}%</div>
           </div>
         </div>
         <div class="derivation-box">
@@ -2663,7 +2663,7 @@ function openFormulaModal(type, itemId) {
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Projected AOV Uplift</div>
-            <div class="db-input-value" style="color: #34d399; font-size: 1.1rem;">+${c.aovModel.aovUpliftPct}%</div>
+            <div class="db-input-value" style="color: #7FB89E; font-size: 1.1rem;">+${c.aovModel.aovUpliftPct}%</div>
           </div>
         </div>
         <div class="derivation-box">
@@ -2680,7 +2680,7 @@ function openFormulaModal(type, itemId) {
         </div>
         <div>
           <div class="verdict-label">Margin Retained</div>
-          <div class="verdict-val" style="color: #34d399;">${b.marginPercent}% (₹${b.marginEstimate.toLocaleString('en-IN')})</div>
+          <div class="verdict-val" style="color: #7FB89E;">${b.marginPercent}% (₹${b.marginEstimate.toLocaleString('en-IN')})</div>
         </div>
       </div>
     `;
@@ -2689,7 +2689,7 @@ function openFormulaModal(type, itemId) {
     const idx = parseInt(itemId, 10);
     const cp = bundle?.coPurchases?.[idx] || bundle?.coPurchases?.[0];
     if (!cp || !cp.calculation) {
-      body.innerHTML = '<div style="color: #f87171; padding: 2rem;">Apriori mining calculation details not found.</div>';
+      body.innerHTML = '<div style="color: #C97F76; padding: 2rem;">Apriori mining calculation details not found.</div>';
       return;
     }
     const c = cp.calculation;
@@ -2716,7 +2716,7 @@ function openFormulaModal(type, itemId) {
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Support Percentage</div>
-            <div class="db-input-value" style="color: #38bdf8;">${c.supportModel.value}%</div>
+            <div class="db-input-value" style="color: #6FA89C;">${c.supportModel.value}%</div>
           </div>
         </div>
         <div class="derivation-box">
@@ -2742,7 +2742,7 @@ function openFormulaModal(type, itemId) {
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Confidence P(B|A)</div>
-            <div class="db-input-value" style="color: #34d399;">${c.confidenceModel.value}%</div>
+            <div class="db-input-value" style="color: #7FB89E;">${c.confidenceModel.value}%</div>
           </div>
         </div>
         <div class="derivation-box">
@@ -2768,7 +2768,7 @@ function openFormulaModal(type, itemId) {
           </div>
           <div class="db-input-card">
             <div class="db-input-label">Derived Association Lift</div>
-            <div class="db-input-value" style="color: #f59e0b; font-size: 1.1rem;">${c.liftModel.value}x</div>
+            <div class="db-input-value" style="color: #C9A368; font-size: 1.1rem;">${c.liftModel.value}x</div>
           </div>
         </div>
         <div class="derivation-box">
@@ -2784,7 +2784,7 @@ function openFormulaModal(type, itemId) {
         </div>
         <div>
           <div class="verdict-label">Co-Order Frequency</div>
-          <div class="verdict-val" style="color: #38bdf8;">${cp.frequency} Orders</div>
+          <div class="verdict-val" style="color: #6FA89C;">${cp.frequency} Orders</div>
         </div>
       </div>
     `;
@@ -2793,7 +2793,7 @@ function openFormulaModal(type, itemId) {
     if (itemId === 'gmv') {
       const g = strat?.gmvCalculation;
       if (!g) {
-        body.innerHTML = '<div style="color: #f87171; padding: 2rem;">GMV trajectory derivation details not found.</div>';
+        body.innerHTML = '<div style="color: #C97F76; padding: 2rem;">GMV trajectory derivation details not found.</div>';
         return;
       }
       icon = '';
@@ -2819,7 +2819,7 @@ function openFormulaModal(type, itemId) {
             </div>
             <div class="db-input-card">
               <div class="db-input-label">Historical Panel Window</div>
-              <div class="db-input-value" style="color: #38bdf8;">90 Days</div>
+              <div class="db-input-value" style="color: #6FA89C;">90 Days</div>
             </div>
           </div>
           <div class="derivation-box">
@@ -2835,19 +2835,19 @@ function openFormulaModal(type, itemId) {
           </div>
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; margin-bottom: 1rem;">
             <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px; padding: 10px 12px;">
-              <div style="color: #38bdf8; font-weight: 700; font-size: 0.85rem;">Month 1 (Pre-Festive)</div>
-              <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Expected Multiplier: <strong style="color: #34d399;">1.18x</strong></div>
-              <div style="font-size: 0.72rem; color: #94a3b8;">Bounds: 1.05x – 1.35x</div>
+              <div style="color: #6FA89C; font-weight: 700; font-size: 0.85rem;">Month 1 (Pre-Festive)</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Expected Multiplier: <strong style="color: #7FB89E;">1.18x</strong></div>
+              <div style="font-size: 0.72rem; color: #A8A49C;">Bounds: 1.05x – 1.35x</div>
             </div>
             <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px; padding: 10px 12px;">
-              <div style="color: #f59e0b; font-weight: 700; font-size: 0.85rem;">Month 2 (Diwali Peak)</div>
-              <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Expected Multiplier: <strong style="color: #34d399;">1.55x</strong></div>
-              <div style="font-size: 0.72rem; color: #94a3b8;">Bounds: 1.25x – 1.95x</div>
+              <div style="color: #C9A368; font-weight: 700; font-size: 0.85rem;">Month 2 (Diwali Peak)</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Expected Multiplier: <strong style="color: #7FB89E;">1.55x</strong></div>
+              <div style="font-size: 0.72rem; color: #A8A49C;">Bounds: 1.25x – 1.95x</div>
             </div>
             <div style="background: rgba(0, 0, 0, 0.35); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 6px; padding: 10px 12px;">
-              <div style="color: #a78bfa; font-weight: 700; font-size: 0.85rem;">Month 3 (Wedding Season)</div>
-              <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Expected Multiplier: <strong style="color: #34d399;">1.38x</strong></div>
-              <div style="font-size: 0.72rem; color: #94a3b8;">Bounds: 1.15x – 1.65x</div>
+              <div style="color: #6FA89C; font-weight: 700; font-size: 0.85rem;">Month 3 (Wedding Season)</div>
+              <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Expected Multiplier: <strong style="color: #7FB89E;">1.38x</strong></div>
+              <div style="font-size: 0.72rem; color: #A8A49C;">Bounds: 1.15x – 1.65x</div>
             </div>
           </div>
           <div class="derivation-box">
@@ -2861,10 +2861,10 @@ function openFormulaModal(type, itemId) {
             <div class="calc-block-title"><span></span> 3. Econometric Bounds & Transparency Disclosures</div>
             <span class="badge-success">Honest Disclosures</span>
           </div>
-          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; color: #cbd5e1; line-height: 1.5;">
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 0.85rem; color: #A8A49C; line-height: 1.5;">
             ${(g.disclosures || []).map(d => `
               <div style="display: flex; gap: 8px; align-items: flex-start;">
-                <span style="color: #38bdf8;">•</span>
+                <span style="color: #6FA89C;">•</span>
                 <span>${d}</span>
               </div>
             `).join('')}
@@ -2875,20 +2875,20 @@ function openFormulaModal(type, itemId) {
         <div class="calc-verdict-card">
           <div>
             <div class="verdict-label">3-Month Forward GMV Outlook</div>
-            <div class="verdict-val" style="color: #34d399; font-size: 1.3rem;">
+            <div class="verdict-val" style="color: #7FB89E; font-size: 1.3rem;">
               ₹${Math.round(strat.gmvTrajectory[0].expected).toLocaleString('en-IN')} ₹${Math.round(strat.gmvTrajectory[1].expected).toLocaleString('en-IN')} Peak
             </div>
           </div>
           <div>
             <div class="verdict-label">Methodology Status</div>
-            <div class="verdict-val" style="color: #38bdf8;">Deterministic Seasonal Rollup</div>
+            <div class="verdict-val" style="color: #6FA89C;">Deterministic Seasonal Rollup</div>
           </div>
         </div>
       `;
     } else {
       const c = strat?.healthCalculation;
       if (!c) {
-        body.innerHTML = '<div style="color: #f87171; padding: 2rem;">Strategy health calculation details not found.</div>';
+        body.innerHTML = '<div style="color: #C97F76; padding: 2rem;">Strategy health calculation details not found.</div>';
         return;
       }
       icon = '';
@@ -2934,7 +2934,7 @@ function openFormulaModal(type, itemId) {
         <div class="calc-verdict-card">
           <div>
             <div class="verdict-label">Total Composite Health Score</div>
-            <div class="verdict-val" style="color: #34d399; font-size: 1.5rem;">${c.totalScore} / 100 (Grade ${c.ratingGrade})</div>
+            <div class="verdict-val" style="color: #7FB89E; font-size: 1.5rem;">${c.totalScore} / 100 (Grade ${c.ratingGrade})</div>
           </div>
           <div>
             <div class="verdict-label">Strategic Rating</div>

@@ -4,7 +4,8 @@ const { v4: uuidv4 } = require('uuid');
 const fs = require('fs');
 const path = require('path');
 
-const DB_PATH = path.join(__dirname, 'aurora.db');
+// On Vercel only /tmp is writable, and it is wiped whenever the function restarts.
+const DB_PATH = process.env.VERCEL ? '/tmp/aurora.db' : path.join(__dirname, 'aurora.db');
 
 let db = null;
 let rawPrepare = null;
