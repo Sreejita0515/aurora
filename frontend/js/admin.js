@@ -1854,6 +1854,203 @@ async function updateOrderStatus(orderId, newStatus) {
 }
 
 // ═════════════════════════════════════════════════════════════════════════
+// CORE OPERATIONS: PRODUCT INVENTORY & RESTOCK MANAGEMENT
+// ═════════════════════════════════════════════════════════════════════════
+let allCatalogProducts = [];
+let catalogStockFilter = 'all';
+let catalogSearchQuery = '';
+
+async function renderInventoryProducts() {
+  const tableBody = document.querySelector('#adminProductsTable tbody');
+  const kpisContainer = document.getElementById('inventoryProductsKpis');
+  if (!tableBody) return;
+
+  tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 2rem;"><div class="spinner"></div><div style="margin-top: 8px; color: var(--text-muted);">Loading catalog stock data...</div></td></tr>`;
+
+  try {
+    const headers = await getAdminAuthHeaders();
+    const res = await fetch(`${API}/admin/products`, { headers });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    allCatalogProducts = data.products || [];
+
+    // Calculate metrics
+    const totalSkus = allCatalogProducts.length;
+    const totalUnits = allCatalogProducts.reduce((sum, p) => sum + (p.stock || 0), 0);
+    const criticalProducts = allCatalogProducts.filter(p => (p.stock || 0) < 15);
+    const lowStockProducts = allCatalogProducts.filter(p => (p.stock || 0) >= 15 && (p.stock || 0) < 30);
+    const healthyProducts = allCatalogProducts.filter(p => (p.stock || 0) >= 30);
+
+    // Update filter counts
+    const elAll = document.getElementById('countAllStock');
+    const elCrit = document.getElementById('countCriticalStock');
+    const elLow = document.getElementById('countLowStock');
+    const elHealth = document.getElementById('countHealthyStock');
+    if (elAll) elAll.textContent = totalSkus;
+    if (elCrit) elCrit.textContent = criticalProducts.length;
+    if (elLow) elLow.textContent = lowStockProducts.length;
+    if (elHealth) elHealth.textContent = healthyProducts.length;
+
+    if (kpisContainer) {
+      kpisContainer.innerHTML = `
+        <div class="kpi-card">
+          <div class="kpi-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div>
+          <div class="kpi-label">Total Catalog SKUs</div>
+          <div class="kpi-value">${totalSkus} SKUs</div>
+          <span class="kpi-change neutral">Active Inventory Lines</span>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/></svg></div>
+          <div class="kpi-label">Total Stock in Warehouse</div>
+          <div class="kpi-value" style="color: #38bdf8;">${totalUnits.toLocaleString('en-IN')} Units</div>
+          <span class="kpi-change positive">On-Hand Inventory</span>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div class="kpi-label">Restock Alert SKUs</div>
+          <div class="kpi-value" style="color: ${criticalProducts.length > 0 ? '#f87171' : '#34d399'};">
+            ${criticalProducts.length + lowStockProducts.length} Needs Restock
+          </div>
+          <span class="kpi-change ${criticalProducts.length > 0 ? 'negative' : 'positive'}">
+            ${criticalProducts.length} Critical Under 15u
+          </span>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div>
+          <div class="kpi-label">Total Units Sold</div>
+          <div class="kpi-value" style="color: #34d399;">
+            ${allCatalogProducts.reduce((sum, p) => sum + (p.total_sold || 0), 0).toLocaleString('en-IN')} Units
+          </div>
+          <span class="kpi-change positive">Fulfilled Customer Demand</span>
+        </div>
+      `;
+    }
+
+    renderCatalogStockTable();
+  } catch (err) {
+    tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #f87171; padding: 2rem;">Error loading products: ${err.message}</td></tr>`;
+  }
+}
+
+function renderCatalogStockTable() {
+  const tableBody = document.querySelector('#adminProductsTable tbody');
+  if (!tableBody) return;
+
+  let filtered = allCatalogProducts;
+
+  if (catalogStockFilter === 'critical') {
+    filtered = filtered.filter(p => (p.stock || 0) < 15);
+  } else if (catalogStockFilter === 'low') {
+    filtered = filtered.filter(p => (p.stock || 0) < 30);
+  } else if (catalogStockFilter === 'healthy') {
+    filtered = filtered.filter(p => (p.stock || 0) >= 30);
+  }
+
+  if (catalogSearchQuery) {
+    const q = catalogSearchQuery.toLowerCase();
+    filtered = filtered.filter(p =>
+      (p.name || '').toLowerCase().includes(q) ||
+      (p.category_name || '').toLowerCase().includes(q)
+    );
+  }
+
+  if (filtered.length === 0) {
+    tableBody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2rem;">No products match current filter or search criteria.</td></tr>`;
+    return;
+  }
+
+  tableBody.innerHTML = filtered.map(p => {
+    const stock = p.stock || 0;
+    let badge = '<span class="badge-success">✓ In Stock</span>';
+    let stockColor = '#34d399';
+    if (stock === 0) {
+      badge = '<span class="badge-danger" style="background: rgba(239,68,68,0.25); color: #f87171;">⚠️ Out of Stock</span>';
+      stockColor = '#f87171';
+    } else if (stock < 15) {
+      badge = '<span class="badge-danger">⚠️ Critical (&lt;15)</span>';
+      stockColor = '#f87171';
+    } else if (stock < 30) {
+      badge = '<span class="badge-warning">⚡ Low (&lt;30)</span>';
+      stockColor = '#f59e0b';
+    }
+
+    const firstImg = p.image_url || '/favicon.ico';
+
+    return `
+      <tr>
+        <td>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="${firstImg}" alt="${escapeHtml(p.name)}" style="width: 38px; height: 38px; border-radius: 6px; object-fit: cover; border: 1px solid rgba(255,255,255,0.08);" onerror="this.src='/favicon.ico'">
+            <div>
+              <strong style="color: var(--text-primary); font-size: 0.9rem;">${escapeHtml(p.name)}</strong>
+              <div style="font-size: 0.72rem; color: var(--text-muted);">${p.id}</div>
+            </div>
+          </div>
+        </td>
+        <td><span class="badge-neutral">${escapeHtml(p.category_name || p.category_id || 'General')}</span></td>
+        <td><strong>₹${(p.price || 0).toLocaleString('en-IN')}</strong></td>
+        <td>
+          <span style="font-size: 1.15rem; font-weight: 800; color: ${stockColor};">${stock}</span>
+          <span style="font-size: 0.75rem; color: var(--text-muted);"> units</span>
+        </td>
+        <td>${badge}</td>
+        <td><strong>${(p.total_sold || 0).toLocaleString('en-IN')}</strong> units</td>
+        <td>
+          <div style="display: flex; gap: 4px; align-items: center;">
+            <button class="btn-quick-restock-pill" title="Add 10 units immediately" onclick="quickRestockDirect('${p.id}', 10, '${escapeHtml(p.name)}')">+10</button>
+            <button class="btn-quick-restock-pill" title="Add 25 units immediately" onclick="quickRestockDirect('${p.id}', 25, '${escapeHtml(p.name)}')">+25</button>
+            <button class="btn-quick-restock-pill" title="Add 50 units immediately" onclick="quickRestockDirect('${p.id}', 50, '${escapeHtml(p.name)}')">+50</button>
+          </div>
+        </td>
+        <td>
+          <button class="btn-action-restock" onclick="openRestockModal('${p.id}', '${escapeHtml(p.name)}', ${stock}, 25)">
+            📦 Restock
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filterCatalogStock(filterType) {
+  catalogStockFilter = filterType;
+  document.querySelectorAll('#inventoryStockFilters .c-filter-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.id === `stockFilter-${filterType}`);
+  });
+  renderCatalogStockTable();
+}
+
+function handleInventorySearch(val) {
+  catalogSearchQuery = (val || '').trim();
+  renderCatalogStockTable();
+}
+
+async function quickRestockDirect(productId, qty, productName) {
+  try {
+    const headers = await getAdminAuthHeaders();
+    const res = await fetch(`${API}/admin/decision-agents/inventory/restock`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ productId, quantity: qty })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Restock failed');
+
+    showToast(`✓ Added +${qty} units to "${productName || data.product.name}"! New Stock: ${data.product.stock}`, 'success');
+
+    // Update in local state
+    const target = allCatalogProducts.find(p => p.id === productId);
+    if (target) {
+      target.stock = data.product.stock;
+    }
+    renderCatalogStockTable();
+    if (typeof loadDecisionActionsAudit === 'function') loadDecisionActionsAudit();
+  } catch (err) {
+    showToast(`Error restocking: ${err.message}`, 'error');
+  }
+}
+
+// ═════════════════════════════════════════════════════════════════════════
 // CHART HELPERS
 // ═════════════════════════════════════════════════════════════════════════
 function renderRevenueChart(dailyData, containerId = 'revenueChart') {
